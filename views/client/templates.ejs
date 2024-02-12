@@ -1,0 +1,11 @@
+﻿<!-- Add this template in your HTML file or include it in your client.js file -->
+<script type="text/x-template" id="repo-box-template">
+    <li class="list-group-item">
+        <p><strong>Name:</strong> {{ repo.name }}</p>
+        <p><strong>Description:</strong> {{ repo.description }}</p>
+        <p><strong>URL:</strong> <a :href="repo.html_url">{{ repo.html_url }}</a></p>
+
+        <!-- New button for opening the dashboard -->
+        <button @click="openDashboard(repo.owner, repo.name, repo.full_name)">Open Dashboard</button>
+    </li>
+</script>

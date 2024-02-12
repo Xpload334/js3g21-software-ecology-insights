@@ -1,0 +1,28 @@
+﻿Main page
+- Search
+
+History
+(given a owner and repo from MAIN)
+============================================
+GET REPOSITORY
+octokit.request('GET /repos/{owner}/{repo}', {
+  owner: 'OWNER',
+  repo: 'REPO',
+  headers: {
+    'X-GitHub-Api-Version': '2022-11-28'
+  }
+})
+===========
+
+============================================
+- Commit history
+octokit.request('GET /repos/{owner}/{repo}/stats/contributors', {
+  owner: 'OWNER',
+  repo: 'REPO',
+  headers: {
+    'X-GitHub-Api-Version': '2022-11-28'
+  }
+})
+===========
+
+============================================
