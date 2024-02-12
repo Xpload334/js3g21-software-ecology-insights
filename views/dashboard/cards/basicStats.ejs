@@ -3,9 +3,10 @@
         <h5 class="card-title">Stats</h5>
         <!--                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>-->
         <!--                    <a href="#" class="btn btn-primary">Go somewhere</a>-->
-        <p class="card-text">{{repoData.watchers_count || "[UNDEFINED]"}} Watching</p>
-        <p class="card-text">{{repoData.subscribers_count || "[UNDEFINED]"}} Subscribed</p>
-        <p class="card-text">{{repoData.stargazers_count || "[UNDEFINED]"}} Starred</p>
-        <p class="card-text">{{repoData.forks_count || "[UNDEFINED]"}} Forks</p>
+        <p class="card-text"><b>Language:</b> {{repoData.language || "[UNDEFINED]"}}</p>
+        <p class="card-text">{{repoData.watchers_count || "[UNDEFINED]"}} <b>Watching</b></p>
+        <p class="card-text">{{repoData.subscribers_count || "[UNDEFINED]"}} <b>Subscribed</b></p>
+        <p class="card-text">{{repoData.stargazers_count || "[UNDEFINED]"}} <b>Starred</b></p>
+        <p class="card-text">{{repoData.forks_count || "[UNDEFINED]"}} <b>Forks</b></p>
     </div>
 </div>
