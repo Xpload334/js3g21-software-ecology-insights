@@ -114,6 +114,7 @@ class Utils {
                 .get({owner, repo})
                 .then((response) => {
                     const statistics = response.data;
+                    console.log(statistics);
 
                     // Resolve the Promise with the statistics
                     resolve(statistics);

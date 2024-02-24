@@ -2,6 +2,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <%- include('header'); -%>
+
+<!-- Components -->
+<!-- Import the BarChart component -->
+<script src="./vueTemplates/BarChart.vue"></script>
 <body>
 <main>
     <div>
@@ -18,17 +22,9 @@
                     <%- include('cards/titleCard') %>
                     
                     <div v-if="state==='stats'">
-                        <%- include('stats')%>
+                        <%- include('stats/stats') %>
+                        <%- include('commits/commits') %>
                     </div>
-<!--                    <div v-else-if="state==='commits">-->
-<!--                        -->
-<!--                    </div>-->
-                    
-                    
-                    
-                    
-                    
-                    
                 </div>
                 
             </div>

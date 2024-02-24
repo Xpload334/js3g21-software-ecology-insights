@@ -118,7 +118,7 @@ class Commits_Utils{
     
     static parseCommitsList(data){
         let simplified = data.map((item) => (Commits_Utils.parseCommit(item)));
-        // console.log(simplified);
+        // console.log(simplified[0]);
         return simplified;
     }
     static parseCommit(commitData){
@@ -127,22 +127,45 @@ class Commits_Utils{
             author : {
                 name : commitData.commit.author.name,
                 email : commitData.commit.author.email,
-                data : commitData.commit.author.date,
-                avatar_url : commitData.author.avatar_url,
-                html_url : commitData.author.html_url,
-                type : commitData.author.type
+                date : Commits_Utils.convertTime(commitData.commit.author.date),
+                // avatar_url : commitData.author.avatar_url || "",
+                // html_url : commitData.author.html_url,
+                // type : commitData.author.type
             },
             committer : {
                 name : commitData.commit.committer.name,
                 email : commitData.commit.committer.email,
-                data : commitData.commit.committer.date,
-                avatar_url : commitData.committer.avatar_url,
-                html_url : commitData.committer.html_url,
-                type : commitData.committer.type
+                date : Commits_Utils.convertTime(commitData.commit.committer.date),
+                // avatar_url : commitData.committer.avatar_url || "",
+                // html_url : commitData.committer.html_url,
+                // type : commitData.committer.type
             },
             message : commitData.commit.message,
             // Add more details as needed
         }
+    }
+    
+    static convertTime(timeString) {
+        const date = new Date(timeString);
+
+        return {
+            year: date.getFullYear(),
+            month: date.getMonth() + 1, // Months are zero-based, so we add 1
+            week: Commits_Utils.getISOWeek(date),
+            day: date.getDate(),
+            hour: date.getUTCHours(),
+            minute: date.getUTCMinutes()
+        };
+    }
+
+    // Function to get ISO week number
+    static getISOWeek(date) {
+        const onejan = new Date(date.getFullYear(), 0, 1);
+        const dayOfWeek = onejan.getDay();
+        const numberOfDays = Math.floor((date - onejan) / (24 * 60 * 60 * 1000)) + 1;
+        const weekNumber = Math.ceil((numberOfDays + dayOfWeek) / 7);
+        
+        return weekNumber;
     }
 }
 module.exports = Commits_Utils;

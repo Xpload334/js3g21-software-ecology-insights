@@ -1,11 +1,5 @@
 ﻿/*
-File to use for the client view
- */
-// const Vue = require('vue');
-
-/*
 Dashboard
-
 
 VIEWS
 - Main stats
@@ -15,13 +9,22 @@ VIEWS
 - README and citings
  */
 
+// const LineChart = require('views/dashboard/vueTemplates/LineChart.vue');
+// import Vue from 'vue';
+// import App from 'views/Dashboard.vue';
+// import router from 'router';
+
+// import {Chart} from "chart.js/dist/types";
+
 let socket = null;
 let app = new Vue({
     el: "#dashboard",
+    components: {
+ 
+    },
     data: {
         connected: false,
-
-        state: 'stats', //"stats", "contributors"
+        state: 'stats', //"stats", "contributors", 'graphTest'
 
         //Language
         chosenLanguage: "en", //['en','es','it','sv','ru','id','bg','zh-Hans']
@@ -37,6 +40,20 @@ let app = new Vue({
         //Commits
         hasCommitData: false,
         commitsData : [],
+        chartTestData: {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            datasets: [
+                {
+                    label: 'Data One',
+                    backgroundColor: '#f87979',
+                    data: [40, 39, 10, 40, 39, 80, 40]
+                }
+            ]
+        },
+        chartTestOptions: {
+            responsive: true,
+            maintainAspectRatio: false
+        },
         
         //Fields
         isLoading: false,
@@ -54,8 +71,31 @@ let app = new Vue({
             const urlParams = new URLSearchParams(window.location.search);
             this.username = urlParams.get('user');
             this.repoName = urlParams.get('repo');
-            
-            this.getRepoStats(this.username, this.repoName)
+
+            this.getRepoStats(this.username, this.repoName);
+
+            console.log("COMMIT GRAPH")
+            const xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
+            const yValues = [55, 49, 44, 24, 15];
+            const barColors = ["red", "green","blue","orange","brown"];
+
+            let chart = new Chart("myChart", {
+                type: "bar",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        backgroundColor: barColors,
+                        data: yValues
+                    }]
+                },
+                options: {
+                    legend: {display: false},
+                    title: {
+                        display: true,
+                        text: "World Wine Production 2018"
+                    }
+                }
+            });
         },
         getRepoStats(username, repoName){
             let body = {
@@ -123,8 +163,10 @@ let app = new Vue({
             if(!this.hasCommitData){
                 this.hasCommitData = true;
             }
-
-            this.commitsData.push(data);
+            data.commitData.forEach((item) =>{
+                // console.log(item);
+                this.commitsData.push(item);
+            })
         },
         disableButton() {
             if (this.isLoading) return;
@@ -134,17 +176,11 @@ let app = new Vue({
                 this.isLoading = false
             }, 2000)
         },
-        constructGraph(data){
-            // Example commitsData structure:
-            const commitsData = [
-                { date: '2022-01-01', count: 5 },
-                { date: '2022-01-02', count: 8 },
-                // Add more data as needed
-            ];
-
+        generateCommitGraph() {
+            console.log("Commit Data", this.commitsData);
             // Extract dates and commit counts
-            const dates = commitsData.map(commit => commit.date);
-            const commitCounts = commitsData.map(commit => commit.count);
+            const dates = this.commitsData.map(commit => commit.author.date);
+            const commitCounts = this.commitsData.map(() => 1); // Assuming each entry is one commit
 
             // Create a chart using Chart.js
             const ctx = document.getElementById('commitChart').getContext('2d');

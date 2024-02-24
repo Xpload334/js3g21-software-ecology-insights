@@ -15,18 +15,20 @@ File for the main server logic
  */
 //Set up express
 const express = require("express");
-// const util = require("util");
+const path = require("path"); // Import path module
 const app = express();
-
 
 //Setup socket.io
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
 
-//Files
-const fs = require('fs');
-const readline = require('readline');
-const testCommitsFile = require('./schema/accessibilityjs_short.json');
+// // Serve static files from the 'dist' directory
+// app.use(express.static(path.join(__dirname, 'dist')));
+//
+// // Redirect all routes to the 'index.html' file
+// app.get('*', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+// });
 
 //Setup static page handling
 app.set("view engine", "ejs");
@@ -40,6 +42,20 @@ app.get("/", (req, res) => {
 app.get("/dashboard", (req, res) => {
     // res.send('Successful response.');
     res.render("dashboard/mainView");
+});
+
+// // Setup static page handling
+// app.set("view engine", "ejs");
+// app.use("/static", express.static("public"));
+//
+// // Client interface on /
+// app.get("/", (req, res) => {
+//     res.render("index"); // Assuming "index" is your main HTML file
+// });
+
+// Handle 404s
+app.use((req, res) => {
+    res.status(404).send("Page not found");
 });
 
 
@@ -198,120 +214,5 @@ function testCommitsJSON(){
     } catch (parseError) {
         console.error('Error parsing JSON:', parseError);
     }
-    // fs.readFile(filePath, "utf8", (error, data) => {
-    //     if (error) {
-    //         console.log(error);
-    //         return;
-    //     }
-    //    
-    //     // console.log(data);
-    //     // Remove BOM if present
-    //     data = data.replace(/^\uFEFF/, '');
-    //
-    //     try{
-    //         const jsonArray = JSON.parse(data);
-    //         let simplified = jsonArray.map((item) => ({
-    //             sha : item.sha,
-    //             author : item.commit.author,
-    //             committer : item.commit.committer,
-    //             message : item.commit.message,
-    //             // Add more details as needed
-    //         }));
-    //         console.log(simplified);
-    //        
-    //     } catch (parseError) {
-    //         console.error('Error parsing JSON:', parseError);
-    //     }
-    //    
-    //     try {
-    //         // Parse the JSON data
-    //         const jsonArray = JSON.parse(data);
-    //
-    //         // Now jsonArray is an array of objects
-    //         console.log(jsonArray);
-    //     } catch (parseError) {
-    //         console.error('Error parsing JSON:', parseError);
-    //     }
-    // });
-    
-    // // Process the commit
-    // const processedData = Commits_Utils.processCommits([commit]);
-    // console.log('Processed Data:');
-    // console.log(processedData);
-    //
-    // // Specify a time filter (e.g., 'Last Month') for aggregateCommitData function
-    // const timeFilter = 'Last Month';
-    //
-    // // Call aggregateCommitData function
-    // const aggregatedData = Commits_Utils.aggregateCommitData([commit], timeFilter);
-    // console.log(`\nAggregated Data for ${timeFilter}:`);
-    // console.log(aggregatedData);
 }
-
-
-// // Function to read and process commits line by line
-// function processCommitsFromFile(filePath) {
-//     const readStream = fs.createReadStream(filePath);
-//     const rl = readline.createInterface({
-//         input: readStream,
-//         crlfDelay: Infinity
-//     });
-//
-//     let currentLine = '';
-//
-//     rl.on('line', (line) => {
-//         currentLine += line;
-//
-//         try {
-//             const commit = JSON.parse(currentLine);
-//
-//             // Process the commit
-//             const processedData = Commits_Utils.processCommits([commit]);
-//             console.log('Processed Data:');
-//             console.log(processedData);
-//
-//             // Specify a time filter (e.g., 'Last Month') for aggregateCommitData function
-//             const timeFilter = 'Last Month';
-//
-//             // Call aggregateCommitData function
-//             const aggregatedData = Commits_Utils.aggregateCommitData([commit], timeFilter);
-//             console.log(`\nAggregated Data for ${timeFilter}:`);
-//             console.log(aggregatedData);
-//
-//             // Clear currentLine for the next JSON object
-//             currentLine = '';
-//         } catch (error) {
-//             // JSON parsing error, continue reading the next line
-//             console.error(`Error parsing line: ${currentLine}`, error);
-//             currentLine = '';
-//         }
-//     });
-//
-//     rl.on('close', () => {
-//         // Handling any remaining content in the last line
-//         if (currentLine.trim() !== '') {
-//             try {
-//                 const commit = JSON.parse(currentLine);
-//
-//                 // Process the last commit
-//                 const processedData = Commits_Utils.processCommits([commit]);
-//                 console.log('Processed Data:');
-//                 console.log(processedData);
-//
-//                 // Specify a time filter (e.g., 'Last Month') for aggregateCommitData function
-//                 const timeFilter = 'Last Month';
-//
-//                 // Call aggregateCommitData function
-//                 const aggregatedData = Commits_Utils.aggregateCommitData([commit], timeFilter);
-//                 console.log(`\nAggregated Data for ${timeFilter}:`);
-//                 console.log(aggregatedData);
-//             } catch (error) {
-//                 // JSON parsing error for the last line
-//                 console.error(`Error parsing line: ${currentLine}`, error);
-//             }
-//         }
-//
-//         readStream.close();
-//     });
-// }
 

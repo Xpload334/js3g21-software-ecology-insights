@@ -68,40 +68,7 @@ let app = new Vue({
             console.log("Sending message: ", body);
             socket.emit('getRepoList', body);
         },
-        /*
-        Get commit history of a given repository
-         */
-        commitHistory() {
-            let body = {
-                owner: "DougDougGithub",
-                repo: 'TwitchPlays'
-            };
-            this.disableButton();
-            socket.emit('commitHistory', body);
-        },
-
-        /*
-        Get stats of a given repository
-         */
-        repoStats() {
-            let body = {
-                owner: "DougDougGithub",
-                repo: 'TwitchPlays'
-            };
-            this.disableButton();
-            socket.emit('repoStats', body);
-        },
         
-        //TEST COMMITS
-        testCommits(){
-            let body = {
-                owner: "github",
-                repo: "accessibilityjs"
-            }
-            this.disableButton();
-            socket.emit('getCommits', body)
-        },
-
         handleRepos(data) {
             // console.log(data);
             
@@ -115,9 +82,9 @@ let app = new Vue({
         },
         displaySearchResults() {
             console.log(`Displaying page ${this.currentPage}`);
-            console.log('Search Results:', this.searchResults);
-            console.log('Current Page:', this.currentPage);
-            console.log('Total Pages:', this.totalPages);
+            // console.log('Search Results:', this.searchResults);
+            // console.log('Current Page:', this.currentPage);
+            // console.log('Total Pages:', this.totalPages);
 
             // Clear previous content
             this.clearDisplayedResults();
@@ -125,7 +92,7 @@ let app = new Vue({
             const resultList = document.getElementById('resultList');
             // Update the displayed results based on pagination
             this.currentResults = this.searchResults[this.currentPage - 1];
-            console.log('CURRENT Results:', this.currentResults);
+            console.log('CURRENT Results', this.currentResults);
             // const startIndex = (this.currentPage - 1) * this.itemsPerPage;
             // const endIndex = startIndex + this.itemsPerPage;
             // this.displayedResults = this.currentResults.slice(startIndex, endIndex);
@@ -157,7 +124,7 @@ let app = new Vue({
             });
         },
         clearDisplayedResults(){
-            console.log("Clearing data");
+            // console.log("Clearing data");
             // Clear previous content
             const resultList = document.getElementById('resultList');
             while(resultList.firstChild){
