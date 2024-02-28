@@ -1,21 +1,20 @@
 <template>
   <div v-if="storeMain.state === 'search'">
+    <p>SEARCH VIEW</p>
     <SearchView/>
+    
+    <button @click="storeMain.openDashboard('openai', 'openai-cookbook')">QUICK DB</button>
   </div>
   <div v-else-if="storeMain.state === 'dashboard'">
+    <p>DASHBOARD VIEW</p>
     <DashboardView/>
   </div>
   
-  
-  
-<!--  <StoreTest />-->
-  
-  
-  <p>LINE CHART</p>
-  <div class="container py-4 px-3 mx-auto">
-    <LineChart id="lineTest" :data="data" :options="options"/>
-  </div>
-  <p>LINE CHART</p>
+<!--  <p>LINE CHART</p>-->
+<!--  <div class="container py-4 px-3 mx-auto">-->
+<!--    <LineChart id="lineTest" :data="data" :options="options"/>-->
+<!--  </div>-->
+<!--  <p>LINE CHART</p>-->
   
 </template>
 

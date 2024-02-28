@@ -26,6 +26,8 @@ export const storeMain = reactive({
         this.state = "dashboard"
         this.owner = owner;
         this.repoName = repo;
+        
+        dashboardStore.openDashboard();
     },
     openSearch(){
         console.log("Store main, changing state to search")

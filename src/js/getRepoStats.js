@@ -8,29 +8,39 @@ const octokit = new Octokit({
 export const getStatsReactive = reactive({
     
     getRepoStats(owner, repo){
-        const data = this.requestRepoStats(owner, repo);
-        console.log("Repo Stats Request", data);
-        return data
+        const response = this.requestRepoStats(owner, repo);
+        console.log("Repo Stats Request", response);
+        return response;
     },
     
     
     
-    requestRepoStats(owner, repo) {
+    async requestRepoStats(owner, repo) {
         console.log(`Getting stats: GET /repos/${owner}/${repo}`);
-        return new Promise((resolve, reject) => {
-            octokit.repos
-                .get({owner, repo})
-                .then((response) => {
-                    const statistics = response.data;
-
-                    // Resolve the Promise with the statistics
-                    resolve(statistics);
-                })
-                .catch((error) => {
-                    // Handle errors and reject the Promise
-                    reject(error);
-                });
-        });
+        try{
+            return await octokit.repos.get({
+                owner: owner,
+                repo: repo
+            });
+        } catch (error) {
+            // Handle errors
+            console.log("Error fetching stats", error);
+        }
+        
+        // return new Promise((resolve, reject) => {
+        //     octokit.repos
+        //         .get({owner, repo})
+        //         .then((response) => {
+        //             const statistics = response.data;
+        //
+        //             // Resolve the Promise with the statistics
+        //             resolve(statistics);
+        //         })
+        //         .catch((error) => {
+        //             // Handle errors and reject the Promise
+        //             reject(error);
+        //         });
+        // });
     }
 });
 
