@@ -59,30 +59,37 @@
     
     <!-- Body -->
     <div class="card-body">
-      <!-- Chart Lifetime -->
-      <div v-if="dashboardStore.chartState === 'lifetime'">
-        <CommitsChart :chart-data="dashboardStore.chartData.lifetime"/>
+      <div v-if="dashboardStore.chartData">
+        <!-- Chart Lifetime -->
+        <div v-if="dashboardStore.chartState === 'lifetime'">
+          <CommitsChart :chart-data="dashboardStore.chartData.lifetime"/>
+        </div>
+
+        <!-- Chart Last Year -->
+        <div v-else-if="dashboardStore.chartState === 'year'">
+          <CommitsChart :chart-data="dashboardStore.chartData.year"/>
+        </div>
+
+        <!-- Chart Last 3 Months -->
+        <div v-else-if="dashboardStore.chartState === 'threeMonths'">
+          <CommitsChart :chart-data="dashboardStore.chartData.threeMonths"/>
+        </div>
+
+        <!-- Chart Last Month -->
+        <div v-else-if="dashboardStore.chartState === 'month'">
+          <CommitsChart :chart-data="dashboardStore.chartData.month"/>
+        </div>
+
+        <!-- Chart Last Week -->
+        <div v-else-if="dashboardStore.chartState === 'week'">
+          <CommitsChart :chart-data="dashboardStore.chartData.week"/>
+        </div>
+      </div>
+      <div v-else>
+        <p>No commits data available.</p>
       </div>
       
-      <!-- Chart Last Year -->
-      <div v-else-if="dashboardStore.chartState === 'year'">
-        <CommitsChart :chart-data="dashboardStore.chartData.year"/>
-      </div>
-
-      <!-- Chart Last 3 Months -->
-      <div v-else-if="dashboardStore.chartState === 'threeMonths'">
-        <CommitsChart :chart-data="dashboardStore.chartData.threeMonths"/>
-      </div>
-
-      <!-- Chart Last Month -->
-      <div v-else-if="dashboardStore.chartState === 'month'">
-        <CommitsChart :chart-data="dashboardStore.chartData.month"/>
-      </div>
       
-      <!-- Chart Last Week -->
-      <div v-else-if="dashboardStore.chartState === 'week'">
-        <CommitsChart :chart-data="dashboardStore.chartData.week"/>
-      </div>
       
     </div>
   </div>

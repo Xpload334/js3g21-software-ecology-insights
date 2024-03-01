@@ -1,6 +1,6 @@
 ﻿<template>
   <div style="max-height: 1000px; min-height: 400px;">
-    <Line
+    <Bar
         :options="chartOptions"
         :data="chartData"
     />
@@ -9,14 +9,14 @@
 </template>
 
 <script>
-import { Line } from 'vue-chartjs'
+import { Bar } from 'vue-chartjs'
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   PointElement,
   Filler,
-  LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend
@@ -30,7 +30,7 @@ ChartJS.register(
     LinearScale,
     PointElement,
     Filler,
-    LineElement,
+    BarElement,
     Title,
     Tooltip,
     Legend
@@ -60,14 +60,6 @@ const chartOptions = {
         maxTicksLimit: 16, // Change this limit as needed
         autoSkip: true,
         autoSkipPadding: 20,
-        // callback: function (value, index, values) {
-        //   // Show every 2nd label's text if more than 12 labels
-        //   if (values.length > 12) {
-        //     return index % 2 === 0 ? value : '';
-        //   }
-        //   // You can add more conditions for other limits
-        //   return value;
-        // }
       }
     }
   },
@@ -95,7 +87,7 @@ const chartOptions = {
 
 
 export default {
-  components: { Line },
+  components: { Bar },
   props: {
     chartData: {
       type: Object,
@@ -105,13 +97,6 @@ export default {
   data() {
     return {
       chartOptions : chartOptions
-      // chartOptions: {
-      //   label: 'Commits',
-      //   responsive: true,
-      //   fill: false,
-      //   borderColor: 'rgb(75, 192, 192)',
-      //   tension: 0.1
-      // }
     }
   }
 }

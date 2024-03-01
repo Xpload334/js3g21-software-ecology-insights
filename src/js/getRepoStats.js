@@ -26,21 +26,6 @@ export const getStatsReactive = reactive({
             // Handle errors
             console.log("Error fetching stats", error);
         }
-        
-        // return new Promise((resolve, reject) => {
-        //     octokit.repos
-        //         .get({owner, repo})
-        //         .then((response) => {
-        //             const statistics = response.data;
-        //
-        //             // Resolve the Promise with the statistics
-        //             resolve(statistics);
-        //         })
-        //         .catch((error) => {
-        //             // Handle errors and reject the Promise
-        //             reject(error);
-        //         });
-        // });
     }
 });
 

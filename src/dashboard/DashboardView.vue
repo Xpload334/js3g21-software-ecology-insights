@@ -5,7 +5,7 @@
   
   
   <!-- Title -->
-  <RepoTitleCard v-bind="dashboardStore.repoData"/>
+  <RepoTitleCard v-if="dashboardStore.repoData" v-bind="dashboardStore.repoData"/>
   
   <br>
   
@@ -31,12 +31,13 @@
   <div class="row">
     <!-- Stats card-->
     <div class="col-md-6">
-      <BasicMetricsCard v-bind="dashboardStore.repoData"/>
+      <BasicMetricsCard v-if="dashboardStore.repoData" v-bind="dashboardStore.repoData"/>
     </div>
 
     <!-- COMMITS -->
     <div class="col-md-6">
       <CommitsCard
+          v-if="dashboardStore.commitsData"
           :commits_count="dashboardStore.commitsCount"
           :authors_count="dashboardStore.uniqueAuthors"
           :last_commit="dashboardStore.mostRecentCommit"
@@ -47,8 +48,18 @@
   <br>
   
   <div class="col-md-auto">
-    <ChartCard/>
+    <ChartCard v-if="dashboardStore.chartData"/>
   </div>
+  
+  <br>
+  
+  <div class="col-md-auto">
+    <ContributorsCard v-if="dashboardStore.contributorsChartData"/>
+  </div>
+  
+<!--  <div class="col-md-auto">-->
+<!--    <ReadmeCard :readme-content="dashboardStore.htmlReadme"/>-->
+<!--  </div>-->
   
   
   
@@ -63,6 +74,8 @@ import LicenseCard from "./LicenseCard.vue";
 import CommitsCard from "./CommitsCard.vue";
 import CommitsChart from "./CommitsChart.vue";
 import ChartCard from "./ChartCard.vue";
+import ContributorsCard from "./ContributorsCard.vue";
+import ReadmeCard from "./ReadmeCard.vue";
 
 const pageTitle = "GitHub Dashboard"
 

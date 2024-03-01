@@ -3,10 +3,15 @@ import { reactive } from 'vue'
 import {getStatsReactive} from "../js/getRepoStats.js";
 import {getCommitsReactive} from "../js/getRepoCommits.js";
 import {storeMain} from "../js/storeMain.js";
-import testData from "../assets/TestCommitData.json"
 import {chartDataUtils} from "../js/chartDataUtils.js";
+import {getContributorsReactive} from "../js/getRepoContributors.js";
+import {chartDataContributors} from "../js/chartDataContributors.js";
+import {getReadmeReactive} from "../js/getRepoReadme.js";
 
-let socket = null;
+import testCommitData from "../assets/TestCommitData.json";
+import testRepoData from "../assets/TestRepoData.json";
+import testContributorsData from "../assets/TestContributorsData.json";
+
 export const dashboardStore = reactive({
     
     lastOwner : "",
@@ -17,141 +22,7 @@ export const dashboardStore = reactive({
     //     description : "Cannot find description"
     // },
     //TODO: REPLACE WITH CALLS ONCE LIMITATIONS REMOVED
-    repoData : {
-        "id": 468576060,
-        "node_id": "R_kgDOG-3nPA",
-        "name": "openai-cookbook-PASTVIEW",
-        "full_name": "openai/openai-cookbook",
-        "private": false,
-        "owner": {
-            "login": "openai",
-            "id": 14957082,
-            "node_id": "MDEyOk9yZ2FuaXphdGlvbjE0OTU3MDgy",
-            "avatar_url": "https://avatars.githubusercontent.com/u/14957082?v=4",
-            "gravatar_id": "",
-            "url": "https://api.github.com/users/openai",
-            "html_url": "https://github.com/openai",
-            "followers_url": "https://api.github.com/users/openai/followers",
-            "following_url": "https://api.github.com/users/openai/following{/other_user}",
-            "gists_url": "https://api.github.com/users/openai/gists{/gist_id}",
-            "starred_url": "https://api.github.com/users/openai/starred{/owner}{/repo}",
-            "subscriptions_url": "https://api.github.com/users/openai/subscriptions",
-            "organizations_url": "https://api.github.com/users/openai/orgs",
-            "repos_url": "https://api.github.com/users/openai/repos",
-            "events_url": "https://api.github.com/users/openai/events{/privacy}",
-            "received_events_url": "https://api.github.com/users/openai/received_events",
-            "type": "Organization",
-            "site_admin": false
-        },
-        "html_url": "https://github.com/openai/openai-cookbook",
-        "description": "Examples and guides for using the OpenAI API",
-        "fork": false,
-        "url": "https://api.github.com/repos/openai/openai-cookbook",
-        "forks_url": "https://api.github.com/repos/openai/openai-cookbook/forks",
-        "keys_url": "https://api.github.com/repos/openai/openai-cookbook/keys{/key_id}",
-        "collaborators_url": "https://api.github.com/repos/openai/openai-cookbook/collaborators{/collaborator}",
-        "teams_url": "https://api.github.com/repos/openai/openai-cookbook/teams",
-        "hooks_url": "https://api.github.com/repos/openai/openai-cookbook/hooks",
-        "issue_events_url": "https://api.github.com/repos/openai/openai-cookbook/issues/events{/number}",
-        "events_url": "https://api.github.com/repos/openai/openai-cookbook/events",
-        "assignees_url": "https://api.github.com/repos/openai/openai-cookbook/assignees{/user}",
-        "branches_url": "https://api.github.com/repos/openai/openai-cookbook/branches{/branch}",
-        "tags_url": "https://api.github.com/repos/openai/openai-cookbook/tags",
-        "blobs_url": "https://api.github.com/repos/openai/openai-cookbook/git/blobs{/sha}",
-        "git_tags_url": "https://api.github.com/repos/openai/openai-cookbook/git/tags{/sha}",
-        "git_refs_url": "https://api.github.com/repos/openai/openai-cookbook/git/refs{/sha}",
-        "trees_url": "https://api.github.com/repos/openai/openai-cookbook/git/trees{/sha}",
-        "statuses_url": "https://api.github.com/repos/openai/openai-cookbook/statuses/{sha}",
-        "languages_url": "https://api.github.com/repos/openai/openai-cookbook/languages",
-        "stargazers_url": "https://api.github.com/repos/openai/openai-cookbook/stargazers",
-        "contributors_url": "https://api.github.com/repos/openai/openai-cookbook/contributors",
-        "subscribers_url": "https://api.github.com/repos/openai/openai-cookbook/subscribers",
-        "subscription_url": "https://api.github.com/repos/openai/openai-cookbook/subscription",
-        "commits_url": "https://api.github.com/repos/openai/openai-cookbook/commits{/sha}",
-        "git_commits_url": "https://api.github.com/repos/openai/openai-cookbook/git/commits{/sha}",
-        "comments_url": "https://api.github.com/repos/openai/openai-cookbook/comments{/number}",
-        "issue_comment_url": "https://api.github.com/repos/openai/openai-cookbook/issues/comments{/number}",
-        "contents_url": "https://api.github.com/repos/openai/openai-cookbook/contents/{+path}",
-        "compare_url": "https://api.github.com/repos/openai/openai-cookbook/compare/{base}...{head}",
-        "merges_url": "https://api.github.com/repos/openai/openai-cookbook/merges",
-        "archive_url": "https://api.github.com/repos/openai/openai-cookbook/{archive_format}{/ref}",
-        "downloads_url": "https://api.github.com/repos/openai/openai-cookbook/downloads",
-        "issues_url": "https://api.github.com/repos/openai/openai-cookbook/issues{/number}",
-        "pulls_url": "https://api.github.com/repos/openai/openai-cookbook/pulls{/number}",
-        "milestones_url": "https://api.github.com/repos/openai/openai-cookbook/milestones{/number}",
-        "notifications_url": "https://api.github.com/repos/openai/openai-cookbook/notifications{?since,all,participating}",
-        "labels_url": "https://api.github.com/repos/openai/openai-cookbook/labels{/name}",
-        "releases_url": "https://api.github.com/repos/openai/openai-cookbook/releases{/id}",
-        "deployments_url": "https://api.github.com/repos/openai/openai-cookbook/deployments",
-        "created_at": "2022-03-11T02:08:53Z",
-        "updated_at": "2024-02-27T14:51:55Z",
-        "pushed_at": "2024-02-27T10:30:51Z",
-        "git_url": "git://github.com/openai/openai-cookbook.git",
-        "ssh_url": "git@github.com:openai/openai-cookbook.git",
-        "clone_url": "https://github.com/openai/openai-cookbook.git",
-        "svn_url": "https://github.com/openai/openai-cookbook",
-        "homepage": "https://cookbook.openai.com",
-        "size": 246467,
-        "stargazers_count": 54238,
-        "watchers_count": 54238,
-        "language": "MDX",
-        "has_issues": true,
-        "has_projects": false,
-        "has_downloads": true,
-        "has_wiki": false,
-        "has_pages": false,
-        "has_discussions": false,
-        "forks_count": 8500,
-        "mirror_url": null,
-        "archived": false,
-        "disabled": false,
-        "open_issues_count": 71,
-        "license": {
-            "key": "mit",
-            "name": "MIT License",
-            "spdx_id": "MIT",
-            "url": "https://api.github.com/licenses/mit",
-            "node_id": "MDc6TGljZW5zZTEz"
-        },
-        "allow_forking": true,
-        "is_template": false,
-        "web_commit_signoff_required": false,
-        "topics": [
-            "chatgpt",
-            "gpt-4",
-            "openai",
-            "openai-api"
-        ],
-        "visibility": "public",
-        "forks": 8500,
-        "open_issues": 71,
-        "watchers": 54238,
-        "default_branch": "main",
-        "temp_clone_token": null,
-        "custom_properties": {},
-        "organization": {
-            "login": "openai",
-            "id": 14957082,
-            "node_id": "MDEyOk9yZ2FuaXphdGlvbjE0OTU3MDgy",
-            "avatar_url": "https://avatars.githubusercontent.com/u/14957082?v=4",
-            "gravatar_id": "",
-            "url": "https://api.github.com/users/openai",
-            "html_url": "https://github.com/openai",
-            "followers_url": "https://api.github.com/users/openai/followers",
-            "following_url": "https://api.github.com/users/openai/following{/other_user}",
-            "gists_url": "https://api.github.com/users/openai/gists{/gist_id}",
-            "starred_url": "https://api.github.com/users/openai/starred{/owner}{/repo}",
-            "subscriptions_url": "https://api.github.com/users/openai/subscriptions",
-            "organizations_url": "https://api.github.com/users/openai/orgs",
-            "repos_url": "https://api.github.com/users/openai/repos",
-            "events_url": "https://api.github.com/users/openai/events{/privacy}",
-            "received_events_url": "https://api.github.com/users/openai/received_events",
-            "type": "Organization",
-            "site_admin": false
-        },
-        "network_count": 8500,
-        "subscribers_count": 845
-    },
+    repoData : testRepoData,
     hasRepoData: false,
     
     //Commits
@@ -162,7 +33,6 @@ export const dashboardStore = reactive({
     hasCommitData: false,
     //Charts
     chartState : "year", //lifetime | year | threeMonths | month | week
-    
     chartData : {
         lifetime :      [],
         year :          [],
@@ -170,6 +40,15 @@ export const dashboardStore = reactive({
         month :         [],
         week :          []
     },
+    
+    //Contributors
+    contributorsData: {},
+    hasContributorsData: false,
+    contributorsTop : [],
+    contributorsChartData : [],
+    
+    //README
+    htmlReadme : null,
     /*
     Call whenever the dashboard needs to be initialised to a new repo
      */
@@ -230,6 +109,71 @@ export const dashboardStore = reactive({
         this.chartData.month = chartDataUtils.commitsLastMonthForChart(this.commitsData);
         this.chartData.week = chartDataUtils.commitsLastWeekForChart(this.commitsData);
     },
+    /**
+     * Get the contributions for the given repository
+     * @param username
+     * @param repoName
+     */
+    getContributors(username, repoName){
+        console.log(`Retrieving contributors for ${username}/${repoName}`);
+        const maxContributors = 5;
+        
+        
+        //USING TEST DATA
+        this.getTestContributorsData();
+        let partialContributors = chartDataContributors.getTopNContributors(this.contributorsData, 5);
+        try {
+            // Transform to chart data
+            this.contributorsTop = partialContributors;
+            // this.contributorsChartData = chartDataContributors.convertToChartJSData(partialContributors);
+            // console.log("Contributors Chart Data", this.contributorsChartData);
+        } catch (error) {
+            console.error('Error converting contributors data to chart data', error);
+        }
+        
+        // //Get data
+        // getContributorsReactive.getContributorData(username, repoName)
+        //     .then(contributorsData => {
+        //         console.log("Contributors Data DASHBOARD_STORE", contributorsData);
+        //
+        //         if (!contributorsData || contributorsData.length === 0) {
+        //             console.warn('Contributors data is empty or undefined.');
+        //             return;
+        //         }
+        //
+        //         let partialContributors = contributorsData.slice(0, maxContributors);
+        //
+        //         if (!partialContributors || partialContributors.length === 0) {
+        //             console.warn('Partial contributors data is empty or undefined.');
+        //             return;
+        //         }
+        //
+        //         try {
+        //             // Transform to chart data
+        //             this.contributorsChartData = chartDataContributors.convertToChartJSData(partialContributors);
+        //             console.log("Contributors Chart Data", this.contributorsChartData);
+        //         } catch (error) {
+        //             console.error('Error converting contributors data to chart data', error);
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.error('Error getting contributors chart data', error);
+        //     });
+    },
+
+    /**
+     * Request the repo's README file in HTML format
+     * @param username
+     * @param repoName
+     */
+    getReadme(username, repoName){
+        console.log(`Retrieving README for ${username}/${repoName}`);
+        getReadmeReactive.getRepoReadme(username, repoName)
+            .then(content => {
+                console.log("Repo README", content);
+                this.htmlReadme = content;
+            })
+    },
 
     /*
     Using the URLs inside the stats data, can get even more information.
@@ -237,7 +181,13 @@ export const dashboardStore = reactive({
      */
     handleRepoLinks(){
         //Get Commits
-        this.getCommits(this.lastOwner, this.lastRepoName)
+        this.getCommits(this.lastOwner, this.lastRepoName);
+        
+        //Get Contributors
+        this.getContributors(this.lastOwner, this.lastRepoName);
+        
+        //Get README
+        // this.getReadme(this.lastOwner, this.lastRepoName);
         
         //Get Comments
         //Get issues
@@ -263,14 +213,13 @@ export const dashboardStore = reactive({
             this.errorMessage = null;
         }, 3000);
     },
-
-    objectHasKey(obj, key) {
-        // Check if the object is defined and has the given key, and the value is not null
-        return obj !== null && obj !== undefined && obj[key] !== null && Object.prototype.hasOwnProperty.call(obj, key);
-    },
     
     getTestCommitData(){
-        this.commitsData = testData.commits;
+        this.commitsData = testCommitData.commits;
+        console.log("Test Data Applied", this.commitsData)
+    },
+    getTestContributorsData(){
+        this.contributorsData = testContributorsData.contributors;
         console.log("Test Data Applied", this.commitsData)
     },
     countUniqueAuthors(){

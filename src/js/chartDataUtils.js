@@ -11,7 +11,6 @@ export const chartDataUtils = reactive({
         return this.colors[Math.floor(Math.random() * this.colors.length)];
     },
     
-    
     commitsLast12MonthsForChart(commitsData) {
         const currentDate = new Date();
         const lastYearDate = new Date(currentDate);
@@ -43,7 +42,7 @@ export const chartDataUtils = reactive({
                 data: monthlyCommits
             }]
         };
-        
+
         console.log("Chart Data (Commits Last 12 Months)", chartData)
 
         return chartData;
