@@ -68,17 +68,6 @@ const chartOptions = {
       display: false
     }
   },
-  // elements: {
-  //   line: {
-  //     tension: 0.1 // Adjust the tension to smooth out the line
-  //   },
-  //   area: {
-  //     backgroundColor: 'rgb(135, 206, 235, 0.5)', // Fill in the area below the line with a color
-  //     fill: 'start'
-  //   }
-  // },
-  // borderColor: '#0d6efd',
-  backgroundColor: 'rgb(135, 206, 235, 0.2)',
   fill : true,
   responsive: true,
   tension: 0.1,

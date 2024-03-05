@@ -1,11 +1,12 @@
 ﻿import {reactive} from "vue";
 
+const RADIUS_ZERO = 0;
+const RADIUS_DEFAULT = 5;
+
+
 export const chartDataUtils = reactive({
-    backgroundColor : '#f87979',
-    colors: [
-        // Generate a list of 5 pale colors here
-        '#FF5733', '#FFAB33', '#FFD633', '#E9FF33', '#33FF57'
-    ],
+    backgroundColor : 'rgb(135, 206, 235, 0.2)',
+    borderColor : 'rgb(135, 206, 235, 0.8)',
 
     generateRandomColor() {
         return this.colors[Math.floor(Math.random() * this.colors.length)];
@@ -38,8 +39,10 @@ export const chartDataUtils = reactive({
         const chartData = {
             labels: monthLabels,
             datasets: [{
-                // backgroundColor : this.backgroundColor,
-                data: monthlyCommits
+                backgroundColor: this.backgroundColor,
+                borderColor : this.borderColor,
+                data: monthlyCommits,
+                radius : RADIUS_DEFAULT,
             }]
         };
 
@@ -76,7 +79,9 @@ export const chartDataUtils = reactive({
         const chartData = {
             labels: rotatedDayLabels,
             datasets: [{
-                // backgroundColor : this.backgroundColor,
+                backgroundColor : this.backgroundColor,
+                borderColor : this.borderColor,
+                radius : RADIUS_DEFAULT,
                 data: dailyCommits
             }]
         };
@@ -113,7 +118,9 @@ export const chartDataUtils = reactive({
                 return `${mondayDate.getDate()}/${mondayDate.getMonth() + 1}`;
             }),
             datasets: [{
-                // backgroundColor : this.backgroundColor,
+                backgroundColor : this.backgroundColor,
+                borderColor : this.borderColor,
+                radius : RADIUS_DEFAULT,
                 data: weeklyCommits
             }]
         };
@@ -145,7 +152,9 @@ export const chartDataUtils = reactive({
                 return `${currentDay.getDate()}/${currentDay.getMonth() + 1}`;
             }),
             datasets: [{
-                // backgroundColor : this.backgroundColor,
+                backgroundColor : this.backgroundColor,
+                borderColor : this.borderColor,
+                radius : RADIUS_DEFAULT,
                 data: dailyCommits
             }]
         };
@@ -176,7 +185,9 @@ export const chartDataUtils = reactive({
         const chartData = {
             labels: monthLabels,
             datasets: [{
-                // backgroundColor : this.backgroundColor,
+                backgroundColor : this.backgroundColor,
+                borderColor : this.borderColor,
+                radius : RADIUS_DEFAULT,
                 data: sortedMonthCommits.map(([, count]) => count)
             }]
         };

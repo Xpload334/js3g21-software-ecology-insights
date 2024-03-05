@@ -1,26 +1,35 @@
 ﻿<script>
-  import {storeMain} from "../js/storeMain.js";
-
-  export default {
-    name: 'SearchEntry',
-    props: ['name', 'description', 'url'],
-    methods: {
-      openDashboard(repoName){
-        console.log(`Opening dashboard ${storeMain.owner}/${repoName}`)
-        storeMain.openDashboard(storeMain.owner, repoName)
-      }
+export default {
+  name: 'SearchEntry',
+  props: ['name', 'owner', 'description', 'url', 'openDashboardHandler'],
+  methods: {
+    openDashboard(owner, repoName) {
+      console.log(`Opening dashboard ${owner}/${repoName}`);
+      this.openDashboardHandler(owner, repoName);
     }
   }
+}
 </script>
+
 <template>
   <div class="card">
-    <!-- Your card content here -->
-    <p><strong>Name:</strong> {{ name }}</p>
-    <p><strong>Description:</strong> {{ description }}</p>
-    <p><strong>URL:</strong>{{url}}</p>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-10">
+          <!-- Your card content here -->
+          <h5 class="card-title">{{ name }}</h5>
+          <p class="card-text">{{ description }}</p>
+          <p class="card-link"><a :href="url">{{url}}</a></p>
+        </div>
+
+        <div class="col-md-2">
+          <!-- New button for opening the dashboard -->
+          <button @click="openDashboard(owner, name)" class="btn btn-primary mt-2">Open Dashboard</button>
+        </div>
+      </div>
+    </div>
+
     
-      <!-- New button for opening the dashboard -->
-      <button @click="openDashboard(name)">Open Dashboard</button>
   </div>
 </template>
 

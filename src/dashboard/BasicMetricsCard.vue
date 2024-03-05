@@ -1,7 +1,10 @@
 ﻿<template>
   <div class="card">
-    <div class="card-body">
+    <div class="card-header">
       <h5 class="card-title">Basic Stats</h5>
+    </div>
+    
+    <div class="card-body">
       <p class="card-text">Language: <b>{{language}}</b></p>
       <p class="card-text"><b>{{watchers_count}}</b> Watching</p>
       <p class="card-text"><b>{{subscribers_count}}</b> Subscribed</p>

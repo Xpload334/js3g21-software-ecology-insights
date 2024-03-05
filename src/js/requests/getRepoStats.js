@@ -3,6 +3,7 @@ import {Octokit} from "@octokit/rest";
 
 const octokit = new Octokit({
     // auth: process.env.AUTHENTICATION_TOKEN,
+    auth : "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"
 });
 
 export const getStatsReactive = reactive({

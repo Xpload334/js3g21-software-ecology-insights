@@ -3,12 +3,11 @@ import {Octokit} from "@octokit/rest";
 
 const octokit = new Octokit({
     // auth: process.env.AUTHENTICATION_TOKEN,
+    auth : "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"
 });
 
 export const getContributorsReactive = reactive({
     async getContributorData(owner, repo) {
-        const octokit = new Octokit();
-    
         try {
             // Fetch data from GitHub API using Octokit
             const response = await octokit.repos.getContributorsStats({
