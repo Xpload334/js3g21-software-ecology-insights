@@ -1,5 +1,6 @@
 ﻿import {reactive} from "vue";
 import {Octokit} from "@octokit/rest";
+import testData from "../../assets/TestContributorsData.json";
 
 const octokit = new Octokit({
     // auth: process.env.AUTHENTICATION_TOKEN,
@@ -7,7 +8,12 @@ const octokit = new Octokit({
 });
 
 export const getContributorsReactive = reactive({
-    async getContributorData(owner, repo) {
+    async getContributorData(owner, repo, usingTestData=false) {
+        if(usingTestData){
+            console.log("TEST CONTRIBUTOR DATA");
+            return testData.contributors;
+        }
+        
         try {
             // Fetch data from GitHub API using Octokit
             const response = await octokit.repos.getContributorsStats({

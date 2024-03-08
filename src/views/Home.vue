@@ -11,7 +11,6 @@
 </template>
 
 <script>
-
 import SearchViewSFC from "./SearchViewSFC.vue";
 import DashboardViewSFC from "./DashboardViewSFC.vue";
 

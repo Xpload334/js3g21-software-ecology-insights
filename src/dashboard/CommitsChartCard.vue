@@ -54,12 +54,19 @@
             <a class="nav-link" aria-current="true" @click="changeChartState('week')">Last Week</a>
           </div>
         </li>
+        
+        <!-- Refresh Button-->
+        <li class="nav-item">
+          <div id="commits-refresh-button">
+            <button @click="refreshCommits()" class="btn btn-outline-primary" :disabled="is_loading">Refresh</button>
+          </div>
+        </li>
       </ul>
     </div>
     
     <!-- Body -->
     <div class="card-body">
-      <div v-if="chartData">
+      <div v-if="chartData !== null && Object.keys(chartData).length > 0">
         <!-- Chart Lifetime -->
         <div v-if="chartState === 'lifetime'">
           <CommitsChart :chart-data="chartData.lifetime"/>
@@ -89,12 +96,8 @@
         </div>
       </div>
       <div v-else>
-        <p>No commit data available. Please try again.</p>
+        <p>Loading...</p> <!-- Placeholder while data is being loaded -->
       </div>
-      
-      
-      
-      
     </div>
   </div>
       
@@ -111,7 +114,8 @@ export default {
     //UNFINISHED
     change_chart_state : {
       type : Function
-    }
+    },
+    is_loading : [Boolean, String]
   },
   components:{
     CommitsChart
@@ -120,6 +124,9 @@ export default {
     changeChartState(newState){
       //Emit an event to notify parent
       this.$emit('change-activity-chart-state', newState);
+    },
+    refreshCommits(){
+      this.$emit('refresh-commits');
     }
   }
 }

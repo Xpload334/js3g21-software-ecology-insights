@@ -1,13 +1,20 @@
 ﻿import {reactive} from "vue";
 import {Octokit} from "@octokit/rest";
 
+import testData from '../../assets/TestCommitData.json'
+
 const octokit = new Octokit({
     // auth: process.env.AUTHENTICATION_TOKEN,
     auth : "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"
 });
 export const getCommitsReactive = reactive({
-    
-    async getCommits(owner, repo){
+    async getCommits(owner, repo, usingTestData=false){
+        if(usingTestData){
+            console.log("TEST COMMIT DATA");
+            return testData.commits;
+        }
+        
+        
         const iterator = await this.getCommitsIterator(owner, repo);
         let commitData = []
         //Iterate through responses

@@ -1,5 +1,6 @@
 ﻿import {reactive} from "vue";
 import {Octokit} from "@octokit/rest";
+import testData from "../../assets/TestRepoData.json";
 
 const octokit = new Octokit({
     // auth: process.env.AUTHENTICATION_TOKEN,
@@ -8,10 +9,15 @@ const octokit = new Octokit({
 
 export const getStatsReactive = reactive({
     
-    getRepoStats(owner, repo){
+    getRepoStats(owner, repo, usingTestData=false){
+        if(usingTestData){
+            console.log("TEST STATS DATA");
+            return testData;
+        }
+        
         const response = this.requestRepoStats(owner, repo);
         console.log("Repo Stats Request", response);
-        return response;
+        return response.data;
     },
     
     

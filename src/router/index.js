@@ -9,6 +9,10 @@ import '../css/main.css'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
 
+//BootstrapVue
+// import "bootstrap-vue/dist/bootstrap-vue.min.css"
+// import "bootstrap-vue"
+
 //Import components
 import Home from "../views/Home.vue";
 import NotFound from "../connectionFail/NotFound.vue";
@@ -16,7 +20,7 @@ import NotFound from "../connectionFail/NotFound.vue";
 
 const routes = [
     { path: '/', component: Home },
-    { path: '/:owner/:repo', component: Home},
+    { path: '/dashboard/:owner/:repo', component: Home},
     // Add a wildcard route for 404 errors
     {
         path: '/:pathMatch(.*)*',

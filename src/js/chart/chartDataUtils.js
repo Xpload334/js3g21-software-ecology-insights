@@ -11,21 +11,29 @@ export const chartDataUtils = reactive({
     generateRandomColor() {
         return this.colors[Math.floor(Math.random() * this.colors.length)];
     },
+    setColorCommits(){
+        this.backgroundColor = 'rgb(135, 206, 235, 0.2)';
+        this.borderColor = 'rgb(135, 206, 235, 0.8)';
+    },
+    setColorIssues(){
+        this.backgroundColor = 'rgb(255, 172, 28, 0.2)';
+        this.borderColor = 'rgb(255, 172, 28, 0.8)';
+    },
     
-    commitsLast12MonthsForChart(commitsData) {
+    chartDataTwelveMonths(dataArray) {
         const currentDate = new Date();
         const lastYearDate = new Date(currentDate);
         lastYearDate.setFullYear(lastYearDate.getFullYear() - 1);
 
-        const monthlyCommits = Array(12).fill(0);
+        const monthlyEntries = Array(12).fill(0);
 
-        commitsData.forEach(commit => {
-            const commitDate = new Date(commit.author.date);
+        dataArray.forEach(item => {
+            const date = new Date(item.author.date);
 
             // Check if the commit is within the last 12 months
-            if (commitDate > lastYearDate) {
-                const monthIndex = (commitDate.getMonth() + 12 - lastYearDate.getMonth()) % 12;
-                monthlyCommits[monthIndex]++;
+            if (date > lastYearDate) {
+                const monthIndex = (date.getMonth() + 12 - lastYearDate.getMonth()) % 12;
+                monthlyEntries[monthIndex]++;
             }
         });
 
@@ -41,30 +49,30 @@ export const chartDataUtils = reactive({
             datasets: [{
                 backgroundColor: this.backgroundColor,
                 borderColor : this.borderColor,
-                data: monthlyCommits,
+                data: monthlyEntries,
                 radius : RADIUS_DEFAULT,
             }]
         };
 
-        console.log("Chart Data (Commits Last 12 Months)", chartData)
+        console.log("Chart Data (Last 12 Months)", chartData)
 
         return chartData;
     },
 
-    commitsLastWeekForChart(commitsData) {
+    chartDataWeek(dataArray) {
         const currentDate = new Date();
         const lastWeekDate = new Date(currentDate);
         lastWeekDate.setDate(lastWeekDate.getDate() - 7);
 
-        const dailyCommits = Array(7).fill(0);
+        const dailyEntries = Array(7).fill(0);
 
-        commitsData.forEach(commit => {
-            const commitDate = new Date(commit.author.date);
+        dataArray.forEach(item => {
+            const date = new Date(item.author.date);
 
-            // Check if the commit is within the last week
-            if (commitDate > lastWeekDate) {
-                const dayIndex = (commitDate.getDay() - lastWeekDate.getDay() + 7) % 7;
-                dailyCommits[dayIndex]++;
+            // Check if the item is within the last week
+            if (date > lastWeekDate) {
+                const dayIndex = (date.getDay() - lastWeekDate.getDay() + 7) % 7;
+                dailyEntries[dayIndex]++;
             }
         });
 
@@ -82,32 +90,32 @@ export const chartDataUtils = reactive({
                 backgroundColor : this.backgroundColor,
                 borderColor : this.borderColor,
                 radius : RADIUS_DEFAULT,
-                data: dailyCommits
+                data: dailyEntries
             }]
         };
 
-        console.log("Chart Data (Commits Last Week)", chartData)
+        console.log("Chart Data (Last Week)", chartData)
 
         return chartData;
     },
 
-    commitsLastThreeMonthsForChart(commitsData) {
+    chartDataThreeMonths(dataArray) {
         const currentDate = new Date();
         const lastThreeMonthsDate = new Date(currentDate);
         lastThreeMonthsDate.setMonth(lastThreeMonthsDate.getMonth() - 3);
 
-        const weeklyCommits = Array(12).fill(0);
+        const weeklyEntries = Array(12).fill(0);
 
-        commitsData.forEach(commit => {
-            const commitDate = new Date(commit.author.date);
+        dataArray.forEach(item => {
+            const date = new Date(item.author.date);
 
-            // Check if the commit is within the last 3 months
-            if (commitDate > lastThreeMonthsDate) {
-                const mondayOfCurrentWeek = new Date(commitDate);
-                mondayOfCurrentWeek.setDate(commitDate.getDate() - commitDate.getDay() + (commitDate.getDay() === 0 ? -6 : 1));
+            // Check if the item is within the last 3 months
+            if (date > lastThreeMonthsDate) {
+                const mondayOfCurrentWeek = new Date(date);
+                mondayOfCurrentWeek.setDate(date.getDate() - date.getDay() + (date.getDay() === 0 ? -6 : 1));
 
                 const weekIndex = Math.floor((currentDate - mondayOfCurrentWeek) / (7 * 24 * 60 * 60 * 1000));
-                weeklyCommits[weekIndex]++;
+                weeklyEntries[weekIndex]++;
             }
         });
 
@@ -121,27 +129,29 @@ export const chartDataUtils = reactive({
                 backgroundColor : this.backgroundColor,
                 borderColor : this.borderColor,
                 radius : RADIUS_DEFAULT,
-                data: weeklyCommits
+                data: weeklyEntries
             }]
         };
+
+        console.log("Chart Data (Last 3 Months)", chartData);
 
         return chartData;
     },
 
-    commitsLastMonthForChart(commitsData) {
+    chartDataMonth(dataArray) {
         const currentDate = new Date();
         const lastMonthDate = new Date(currentDate);
         lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
 
-        const dailyCommits = Array(30).fill(0);
+        const dailyEntries = Array(30).fill(0);
 
-        commitsData.forEach(commit => {
-            const commitDate = new Date(commit.author.date);
+        dataArray.forEach(item => {
+            const date = new Date(item.author.date);
 
-            // Check if the commit is within the last month
-            if (commitDate > lastMonthDate) {
-                const dayIndex = Math.floor((commitDate - lastMonthDate) / (24 * 60 * 60 * 1000));
-                dailyCommits[dayIndex]++;
+            // Check if the item is within the last month
+            if (date > lastMonthDate) {
+                const dayIndex = Math.floor((date - lastMonthDate) / (24 * 60 * 60 * 1000));
+                dailyEntries[dayIndex]++;
             }
         });
 
@@ -155,7 +165,7 @@ export const chartDataUtils = reactive({
                 backgroundColor : this.backgroundColor,
                 borderColor : this.borderColor,
                 radius : RADIUS_DEFAULT,
-                data: dailyCommits
+                data: dailyEntries
             }]
         };
 
@@ -164,21 +174,21 @@ export const chartDataUtils = reactive({
         return chartData;
     },
 
-    commitsLifetimeForChart(commitsData) {
-        const monthCommitsMap = new Map();
+    chartDataLifetime(commitsData) {
+        const monthEntriesMap = new Map();
 
-        commitsData.forEach(commit => {
-            const commitDate = new Date(commit.author.date);
+        commitsData.forEach(item => {
+            const commitDate = new Date(item.author.date);
             const yearMonth = `${commitDate.toLocaleString('default', { month: 'long' })}/${commitDate.getFullYear()}`;
 
-            if (monthCommitsMap.has(yearMonth)) {
-                monthCommitsMap.set(yearMonth, monthCommitsMap.get(yearMonth) + 1);
+            if (monthEntriesMap.has(yearMonth)) {
+                monthEntriesMap.set(yearMonth, monthEntriesMap.get(yearMonth) + 1);
             } else {
-                monthCommitsMap.set(yearMonth, 1);
+                monthEntriesMap.set(yearMonth, 1);
             }
         });
 
-        const sortedMonthCommits = [...monthCommitsMap.entries()].sort(([a], [b]) => new Date(a) - new Date(b));
+        const sortedMonthCommits = [...monthEntriesMap.entries()].sort(([a], [b]) => new Date(a) - new Date(b));
 
         const monthLabels = sortedMonthCommits.map(([yearMonth]) => yearMonth);
 
@@ -191,6 +201,8 @@ export const chartDataUtils = reactive({
                 data: sortedMonthCommits.map(([, count]) => count)
             }]
         };
+
+        // console.log("Chart Data (Lifetime)", chartData);
 
         return chartData;
     }
