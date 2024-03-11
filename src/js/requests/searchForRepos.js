@@ -31,7 +31,10 @@ export const searchRepos = {
             description: repo.description,
             url: repo.url,
             html_url: repo.html_url,
+            
             created_at: repo.created_at,
+            updated_at : repo.updated_at,
+            topics : repo.topics,
             // Add more details as needed
         }));
 

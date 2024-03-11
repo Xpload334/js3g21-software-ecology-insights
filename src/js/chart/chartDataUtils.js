@@ -54,7 +54,7 @@ export const chartDataUtils = reactive({
             }]
         };
 
-        console.log("Chart Data (Last 12 Months)", chartData)
+        // console.log("Chart Data (Last 12 Months)", chartData)
 
         return chartData;
     },
@@ -94,7 +94,7 @@ export const chartDataUtils = reactive({
             }]
         };
 
-        console.log("Chart Data (Last Week)", chartData)
+        // console.log("Chart Data (Last Week)", chartData)
 
         return chartData;
     },
@@ -133,7 +133,7 @@ export const chartDataUtils = reactive({
             }]
         };
 
-        console.log("Chart Data (Last 3 Months)", chartData);
+        // console.log("Chart Data (Last 3 Months)", chartData);
 
         return chartData;
     },
@@ -169,7 +169,7 @@ export const chartDataUtils = reactive({
             }]
         };
 
-        console.log("Chart Data (Last Month)", chartData);
+        // console.log("Chart Data (Last Month)", chartData);
 
         return chartData;
     },

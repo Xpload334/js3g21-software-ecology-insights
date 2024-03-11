@@ -1,6 +1,7 @@
 ﻿import {reactive} from "vue";
 import {Octokit} from "@octokit/rest";
 import testData from "../../assets/TestIssuesData.json";
+import testDataNoPR from "../../assets/TestIssuesData_NoPR.json"
 
 const octokit = new Octokit({
     // auth: process.env.AUTHENTICATION_TOKEN,
@@ -10,7 +11,7 @@ export const getIssuesReactive = reactive({
     async getIssues(owner, repo, usingTestData=false){
         if(usingTestData){
             console.log("TEST ISSUES DATA");
-            return testData;
+            return testDataNoPR;
         }
         
         
@@ -24,18 +25,23 @@ export const getIssuesReactive = reactive({
             //Concat
             issuesData.push(issuesArray);
         }
+
         return issuesData.flat();
     },
-    
-    
-    
-    parseIssuesList(data){
-        let simplified = data.map((item) => (this.parseIssue(item)));
 
-        // //LOG
-        // console.log(simplified);
+
+
+    parseIssuesList(data) {
+        let simplified = data
+            .filter(item => !item.pull_request) // Filter out items with pull_request
+            .map(item => this.parseIssue(item));
+
+        // LOG
+        console.log(simplified);
         return simplified;
     },
+    
+    
     parseIssue(issueData){
         //WILL ADD MORE LATER
         return {
@@ -51,7 +57,9 @@ export const getIssuesReactive = reactive({
             closed_at : issueData.closed_at,
             created_at : issueData.created_at,
             updated_at : issueData.updated_at,
-            closed_by : issueData.closed_by
+            closed_by : issueData.closed_by,
+            
+            // pull_request : issueData.pull_request
         }
     },
 
@@ -75,6 +83,7 @@ export const getIssuesReactive = reactive({
             
             //Return all issues, so that we can aggregate which are open at any given time
             state: 'all',
+            type: 'issue', //TRY
             
             headers: {
                 "X-GitHub-Api-Version": "2022-11-28",

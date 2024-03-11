@@ -4,7 +4,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">GitDash</a>
+        <a class="navbar-brand" href="/">GitDash</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -18,7 +18,7 @@
                 <a class="nav-link active" aria-current="page">Search</a>
               </div>
               <div v-else>
-                <a class="nav-link" aria-current="page" href="#">Search</a>
+                <a class="nav-link" aria-current="page" href="/search">Search</a>
               </div>
             </li>
             
@@ -36,19 +36,17 @@
             
             <!-- HELP -->
             <li class="nav-item">
-<!--              <a class="nav-link" href="#">Pricing</a>-->
               <div v-if="state === 'help'">
                 <a class="nav-link active" aria-current="page">Help</a>
               </div>
               <div v-else>
-                <a class="nav-link" aria-current="page" href="#">Help</a>
+                <a class="nav-link" aria-current="page" href="/help">Help</a>
               </div>
             </li>
             
-            
-            <li class="nav-item">
-              <a class="nav-link disabled">Disabled</a>
-            </li>
+<!--            <li class="nav-item">-->
+<!--              <a class="nav-link disabled">Disabled</a>-->
+<!--            </li>-->
           </ul>
           </div>
         </div>

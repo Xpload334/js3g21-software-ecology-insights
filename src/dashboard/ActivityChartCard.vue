@@ -88,7 +88,7 @@
 
         <!-- Chart Last Year -->
         <div v-else-if="chartState === 'year'">
-          <CommitsChart :chart-data="commitsChartData.year"/>
+          <ActivityChart :chart-data="combineChartData(commitsChartData.year, issuesChartData.year)"/>
         </div>
 
         <!-- Chart Last 3 Months -->
@@ -121,17 +121,25 @@
 // <div v-if="chartData !== null && Object.keys(chartData).length > 0">
 // import {dashboardStore} from "./dashboardStore.js";
 import CommitsChart from "./CommitsChart.vue";
+import ActivityChart from "./ActivityChart.vue";
 
 export default {
   props:{
     chartState: String,
     commitsChartData : Object,
+    issuesChartData : Object,
+    // chartData: {
+    //   commits : Object,
+    //   issues : Object
+    // },
+    //UNFINISHED
     change_chart_state : {
       type : Function
     },
     is_loading : [Boolean, String]
   },
   components:{
+    ActivityChart,
     CommitsChart
   },
   methods: {
@@ -141,6 +149,21 @@ export default {
     },
     refreshCommits(){
       this.$emit('refresh-commits');
+    },
+    combineChartData(commitsData, issuesData){
+      if(!commitsData.labels) return {};
+      if(!issuesData.labels) return {};
+      
+      if(commitsData.labels !== issuesData.labels){
+        console.log("Labels do not match", commitsData.labels, issuesData.labels)
+      }
+
+      return {
+        labels : commitsData.labels,
+        datasets: [
+          commitsData.datasets[0], issuesData.datasets[0]
+        ]
+      }
     }
   }
 }

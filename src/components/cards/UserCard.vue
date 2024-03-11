@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="card">
-    <div class="row">
-      <div class="col-md-2">
+    <div class="row g-0">
+      <div class="col-md-3">
         <!-- Check if avatar_url is available -->
         <div v-if="avatar_url">
           <!-- Display user's avatar with a link to their GitHub profile -->
@@ -14,7 +14,9 @@
           <img src="https://placehold.co/400" class="img-fluid rounded-start" alt="placeholder">
         </div>
       </div>
-      <div class="col-md-6">
+      
+      
+      <div class="col-md-9">
         <div class="card-body">
           <!-- Display user's login with a placeholder if unavailable -->
           <h5 class="card-title">{{ login || 'Placeholder Login' }}</h5>

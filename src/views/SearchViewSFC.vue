@@ -4,15 +4,63 @@
   </div>
   
   <div class="container" id="searchView">
-    <h2 class="title text-center mt-5">Search for Repos</h2>
+    <h1 class="title text-center mt-5">Search for Repos</h1>
+    
     <button @click="openDashboard('openai', 'openai-cookbook')">QUICK DB</button>
-    <div class="col-md-6 align-self-center">
-      <!-- Search bar -->
-      <form @submit.prevent="getReposByUsername">
-        <input v-model="currentUsername" class="form-control mb-5" type="text" name="username" placeholder="GitHub Username">
-        <input type="submit" class="btn btn-primary ml-2 mb-5" value="Submit">
+    <div>
+      
+      <!-- Search bar (@submit.prevent="getReposByUsername")-->
+      <form class="row justify-content-center">
+        <!-- Form Text -->
+        <div class="col-md-6">
+          <input v-model="currentUsername" class="form-control col" type="text" name="username" placeholder="GitHub Username" :disabled="isLoading">
+        </div>
+
+
+        <div class="col-md-auto">
+          <!-- Submit button -->
+          <div v-if="isLoading">
+            <button class="btn btn-primary" type="button" disabled>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Submit
+            </button>
+          </div>
+          <div v-else>
+            <button @click="getReposByUsername" class="btn btn-primary" :disabled="isLoading">Submit</button>
+          </div>
+        </div>
+        
+        <div class="col-md-auto">
+          <!-- Reload Button -->
+          <div v-if="isLoading">
+            <button class="btn btn-primary" type="button" disabled>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Reload
+            </button>
+          </div>
+          <div v-else>
+            <button @click="displaySearchResults" class="btn btn-primary" :disabled="isLoading">Reload</button>
+          </div>
+          
+        </div>
       </form>
+      
+      
+      
+<!--      <form @submit.prevent="getReposByUsername">-->
+<!--        <input v-model="currentUsername" class="form-control" type="text" name="username" placeholder="GitHub Username">-->
+<!--        <div v-if="isLoading" class="col">-->
+<!--          <div class="spinner-grow" role="status">-->
+<!--            <span class="visually-hidden">Loading...</span>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div v-else>-->
+<!--          <input type="submit" class="btn btn-primary ml-2 mb-5" value="Submit">-->
+<!--        </div>-->
+<!--      </form>-->
     </div>
+    
+    <br>
 
 
     <!-- Pagination Buttons -->
@@ -26,29 +74,58 @@
 <!--      ></b-pagination>-->
     </div>
     
-    <div v-if="hasSearchData">
-      <button @click="previousPage" :disabled="currentPage <= 1 || isLoading">Previous</button>
-      <span>{{ currentPage }} / {{ totalPages }}</span>
-      <button @click="nextPage" :disabled="currentPage >= totalPages || isLoading">Next</button>
-    </div>
-
-    <!-- Reload Button -->
-    <button @click="displaySearchResults" class="btn btn-primary mt-2" :disabled="isLoading">Reload</button>
+    <!-- PAGINATION -->
+    <ul v-if="hasSearchData" class="pagination justify-content-center">
+      <li class="page-item">
+        <button @click="previousPage" :disabled="currentPage <= 1 || isLoading" 
+                class="btn btn-outline-primary">&laquo;</button>
+      </li>
+      <li class="page-item disabled">
+        <a class="page-link">{{ currentPage }} / {{ totalPages }}</a>
+      </li>
+      <li class="page-item">
+        <button @click="nextPage" :disabled="currentPage >= totalPages || isLoading" 
+                class="btn btn-outline-primary">&raquo;</button>
+      </li>
+    </ul>
+    
 
     <!-- Search Results-->
     <div id="scrollPane" class="scroll-pane overflow-auto">
+      <div v-if="isLoading && !currentResults">
+        <div class="d-flex justify-content-center">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </div>
       <div v-if="currentResults">
-        <SearchEntry
-            v-for="item in currentResults"
-            :key="item.name"
-            :owner="lastUsername"
-            :name="item.name"
-            :description="item.description"
-            :url="item.html_url"
-            :openDashboardHandler="openDashboard"
-        />
+        <div v-for="item in currentResults">
+          <SearchEntry
+              v-bind="item"
+              :openDashboardHandler="openDashboard"/>
+          <br>
+        </div>
+        
       </div>
     </div>
+    
+    <!-- PAGINATION -->
+    <ul v-if="hasSearchData" class="pagination justify-content-center">
+      <li class="page-item">
+        <button @click="previousPage" :disabled="currentPage <= 1 || isLoading"
+                class="btn btn-outline-primary">&laquo;</button>
+      </li>
+      <li class="page-item disabled">
+        <a class="page-link">{{ currentPage }} / {{ totalPages }}</a>
+      </li>
+      <li class="page-item">
+        <button @click="nextPage" :disabled="currentPage >= totalPages || isLoading"
+                class="btn btn-outline-primary">&raquo;</button>
+      </li>
+    </ul>
+    
+<!--    <MainFooter/>-->
   </div>
 </template>
 
@@ -57,6 +134,7 @@ import {ref} from 'vue'
 import {searchRepos} from "../js/requests/searchForRepos.js";
 import SearchEntry from "../search/SearchEntry.vue";
 import MainTitle from "../components/MainTitle.vue";
+import MainFooter from "../components/MainFooter.vue";
 
 // import 'bootstrap/dist/css/bootstrap.css'
 // import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -76,6 +154,11 @@ const itemsPerPage = ref(30);
 const totalPages = ref(10);
 
 const getReposByUsername = () => {
+  if(currentUsername.value === ""){
+    return;
+  }
+  
+  
   let shouldSearch = lastUsername.value !== currentUsername.value;
 
   if (shouldSearch) {
@@ -108,6 +191,10 @@ const handleRepos = (data) => {
 };
 
 const displaySearchResults = () => {
+  if(lastUsername.value === ""){
+    return;
+  }
+  
   console.log(`Displaying page ${currentPage.value}`);
   clearDisplayedResults();
   currentResults.value = searchResults.value[currentPage.value - 1];

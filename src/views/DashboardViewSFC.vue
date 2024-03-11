@@ -55,9 +55,18 @@
     <br>
 
     <div class="col-md-auto">
-      <CommitsChartCard
-          :chart-state="commitsChartState" 
-          :chart-data="commitsChartData"
+<!--      <CommitsChartCard-->
+<!--          :chart-state="commitsChartState" -->
+<!--          :commits-chart-data="commitsChartData"-->
+<!--          :issues-chart-data="issuesChartData"-->
+<!--          :is-loading="isLoadingCommits"-->
+<!--          @change-activity-chart-state="setChartState"-->
+<!--          @refresh-commits="refreshCommits"-->
+<!--      />-->
+      <ActivityChartCard
+          :chart-state="commitsChartState"
+          :commits-chart-data="commitsChartData"
+          :issues-chart-data="issuesChartData"
           :is-loading="isLoadingCommits"
           @change-activity-chart-state="setChartState"
           @refresh-commits="refreshCommits"
@@ -109,9 +118,9 @@ import MainTitle from "../components/MainTitle.vue";
 import Toast_BottomRight from "../components/toasts/Toast_BottomRight.vue";
 import {getIssuesReactive} from "../js/requests/getRepoIssues.js";
 import {chartDataIssues} from "../js/chart/chartDataIssues.js";
+import ActivityChartCard from "../dashboard/ActivityChartCard.vue";
 
 const USING_TEST_DATA = true;
-
 
 
 const route = useRoute();
@@ -211,12 +220,17 @@ const dashboardStart = (newUsername, newRepoName) => {
  * @param repoName name of the repo
  */
 const getRepoStats = (username, repoName) => {
+  isLoadingRepo.value = true;
+  
   fetchStats(username, repoName).then((data) => {
     repoData.value = data;
     handleRepoLinks();
   }).catch((error) => {
     console.warn(error);
+  }).finally(() => {
+    isLoadingRepo.value = false
   });
+  
   
   // getStatsReactive.getRepoStats(username, repoName).then((response) => {
   //   console.log("Stats Response", response.data);
@@ -288,6 +302,8 @@ function getCommits(username, repoName){
  * @param repoName name of the repo
  */
 const getContributors = (username, repoName) => {
+  isLoadingContributors.value = true;
+  
   fetchContributors(username, repoName).then((data) => {
     // console.log("Contributors Response (Full)", data)
     contributorsData.value = data;
@@ -302,30 +318,17 @@ const getContributors = (username, repoName) => {
     hasContributorsTop.value = true;
   }).catch((error) => {
     console.error(error);
+  }).finally(() => {
+    isLoadingContributors.value = false
   });
-  
-  // getContributorsReactive.getContributorData(username, repoName, USING_TEST_DATA).then((data) => {
-  //   console.log("Contributors Response (Full)", data)
-  //   contributorsData.value = data;
-  //  
-  //   contributorsTop.value = chartDataContributors.getTopNContributors(contributorsData.value, NUM_TOP_CONTRIBUTORS);
-  //   contributorsChartData.value = chartDataContributors.convertToChartJSData(contributorsTop.value);
-  //   console.log(`Top ${NUM_TOP_CONTRIBUTORS} Contributors`, contributorsTop.value)
-  //  
-  //   contributorsSuggestedMax.value = chartDataContributors.getSuggestedMaxY(contributorsTop.value);
-  //   console.log("Suggested Max Y", contributorsSuggestedMax.value);
-  //  
-  //   hasContributorsTop.value = true;
-  //  
-  //   // contributorsChartData.value = chartDataContributors.convertToChartJSData(contributorsTop.value);
-  // }).catch((error) => {
-  //   console.error(error);
-  // });
 };
 
 
 function getIssues(username, repoName){
+  isLoadingIssues.value = true;
+  
   fetchIssues(username, repoName).then((data) => {
+    console.log("Received issues data")
     issuesData.value = data;
     hasIssuesData.value = true;
     
@@ -357,7 +360,7 @@ const handleRepoLinks = () => {
   getContributors(owner.value, repoName.value);
   
   //Get issues
-  // getIssues(owner.value, repoName.value);
+  getIssues(owner.value, repoName.value);
 };
 
 
@@ -438,10 +441,23 @@ const setChartState = (newState) => {
 };
 
 const refreshCommits = () => {
+  if(isLoadingCommits){
+    return;
+  }
+  
   //Get commits
   displayToast("Refreshing commits...")
   getCommits(owner.value, repoName.value);
 };
+
+const refreshContributors = () => {
+  if(isLoadingContributors){
+    return;
+  }
+  
+  displayToast("Refreshing contributors...")
+  getContributors(owner.value, repoName.value);
+}
 
 const displayToast= (message) => {
   toastMessage.value = message;
