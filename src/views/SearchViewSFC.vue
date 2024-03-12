@@ -30,7 +30,7 @@
           </div>
         </div>
         
-        <div class="col-md-auto">
+        <div class="col-md-auto" v-if="hasSearchData">
           <!-- Reload Button -->
           <div v-if="isLoading">
             <button class="btn btn-primary" type="button" disabled>
@@ -39,7 +39,7 @@
             </button>
           </div>
           <div v-else>
-            <button @click="displaySearchResults" class="btn btn-primary" :disabled="isLoading">Reload</button>
+            <button @click="displaySearchResultsPaged" class="btn btn-primary" :disabled="isLoading">Reload</button>
           </div>
           
         </div>
@@ -145,8 +145,10 @@ const lastUsername = ref("");
 
 // Search Results
 const hasSearchData = ref(false);
-const searchResults = ref([]);
+// const searchResults = ref([]);
 const currentResults = ref([]);
+
+const searchResultsPaged = ref([]);
 
 // Page
 const currentPage = ref(1);
@@ -163,41 +165,66 @@ const getReposByUsername = () => {
 
   if (shouldSearch) {
     // Search page 1
-    searchResults.value = [];
-    getRepos(currentUsername.value, 1);
+    // searchResults.value = [];
+    getRepos(currentUsername.value);
   } else {
     console.log("Searching for the same username, cancelling search");
   }
 };
 
-const getRepos = (username, pageNum) => {
+const getRepos = (username) => {
   disableButton();
   lastUsername.value = username;
 
-  searchRepos.listReposForUser(username, pageNum).then((r) => {
+  // searchRepos.listReposForUser(username, pageNum).then((r) => {
+  //   console.log("Repos data received", r);
+  //   currentUsername = username
+  //   handleRepos(r);
+  // });
+  
+  searchRepos.getReposPages(username).then((r) => {
     console.log("Repos data received", r);
     currentUsername = username
-    handleRepos(r);
-  });
+    handleReposPaged(r);
+  })
 
 };
 
-const handleRepos = (data) => {
-  searchResults.value[currentPage.value - 1] = data.repos;
-  itemsPerPage.value = data.itemsPerPage;
-  totalPages.value = data.totalPages;
+// const handleRepos = (data) => {
+//   searchResults.value[currentPage.value - 1] = data.repos;
+//   itemsPerPage.value = data.itemsPerPage;
+//   totalPages.value = data.totalPages;
+//   hasSearchData.value = true;
+//   displaySearchResults();
+// };
+
+function handleReposPaged(data){
+  searchResultsPaged.value = data;
+  totalPages.value = data.length;
   hasSearchData.value = true;
-  displaySearchResults();
-};
+  
+  displaySearchResultsPaged();
+}
 
-const displaySearchResults = () => {
+// const displaySearchResults = () => {
+//   if(lastUsername.value === ""){
+//     return;
+//   }
+//  
+//   console.log(`Displaying page ${currentPage.value}`);
+//   clearDisplayedResults();
+//   currentResults.value = searchResults.value[currentPage.value - 1];
+//   console.log('CURRENT Results', currentResults.value);
+// };
+
+const displaySearchResultsPaged = () => {
   if(lastUsername.value === ""){
     return;
   }
-  
+
   console.log(`Displaying page ${currentPage.value}`);
   clearDisplayedResults();
-  currentResults.value = searchResults.value[currentPage.value - 1];
+  currentResults.value = searchResultsPaged.value[currentPage.value - 1];
   console.log('CURRENT Results', currentResults.value);
 };
 
@@ -219,24 +246,32 @@ const disableButton = () => {
   }, 2000);
 };
 
-const nextPage = () => {
-  if (currentPage.value < totalPages.value) {
-    currentPage.value++;
+// const nextPage = () => {
+//   if (currentPage.value < totalPages.value) {
+//     currentPage.value++;
+//
+//     if (currentPage.value > searchResults.value.length) {
+//       console.log("Retrieving data for next page from server");
+//       getRepos(lastUsername.value, currentPage.value);
+//     } else {
+//       console.log("Already has data for this page");
+//       displaySearchResults();
+//     }
+//   }
+// };
 
-    if (currentPage.value > searchResults.value.length) {
-      console.log("Retrieving data for next page from server");
-      getRepos(lastUsername.value, currentPage.value);
-    } else {
-      console.log("Already has data for this page");
-      displaySearchResults();
-    }
+function nextPage(){
+  if(currentPage.value < totalPages.value){
+    currentPage.value++;
+    displaySearchResultsPaged()
   }
-};
+}
 
 const previousPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--;
-    displaySearchResults();
+    // displaySearchResults();
+    displaySearchResultsPaged();
   }
 };
 
@@ -248,18 +283,18 @@ const openDashboard = (owner, repo) => {
 };
 
 // Handle pagination change event
-function handlePaginationChange(page) {
-  // Update the current page and display search results
-  currentPage.value = page;
-  if (currentPage.value > searchResults.value.length) {
-    console.log("Retrieving data for next page from server");
-    getRepos(lastUsername.value, currentPage.value);
-  } else {
-    console.log("Already has data for this page");
-    displaySearchResults();
-  }
-  // displaySearchResults();
-}
+// function handlePaginationChange(page) {
+//   // Update the current page and display search results
+//   currentPage.value = page;
+//   if (currentPage.value > searchResults.value.length) {
+//     console.log("Retrieving data for next page from server");
+//     getRepos(lastUsername.value, currentPage.value);
+//   } else {
+//     console.log("Already has data for this page");
+//     displaySearchResults();
+//   }
+//   // displaySearchResults();
+// }
 
 </script>
 

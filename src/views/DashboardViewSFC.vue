@@ -360,7 +360,7 @@ const handleRepoLinks = () => {
   getContributors(owner.value, repoName.value);
   
   //Get issues
-  getIssues(owner.value, repoName.value);
+  // getIssues(owner.value, repoName.value);
 };
 
 
