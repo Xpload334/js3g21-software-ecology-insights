@@ -1,26 +1,26 @@
 ﻿import {reactive} from "vue";
+import ChartDataIssues from "./chartDataIssues.js";
 
-const RADIUS_ZERO = 0;
-const RADIUS_DEFAULT = 5;
-
-
-export const chartDataUtils = reactive({
-    backgroundColor : 'rgb(135, 206, 235, 0.2)',
-    borderColor : 'rgb(135, 206, 235, 0.8)',
-
-    generateRandomColor() {
-        return this.colors[Math.floor(Math.random() * this.colors.length)];
-    },
-    setColorCommits(){
-        this.backgroundColor = 'rgb(135, 206, 235, 0.2)';
-        this.borderColor = 'rgb(135, 206, 235, 0.8)';
-    },
-    setColorIssues(){
-        this.backgroundColor = 'rgb(255, 172, 28, 0.2)';
-        this.borderColor = 'rgb(255, 172, 28, 0.8)';
-    },
+class ChartDataUtils{
+    static RADIUS_ZERO = 0;
+    static RADIUS_DEFAULT = 5;
     
-    chartDataTwelveMonths(dataArray) {
+    static backgroundColor = 'rgb(135, 206, 235, 0.2)';
+    static borderColor = 'rgb(135, 206, 235, 0.8)';
+
+    // generateRandomColor() {
+    //     return this.colors[Math.floor(Math.random() * this.colors.length)];
+    // },
+    // setColorCommits(){
+    //     this.backgroundColor = 'rgb(135, 206, 235, 0.2)';
+    //     this.borderColor = 'rgb(135, 206, 235, 0.8)';
+    // },
+    // setColorIssues(){
+    //     this.backgroundColor = 'rgb(255, 172, 28, 0.2)';
+    //     this.borderColor = 'rgb(255, 172, 28, 0.8)';
+    // },
+    
+    static chartDataTwelveMonths(dataArray) {
         const currentDate = new Date();
         const lastYearDate = new Date(currentDate);
         lastYearDate.setFullYear(lastYearDate.getFullYear() - 1);
@@ -47,19 +47,19 @@ export const chartDataUtils = reactive({
         const chartData = {
             labels: monthLabels,
             datasets: [{
-                backgroundColor: this.backgroundColor,
-                borderColor : this.borderColor,
+                backgroundColor: ChartDataUtils.backgroundColor,
+                borderColor : ChartDataUtils.borderColor,
                 data: monthlyEntries,
-                radius : RADIUS_DEFAULT,
+                radius : ChartDataUtils.RADIUS_DEFAULT,
             }]
         };
 
         // console.log("Chart Data (Last 12 Months)", chartData)
 
         return chartData;
-    },
+    }
 
-    chartDataWeek(dataArray) {
+    static chartDataWeek(dataArray) {
         const currentDate = new Date();
         const lastWeekDate = new Date(currentDate);
         lastWeekDate.setDate(lastWeekDate.getDate() - 7);
@@ -89,7 +89,7 @@ export const chartDataUtils = reactive({
             datasets: [{
                 backgroundColor : this.backgroundColor,
                 borderColor : this.borderColor,
-                radius : RADIUS_DEFAULT,
+                radius : this.RADIUS_DEFAULT,
                 data: dailyEntries
             }]
         };
@@ -97,9 +97,9 @@ export const chartDataUtils = reactive({
         // console.log("Chart Data (Last Week)", chartData)
 
         return chartData;
-    },
+    }
 
-    chartDataThreeMonths(dataArray) {
+    static chartDataThreeMonths(dataArray) {
         const currentDate = new Date();
         const lastThreeMonthsDate = new Date(currentDate);
         lastThreeMonthsDate.setMonth(lastThreeMonthsDate.getMonth() - 3);
@@ -128,7 +128,7 @@ export const chartDataUtils = reactive({
             datasets: [{
                 backgroundColor : this.backgroundColor,
                 borderColor : this.borderColor,
-                radius : RADIUS_DEFAULT,
+                radius : this.RADIUS_DEFAULT,
                 data: weeklyEntries
             }]
         };
@@ -136,9 +136,9 @@ export const chartDataUtils = reactive({
         // console.log("Chart Data (Last 3 Months)", chartData);
 
         return chartData;
-    },
+    }
 
-    chartDataMonth(dataArray) {
+    static chartDataMonth(dataArray) {
         const currentDate = new Date();
         const lastMonthDate = new Date(currentDate);
         lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
@@ -164,7 +164,7 @@ export const chartDataUtils = reactive({
             datasets: [{
                 backgroundColor : this.backgroundColor,
                 borderColor : this.borderColor,
-                radius : RADIUS_DEFAULT,
+                radius : this.RADIUS_DEFAULT,
                 data: dailyEntries
             }]
         };
@@ -172,9 +172,9 @@ export const chartDataUtils = reactive({
         // console.log("Chart Data (Last Month)", chartData);
 
         return chartData;
-    },
+    }
 
-    chartDataLifetime(commitsData) {
+    static chartDataLifetime(commitsData, labelName='Commits') {
         const monthEntriesMap = new Map();
 
         commitsData.forEach(item => {
@@ -195,9 +195,10 @@ export const chartDataUtils = reactive({
         const chartData = {
             labels: monthLabels,
             datasets: [{
+                label: labelName,
                 backgroundColor : this.backgroundColor,
                 borderColor : this.borderColor,
-                radius : RADIUS_DEFAULT,
+                radius : this.RADIUS_DEFAULT,
                 data: sortedMonthCommits.map(([, count]) => count)
             }]
         };
@@ -206,7 +207,6 @@ export const chartDataUtils = reactive({
 
         return chartData;
     }
-    
-    
-});
+}
+export default ChartDataUtils;
 

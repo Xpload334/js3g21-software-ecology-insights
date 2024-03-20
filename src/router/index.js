@@ -14,9 +14,9 @@ import "bootstrap"
 // import "bootstrap-vue"
 
 //Import components
-import Home from "../views/Home.vue";
+// import Home from "../views/Home.vue";
 import SearchViewSFC from "../views/SearchViewSFC.vue"
-import DashboardViewSFC from "../views/DashboardViewSFC.vue"
+// import DashboardViewSFC from "../views/DashboardViewSFC.vue"
 import HelpViewSFC from "../views/HelpViewSFC.vue"
 import NotFound from "../connectionFail/NotFound.vue";
 import HomeDashboard from "../views/HomeDashboard.vue";

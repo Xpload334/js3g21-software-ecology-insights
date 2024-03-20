@@ -39,17 +39,35 @@ export default {
       type: Object,
       required: true
     },
-    suggestedMaxY: Number
+    suggestedMaxY: Number,
+    suggestedMaxY1: Number
   },
   data() {
     return {
       chartOptions: {
         scales: {
           y: {
-            suggestedMax: this.suggestedMaxY || undefined, // Use the prop if available
+            suggestedMax: this.suggestedMaxY || 100, // Use the prop if available
+            suggestedMin: 0,
             ticks: {
               precision: 0 // Display only whole numbers on the y-axis
-            }
+            },
+            display: true,
+            position: 'left',
+          },
+          y1: {
+            suggestedMax: this.suggestedMaxY1 || 100, // Use the prop if available
+            suggestedMin: 0,
+            ticks: {
+              precision: 0 // Display only whole numbers on the y-axis
+            },
+            display: true,
+            position: 'right',
+
+            // grid line settings
+            grid: {
+              drawOnChartArea: false, // only want the grid lines for one axis to show up
+            },
           },
           x: {
             type: 'category',
@@ -71,12 +89,12 @@ export default {
             display: false
           }
         },
+        fill: true,
+        responsive: true,
         interaction: {
           mode : 'index',
           intersect: false
         },
-        fill: true,
-        responsive: true,
         tension: 0.1,
         maintainAspectRatio: false,
       }

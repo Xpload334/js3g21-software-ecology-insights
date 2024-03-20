@@ -5,11 +5,34 @@
     </div>
     
     <div class="card-body">
-      <p class="card-text">Language: <b>{{language}}</b></p>
-      <p class="card-text"><b>{{watchers_count}}</b> Watching</p>
-      <p class="card-text"><b>{{subscribers_count}}</b> Subscribed</p>
-      <p class="card-text"><b>{{stargazers_count}}</b> Starred</p>
-      <p class="card-text"><b>{{forks_count}}</b> Forks</p>
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col card-text">
+          <p>Language: <b>{{language}}</b></p>
+        </div>
+        
+        <div class="col card-text">
+          <p><b>{{watchers_count}}</b> Watching</p>
+        </div>
+
+        <div class="col card-text">
+          <p><b>{{subscribers_count}}</b> Subscribed</p>
+        </div>
+
+        <div class="col card-text">
+          <p><b>{{stargazers_count}}</b> Starred</p>
+        </div>
+
+        <div class="col card-text">
+          <p><b>{{forks_count}}</b> Forks</p>
+        </div>
+      </div>
+      
+      
+      
+      
+      
+      
+      
     </div>
   </div>
 </template>

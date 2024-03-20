@@ -39,8 +39,7 @@ export default {
       type: Object,
       required: true
     },
-    suggestedMaxY: Number,
-    suggestedMaxY1: Number
+    suggestedMaxY: Number
   },
   data() {
     return {
@@ -51,21 +50,7 @@ export default {
             ticks: {
               precision: 0 // Display only whole numbers on the y-axis
             },
-            display: true,
-            position: 'left',
-          },
-          y1: {
-            suggestedMax: this.suggestedMaxY1 || undefined, // Use the prop if available
-            ticks: {
-              precision: 0 // Display only whole numbers on the y-axis
-            },
-            display: true,
-            position: 'right',
-
-            // grid line settings
-            grid: {
-              drawOnChartArea: false, // only want the grid lines for one axis to show up
-            },
+            stacked: true,
           },
           x: {
             type: 'category',
@@ -87,12 +72,12 @@ export default {
             display: false
           }
         },
-        fill: true,
-        responsive: true,
         interaction: {
           mode : 'index',
           intersect: false
         },
+        fill: true,
+        responsive: true,
         tension: 0.1,
         maintainAspectRatio: false,
       }

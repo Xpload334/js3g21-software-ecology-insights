@@ -1,35 +1,36 @@
-﻿<!--<template>-->
-<!--  <div class="overflow-auto">-->
-<!--    <b-pagination-->
-<!--        :value="currentPage"-->
-<!--        :total-rows="rows"-->
-<!--        :per-page="perPage"-->
-<!--        first-text="⏮"-->
-<!--        prev-text="⏪"-->
-<!--        next-text="⏩"-->
-<!--        last-text="⏭"-->
-<!--        class="mt-4"-->
-<!--        @input="handlePageChange"-->
-<!--    ></b-pagination>-->
-<!--  </div>-->
-<!--</template>-->
+﻿<template>
+  <div class="overflow-auto">
+    <!-- PAGINATION -->
+    <ul class="pagination justify-content-center">
+      <li class="page-item">
+        <button @click="previousPage" :disabled="currentPage <= 1 || isLoading"
+                class="btn btn-outline-primary">&laquo;</button>
+      </li>
+      <li class="page-item disabled">
+        <a class="page-link">{{ currentPage }} / {{ totalPages }}</a>
+      </li>
+      <li class="page-item">
+        <button @click="nextPage" :disabled="currentPage >= totalPages || isLoading"
+                class="btn btn-outline-primary">&raquo;</button>
+      </li>
+    </ul>
+  </div>
+</template>
 
-<!--<script>-->
-<!--export default {-->
-<!--  props: {-->
-<!--    currentPage : Number,-->
-<!--    rows : Number,-->
-<!--    perPage: Number-->
-<!--  },-->
-<!--  methods: {-->
-<!--    // Emit an input event with the new page value when pagination changes-->
-<!--    handlePageChange(newPage) {-->
-<!--      this.$emit("update:currentPage", newPage);-->
-<!--    },-->
-<!--  },-->
-<!--}-->
-<!--</script>-->
+<script>
+export default {
+  props: {
+    currentPage : Number,
+    totalPages : Number,
+    
+    isLoading : Boolean,
+    
+    previousPage : Function,
+    nextPage : Function,
+  },
+}
+</script>
 
-<!--<style scoped>-->
+<style scoped>
 
-<!--</style>-->
+</style>

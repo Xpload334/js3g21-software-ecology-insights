@@ -11,6 +11,7 @@ export default {
     created_at : String,
     updated_at : String,
     topics : Array,
+    private : Boolean,
     openDashboardHandler : Function
   },
   methods: {
@@ -29,12 +30,21 @@ export default {
 </script>
 
 <template>
-  <div class="card">
+  <div class="card h-100">
     <div class="card-header">
       <div class="row">
         <h5 class="card-title col-md-9">{{ name }}</h5>
         <!-- TOPICS -->
         <div class="col align-content-end">
+          <!-- PRIVATE/PUBLIC -->
+          <span v-if="private">
+            <span class="badge rounded-pill bg-danger">Private</span> &nbsp
+          </span>
+          <span v-else>
+            <span class="badge rounded-pill bg-success">Public</span> &nbsp
+          </span>
+          
+          
           <span v-for="topic in topics">
             <span class="badge rounded-pill bg-primary">{{topic}}</span> &nbsp
           </span>

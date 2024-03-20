@@ -2,7 +2,7 @@
   <div class="card">
     <!-- Header -->
     <div class="card-header">
-      <h2 class="card-title text-center">Commit Activity</h2>
+      <h2 class="card-title text-center">Activity</h2>
       <ul class="nav nav-tabs card-header-tabs">
 
         <!-- Lifetime -->
@@ -83,27 +83,47 @@
       <div v-if="commitsChartData !== null && Object.keys(commitsChartData).length > 0">
         <!-- Chart Lifetime -->
         <div v-if="chartState === 'lifetime'">
-          <CommitsChart :chart-data="commitsChartData.lifetime"/>
+          <LineChart_DualYAxes
+              :chart-data="combineChartData(commitsChartData.lifetime, issuesChartData.lifetime)"
+              :suggested-max-y="getSuggestedMaxY(commitsChartData.lifetime)"
+              :suggested-max-y1="getSuggestedMaxY(issuesChartData.lifetime)"
+          />
         </div>
 
         <!-- Chart Last Year -->
         <div v-else-if="chartState === 'year'">
-          <ActivityChart :chart-data="combineChartData(commitsChartData.year, issuesChartData.year)"/>
+          <LineChart_DualYAxes 
+              :chart-data="combineChartData(commitsChartData.year, issuesChartData.year)"
+              :suggested-max-y="getSuggestedMaxY(commitsChartData.year)"
+              :suggested-max-y1="getSuggestedMaxY(issuesChartData.year)"
+          />
         </div>
 
         <!-- Chart Last 3 Months -->
         <div v-else-if="chartState === 'threeMonths'">
-          <CommitsChart :chart-data="commitsChartData.threeMonths"/>
+          <LineChart_DualYAxes
+              :chart-data="combineChartData(commitsChartData.threeMonths, issuesChartData.threeMonths)"
+              :suggested-max-y="getSuggestedMaxY(commitsChartData.threeMonths)"
+              :suggested-max-y1="getSuggestedMaxY(issuesChartData.threeMonths)"
+          />
         </div>
 
         <!-- Chart Last Month -->
         <div v-else-if="chartState === 'month'">
-          <CommitsChart :chart-data="commitsChartData.month"/>
+          <LineChart_DualYAxes
+              :chart-data="combineChartData(commitsChartData.month, issuesChartData.month)"
+              :suggested-max-y="getSuggestedMaxY(commitsChartData.month)"
+              :suggested-max-y1="getSuggestedMaxY(issuesChartData.month)"
+          />
         </div>
 
         <!-- Chart Last Week -->
         <div v-else-if="chartState === 'week'">
-          <CommitsChart :chart-data="commitsChartData.week"/>
+          <LineChart_DualYAxes
+              :chart-data="combineChartData(commitsChartData.week, issuesChartData.week)"
+              :suggested-max-y="getSuggestedMaxY(commitsChartData.week)"
+              :suggested-max-y1="getSuggestedMaxY(issuesChartData.week)"
+          />
         </div>
         <div v-else>
           <p>No commits data available.</p>
@@ -121,7 +141,7 @@
 // <div v-if="chartData !== null && Object.keys(chartData).length > 0">
 // import {dashboardStore} from "./dashboardStore.js";
 import CommitsChart from "./CommitsChart.vue";
-import ActivityChart from "./ActivityChart.vue";
+import LineChart_DualYAxes from "./LineChart_DualYAxes.vue";
 
 export default {
   props:{
@@ -139,7 +159,7 @@ export default {
     is_loading : [Boolean, String]
   },
   components:{
-    ActivityChart,
+    LineChart_DualYAxes,
     CommitsChart
   },
   methods: {
@@ -151,20 +171,58 @@ export default {
       this.$emit('refresh-commits');
     },
     combineChartData(commitsData, issuesData){
-      if(!commitsData.labels) return {};
-      if(!issuesData.labels) return {};
+      // if(!commitsData.labels) return null;
+      // if(!issuesData.labels) return null;
+      //
+      // if(commitsData.labels !== issuesData.labels){
+      //   console.log("Labels do not match", commitsData.labels, issuesData.labels)
+      // }
       
-      if(commitsData.labels !== issuesData.labels){
-        console.log("Labels do not match", commitsData.labels, issuesData.labels)
+      try{
+        return {
+          labels : commitsData.labels,
+          datasets: [
+            commitsData.datasets[0], issuesData.datasets[0]
+          ]
+        }
+      } catch(e){
+        
+        try{
+          return commitsData;
+        } catch(e){
+          return {
+            labels: [],
+            datasets: []
+          };
+        }
+        
       }
+    },
 
-      return {
-        labels : commitsData.labels,
-        datasets: [
-          commitsData.datasets[0], issuesData.datasets[0]
-        ]
+    getSuggestedMaxY(chartData) {
+      try{
+        const datasets = chartData.datasets;
+
+        if (datasets.length === 0) {
+          return 0; // No datasets available
+        }
+
+        // Find the maximum value among all datasets
+        const maxValues = datasets.map(dataset => Math.max(...dataset.data));
+        const absoluteMax = Math.max(...maxValues);
+
+        // Provide a buffer (e.g., 10%) to ensure better visual representation
+        const bufferPercentage = 0;
+        const buffer = absoluteMax * bufferPercentage;
+
+        return absoluteMax + buffer;
+      } catch(e){
+        console.error(e)
+        return 100;
       }
-    }
+      
+    },
+    
   }
 }
 </script>
