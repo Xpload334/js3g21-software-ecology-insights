@@ -1,17 +1,18 @@
-﻿import { Octokit } from "@octokit/rest";
+﻿// import { Octokit } from "@octokit/rest";
+import RequestUtils from "./requestUtils.js";
 
-const octokit = new Octokit({
-    // auth: process.env.AUTHENTICATION_TOKEN,
-});
+// const octokit = new Octokit({
+//     // auth: process.env.AUTHENTICATION_TOKEN,
+// });
 const ITEMS_PER_PAGE = 30;
 const SORTING_TYPE = "full_name"
 
-export const searchRepos = {
-    async getReposPages(owner, searchTypeIndex=0){
+class SearchForRepos{
+    static async getReposPages(owner, searchTypeIndex=0){
         let iterator = null;
         console.log("Search Type Index", searchTypeIndex)
-        
-        
+
+
         if(searchTypeIndex === 0){
             iterator = await this.getSearchIterator(owner);
         } else if(searchTypeIndex === 1){
@@ -19,7 +20,7 @@ export const searchRepos = {
         } else {
             throw new Error("Invalid search type");
         }
-        
+
         let reposData = []
         //Iterate through responses
         console.log("Iterating through repos")
@@ -34,11 +35,11 @@ export const searchRepos = {
         } catch (e) {
             throw new Error("Failed to parse repos");
         }
-        
-        return reposData;
-    },
 
-    parseRepoList(data) {
+        return reposData;
+    }
+
+    static parseRepoList(data) {
         // console.log("Parsing response", data);
         const repoDetails = data.map((repo) => ({
             owner: repo.owner.login,
@@ -54,15 +55,15 @@ export const searchRepos = {
             private : repo.private,
             // Add more details as needed
         }));
-        
-        return repoDetails;
-    },
 
-    async getSearchIterator(username){
+        return repoDetails;
+    }
+
+    static async getSearchIterator(username){
         console.log(`Getting repos for ${username}`)
         try {
             //Iterator
-            return octokit.paginate.iterator('GET /users/{username}/repos', {
+            return RequestUtils.octokit.paginate.iterator('GET /users/{username}/repos', {
                 username: username,
                 per_page: ITEMS_PER_PAGE,
                 sort : SORTING_TYPE,
@@ -74,13 +75,12 @@ export const searchRepos = {
             console.error('Error fetching repos:', error.message);
             throw error;
         }
-    },
-
-    async getSearchIteratorOrgs(orgName){
+    }
+    static async getSearchIteratorOrgs(orgName){
         console.log(`Handling getting commits for organisation ${orgName}`)
         try {
             //Iterator
-            return octokit.paginate.iterator('GET /orgs/{org}/repos', {
+            return RequestUtils.octokit.paginate.iterator('GET /orgs/{org}/repos', {
                 org: orgName,
                 per_page: ITEMS_PER_PAGE,
                 sort : SORTING_TYPE,
@@ -92,5 +92,10 @@ export const searchRepos = {
             console.error('Error fetching repos:', error.message);
             throw error;
         }
-    },
-};
+    }
+}
+export default SearchForRepos;
+
+
+// export const searchRepos = {
+// };

@@ -7,12 +7,25 @@
 
     <div class="card-body">
       <!-- Overview -->
-      <div v-if="commits_count !== null && authors_count !== null">
-        <p class="card-text"><b>{{ commits_count }}</b> Commits</p>
-        <p class="card-text"><b>{{ authors_count }}</b> Unique Authors</p>
-      </div>
-      <div v-else>
-        <p class="card-text"><b>Loading...</b></p>
+      <div class="d-flex justify-content-between flex-wrap">
+<!--        <p class="card-text"><b>{{ commits_count }}</b> Commits</p>-->
+        <div class="placeholder-wave">
+          <span v-if="commits_count !== null" class="badge bg-light text-dark fs-5">
+            <span>{{ commits_count }}</span>
+          </span>
+          <span v-else class="placeholder col-12"></span>
+          <p>Total Commits</p>
+        </div>
+        
+        <div class="placeholder-wave">
+          <span v-if="authors_count !== null" class="badge bg-light text-dark fs-5">
+            <span>{{ authors_count }}</span>
+          </span>
+          <span v-else class="placeholder col-12"></span>
+          <p>Unique Authors</p>
+        </div>
+<!--        <p class="card-text"><b>{{ authors_count }}</b> Unique Authors</p>-->
+        
       </div>
     </div>
   </div>

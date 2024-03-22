@@ -5,25 +5,54 @@
   
   <div class="container" id="dashboard">
     <!-- Title -->
-    <RepoTitleCard v-if="hasRepoData" v-bind="repoData" />
+    <RepoTitleCard v-bind="repoData" />
 
     <br>
 
     <!-- Basic Metrics -->
     <div class="row row-cols-1 row-cols-md-3 g-4">
+      
       <!-- OWNER/ORGANISATION -->
       <div class="col">
-        <div v-if="Object.keys(repoData).length > 0">
-          <UserCard v-bind="repoData.owner" />
+        
+        <!-- Owner -->
+<!--        <div class="card" v-if="Object.keys(repoData).length > 0">-->
+<!--          <div class="card-header">-->
+<!--            <h5 class="card-title">Owner</h5>-->
+<!--          </div>-->
+<!--          <div class="card-body">-->
+<!--            <UserCard v-if="repoData.owner" v-bind="repoData.owner" />-->
+<!--          </div>-->
+<!--        </div>-->
+        <!-- Owner -->
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title">Owner</h5>
+          </div>
+          <div class="card-body">
+            <UserCard v-bind="repoData.owner" />
+          </div>
         </div>
-        <div v-if="Object.keys(repoData).length > 0 && repoData.organization.name !== repoData.owner.name">
-          <UserCard v-bind="repoData.organization" />
+        
+        <br>
+        
+        <!-- Organisation -->
+        <div class="card" v-if="hasRepoData">
+          <div v-if="repoData.organization && repoData.organization.name !== repoData.owner.name">
+            <div class="card-header">
+              <h5 class="card-title">Organisation</h5>
+            </div>
+            <div class="card-body">
+              <UserCard v-bind="repoData.organization" />
+            </div>
+          </div>
+          
         </div>
       </div>
-
+      
       <!-- Stats card-->
       <div class="col">
-        <BasicMetricsCard v-if="Object.keys(repoData).length > 0" v-bind="repoData" />
+        <BasicMetricsCard v-bind="repoData" />
       </div>
       
       <!-- LICENSE -->
@@ -54,15 +83,8 @@
 
     <br>
 
+    <!-- ACTIVITY CHART -->
     <div class="col-md-auto">
-<!--      <CommitsChartCard-->
-<!--          :chart-state="commitsChartState" -->
-<!--          :commits-chart-data="commitsChartData"-->
-<!--          :issues-chart-data="issuesChartData"-->
-<!--          :is-loading="isLoadingCommits"-->
-<!--          @change-activity-chart-state="setChartState"-->
-<!--          @refresh-commits="refreshCommits"-->
-<!--      />-->
       <ActivityChartCard
           :chart-state="commitsChartState"
           :commits-chart-data="commitsChartData"
@@ -75,22 +97,21 @@
 
     <br>
     
+    <!-- CONTRIBUTORS CARD -->
     <div class="col-md-auto">
       <ContributorsCard
           :chart-state="contributorChartState"
           :contributors-top="contributorsChartData"
-          :suggested-max="chartDataContributors.getSuggestedMaxY(contributorsTop)"
-          :suggested-max-y1="chartDataContributors.getSuggestedMaxYCommits(contributorsTop)"
+          :suggested-max="ChartDataContributors.getSuggestedMaxY(contributorsTop)"
+          :suggested-max-y1="ChartDataContributors.getSuggestedMaxYCommits(contributorsTop)"
           
           :contributors-chart-data-stacked="contributorsChartDataStacked"
-          :suggested-max-stacked="chartDataContributors.getSuggestedMaxYCommits(contributorsTop)"
+          :suggested-max-stacked="ChartDataContributors.getSuggestedMaxYCommits(contributorsTop)"
           :change-chart-state="changeContributorChartState"
       />
     </div>
-
-<!--    <div class="col-md-auto">-->
-<!--      <StackedLineChartCard :chart-data="contributorsChartDataStacked"/>-->
-<!--    </div>-->
+    
+    
   </div>
   
   <!-- Toasts -->
@@ -112,26 +133,27 @@ import BasicMetricsCard from "../dashboard/BasicMetricsCard.vue";
 import UserCard from "../components/cards/UserCard.vue";
 import LicenseCard from "../dashboard/LicenseCard.vue";
 import CommitsOverviewCard from "../dashboard/CommitsOverviewCard.vue";
-import CommitsChartCard from "../dashboard/CommitsChartCard.vue";
 import ContributorsCard from "../dashboard/ContributorsCard.vue";
-
-//Reactive modules
-import {getStatsReactive} from "../js/requests/getRepoStats.js";
-import ChartDataUtils from "../js/chart/chartDataUtils.js";
-import {chartDataContributors} from "../js/chart/chartDataContributors.js";
-import {getReadmeReactive} from "../js/requests/getRepoReadme.js";
-import {getCommitsReactive} from "../js/requests/getRepoCommits.js";
-import {getContributorsReactive} from "../js/requests/getRepoContributors.js";
 import TopicsCard from "../dashboard/TopicsCard.vue";
 import MostRecentCommitCard from "../dashboard/MostRecentCommitCard.vue";
 import MainTitle from "../components/MainTitle.vue";
 import Toast_BottomRight from "../components/toasts/Toast_BottomRight.vue";
-import {getIssuesReactive} from "../js/requests/getRepoIssues.js";
-import ChartDataIssues from "../js/chart/chartDataIssues.js";
 import ActivityChartCard from "../dashboard/ActivityChartCard.vue";
 
-const USING_TEST_DATA = true;
+//Requests modules
+import GetRepoStats from "../js/requests/getRepoStats.js"
+import GetRepoCommits from "../js/requests/getRepoCommits.js";
+import GetRepoContributors from "../js/requests/getRepoContributors.js";
+import {getReadmeReactive} from "../js/requests/getRepoReadme.js";
+import GetRepoIssues from "../js/requests/getRepoIssues.js";
 
+
+//Chart modules
+import ChartDataUtils from "../js/chart/chartDataUtils.js";
+import ChartDataContributors from "../js/chart/chartDataContributors.js";
+import ChartDataIssues from "../js/chart/chartDataIssues.js";
+
+const USING_TEST_DATA = false;
 
 const route = useRoute();
 //Base
@@ -177,7 +199,6 @@ const NUM_TOP_CONTRIBUTORS = 5;
 const contributorsTop = ref([]);
 const contributorsChartData = ref([]);
 const contributorsSuggestedMax = ref(0);
-const contributorsSuggestedMaxCommits = ref(0);
 const hasContributorsTop = ref(false);
 const isLoadingContributors = ref(false);
 const contributorsChartDataStacked = ref({});
@@ -240,21 +261,15 @@ const getRepoStats = (username, repoName) => {
   isLoadingRepo.value = true;
   
   fetchStats(username, repoName).then((data) => {
+    console.log("Stats Response (Full)", data);
     repoData.value = data;
+    
     handleRepoLinks();
   }).catch((error) => {
     console.warn(error);
   }).finally(() => {
     isLoadingRepo.value = false
   });
-  
-  
-  // getStatsReactive.getRepoStats(username, repoName).then((response) => {
-  //   console.log("Stats Response", response.data);
-  //   repoData.value = response.data;
-  //  
-  //   handleRepoLinks();
-  // });
 };
 
 /**
@@ -289,6 +304,8 @@ function getCommits(username, repoName){
     console.log("Most recent commit", mostRecentCommitFull);
     mostRecentCommit.value = {
       author : mostRecentCommitFull.author.name,
+      // avatar_url : mostRecentCommitFull.author.avatar_url,
+      // html_url : mostRecentCommitFull.author.html_url,
       message : mostRecentCommitFull.message,
       date : mostRecentCommitFull.author.date
     };
@@ -314,7 +331,7 @@ function getCommits(username, repoName){
 
     hasCommitsChartData.value = true;
   }).catch((error) => {
-    console.error(error);
+    console.error(error.stack);
   }).finally(() => {
     isLoadingCommits.value = false
   });
@@ -333,16 +350,16 @@ const getContributors = (username, repoName) => {
     // console.log("Contributors Response (Full)", data)
     contributorsData.value = data;
 
-    contributorsTop.value = chartDataContributors.getTopNContributors(contributorsData.value, NUM_TOP_CONTRIBUTORS);
-    contributorsChartData.value = chartDataContributors.convertToChartJSData(contributorsTop.value);
+    contributorsTop.value = ChartDataContributors.getTopNContributors(contributorsData.value, NUM_TOP_CONTRIBUTORS);
+    contributorsChartData.value = ChartDataContributors.convertToChartJSData(contributorsTop.value);
     console.log(`Top ${NUM_TOP_CONTRIBUTORS} Contributors`, contributorsTop.value)
 
-    contributorsSuggestedMax.value = chartDataContributors.getSuggestedMaxY(contributorsTop.value);
+    contributorsSuggestedMax.value = ChartDataContributors.getSuggestedMaxY(contributorsTop.value);
     console.log("Suggested Max Y", contributorsSuggestedMax.value);
     // contributorsSuggestedMaxCommits.value = chartDataContributors.getSuggestedMaxYCommits(contributorsTop.value);
     
     // contributorsChartDataStacked.value = chartDataContributors.chartDataContributorsStacked(contributorsData.value, NUM_TOP_CONTRIBUTORS);
-    contributorsChartDataStacked.value = chartDataContributors.generateStackedLineChartData(contributorsData.value, NUM_TOP_CONTRIBUTORS);
+    contributorsChartDataStacked.value = ChartDataContributors.generateStackedLineChartData(contributorsData.value, NUM_TOP_CONTRIBUTORS);
     
     hasContributorsTop.value = true;
   }).catch((error) => {
@@ -404,9 +421,7 @@ async function fetchStats(username, repoName){
     return repoData;
   }
   
-  const data = await getStatsReactive.getRepoStats(username, repoName, USING_TEST_DATA);
-  console.log("Stats Response (Full)", data);
-  
+  const data = await GetRepoStats.getRepoStats(username, repoName, USING_TEST_DATA);
   hasRepoData.value = true;
   return data;
 }
@@ -420,7 +435,7 @@ async function fetchCommits(username, repoName){
     return commitsData;
   }
 
-  const data = await getCommitsReactive.getCommits(username, repoName, USING_TEST_DATA);
+  const data = await GetRepoCommits.getCommits(username, repoName, USING_TEST_DATA);
   console.log("Commits Response (Full)", data);
   
   hasCommitsData.value = true;
@@ -436,7 +451,7 @@ async function fetchContributors(username, repoName){
     return commitsData;
   }
 
-  const data = await getContributorsReactive.getContributorData(username, repoName, USING_TEST_DATA);
+  const data = await GetRepoContributors.getContributorData(username, repoName, USING_TEST_DATA);
   console.log("Contributors Response (Full)", data);
 
   // hasCommitsData.value = true;
@@ -452,7 +467,7 @@ async function fetchIssues(username, repoName){
     return issuesData;
   }
 
-  const data = await getIssuesReactive.getIssues(username, repoName, USING_TEST_DATA);
+  const data = await GetRepoIssues.getIssues(username, repoName, USING_TEST_DATA);
   console.log("Issues Response (Full)", data);
 
   hasIssuesData.value = true;
@@ -460,11 +475,11 @@ async function fetchIssues(username, repoName){
 }
 
 const countUniqueAuthors = () => {
-  return getCommitsReactive.countUniqueAuthors(commitsData.value);
+  return GetRepoCommits.countUniqueAuthors(commitsData.value);
 };
 
 const findMostRecentCommit = () => {
-  return getCommitsReactive.findMostRecentCommit(commitsData.value);
+  return GetRepoCommits.findMostRecentCommit(commitsData.value);
 };
 
 const setActivityChartState = (newState) => {

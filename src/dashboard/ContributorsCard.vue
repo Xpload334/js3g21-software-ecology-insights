@@ -3,25 +3,32 @@
     <div class="card-header">
       <h2 class="card-title text-center">Top Contributors</h2>
       <p class="card-subtitle text-center">Last 100 Weeks</p>
-      <ul class="nav nav-tabs card-header-tabs">
+      
+      <br>
+      
+      <ul class="nav nav-tabs card-header-tabs justify-content-center">
 
         <!-- Multi -->
         <li class="nav-item">
           <div v-if="chartState === 'multi'">
-            <a class="nav-link active" aria-current="true">Top {{contributorsTop.length}}</a>
+            <a class="nav-link active" aria-current="true">Top
+              <span v-if="contributorsTop.length >= 0"> {{contributorsTop.length}}</span>
+            </a>
           </div>
           <div v-else>
-            <a class="nav-link" aria-current="true" @click="changeChartState('multi')">Top {{contributorsTop.length}}</a>
+            <a class="nav-link" aria-current="true" @click="changeChartState('multi')">Top
+              <span v-if="contributorsTop.length >= 0"> {{contributorsTop.length}}</span>
+            </a>
           </div>
         </li>
 
         <!-- Stacked -->
         <li class="nav-item">
           <div v-if="chartState === 'stacked'">
-            <a class="nav-link active" aria-current="true">Stacked</a>
+            <a class="nav-link active" aria-current="true">Stacked Commits</a>
           </div>
           <div v-else>
-            <a class="nav-link" aria-current="true" @click="changeChartState('stacked')">Stacked</a>
+            <a class="nav-link" aria-current="true" @click="changeChartState('stacked')">Stacked Commits</a>
           </div>
         </li>
       </ul>
@@ -36,24 +43,6 @@
               :suggested-max="suggestedMax"
               :suggested-max-y1="suggestedMaxY1"
           />
-          <!--        <div class="row row-cols-1 row-cols-md-2 g-4">-->
-          <!--          &lt;!&ndash; For each contributor card &ndash;&gt;-->
-          <!--          <div v-for="item in contributorsTop">-->
-          <!--            <div class="col">-->
-          <!--              <div class="card">-->
-          <!--                &lt;!&ndash; UserCard component to display contributor info &ndash;&gt;-->
-          <!--                <UserCard v-bind="item.author"/>-->
-
-          <!--                &lt;!&ndash; CommitsChart component for contributor's commit chart &ndash;&gt;-->
-          <!--                <LineChart_DualYAxes-->
-          <!--                    :chart-data="item.chartData"-->
-          <!--                    :suggested-max-y="suggestedMax"-->
-          <!--                    :suggested-max-y1="suggestedMaxY1"-->
-          <!--                />-->
-          <!--              </div>-->
-          <!--            </div>-->
-          <!--          </div>-->
-          <!--        </div>-->
         </div>
         <div v-else>
           <p>No contributors data available. Please try again.</p>

@@ -1,19 +1,30 @@
 ﻿<template>
   <div class="card">
-    <h1 class="card-header text-center">
-      {{name}}
+    <h1 class="card-header text-center placeholder-wave">
+      <span v-if="name !== null">
+        {{name}}
+      </span>
+      <span v-else class="placeholder-lg col-6"></span>
     </h1>
     
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center">
         <div>
           <!-- DESCRIPTION -->
-          <div v-if="description">
-            <p class="card-text">{{description}}</p>
+          <div v-if="description" class="card-text">
+            {{description}}
           </div>
           <div v-else>
-            <span class="placeholder placeholder-glow col-md-auto"></span>
+            <span class="placeholder col-12"/>
+            <span class="placeholder col-12"/>
           </div>
+          
+<!--          <div v-if="description">-->
+<!--            <p class="card-text">{{description}}</p>-->
+<!--          </div>-->
+<!--          <div v-else>-->
+<!--            <span class="placeholder placeholder-glow col-md-auto"></span>-->
+<!--          </div>-->
           
           <br>
 
@@ -30,8 +41,14 @@
 
         <!-- DATES -->
         <div class="card-text text-muted text-end">
-          <p>Created:<br>{{ formatDate(created_at) }}</p>
-          <p>Last Updated:<br>{{ relativeDate(updated_at) }}</p>
+          <span class="badge bg-light text-dark text-muted fs-6">Created {{ formatDate(created_at) }}</span>
+          
+          <br>
+          <br>
+          
+          <span class="badge bg-light text-dark text-muted fs-6">Last updated {{ formatDate(updated_at) }}</span>
+<!--          <p>Created:<br>{{ formatDate(created_at) }}</p>-->
+<!--          <p>Last Updated:<br>{{ relativeDate(updated_at) }}</p>-->
         </div>
       </div>
     </div>

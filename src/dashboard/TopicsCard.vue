@@ -12,7 +12,7 @@
 <!--          </li>-->
 <!--        </ul>-->
         <!-- TOPICS -->
-        <div class="col align-content-end">
+        <div class="d-flex flex-wrap">
           <span v-for="topic in topics">
             <span class="badge rounded-pill bg-primary">{{topic}}</span> &nbsp
           </span>

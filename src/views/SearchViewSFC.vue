@@ -83,10 +83,10 @@
       </div>
     </div>
     
-    <br>
-    
     <!-- PAGINATION -->
     <div v-if="hasSearchData">
+      <br>
+      
       <SearchPagination
           :is-loading="isLoading"
           :current-page="currentPage"
@@ -102,7 +102,8 @@
     
     
     <!-- Search Results-->
-    <div id="scrollPane" class="scroll-pane overflow-auto" >
+    <div id="scrollPane">
+<!--    <div id="scrollPane" class="scroll-pane overflow-auto h-50">-->
       <div v-if="isLoading && !currentResults">
         <div class="d-flex justify-content-center">
           <div class="spinner-border" role="status">
@@ -127,6 +128,8 @@
     
     <!-- PAGINATION -->
     <div v-if="hasSearchData">
+      <br>
+      
       <SearchPagination
           :is-loading="isLoading"
           :current-page="currentPage"
@@ -142,7 +145,7 @@
 
 <script setup>
 import {ref} from 'vue'
-import {searchRepos} from "../js/requests/searchForRepos.js";
+import SearchForRepos from "../js/requests/searchForRepos.js";
 import SearchEntry from "../search/SearchEntry.vue";
 import MainTitle from "../components/MainTitle.vue";
 import MainFooter from "../components/MainFooter.vue";
@@ -214,27 +217,19 @@ function getRepos(username, searchIndex=0){
   //   handleRepos(r);
   // });
   loading(true)
-  
-  searchRepos.getReposPages(username, searchIndex).then((r) => {
+
+  SearchForRepos.getReposPages(username, searchIndex).then((r) => {
     console.log("Repos data received", r);
     currentUsername = username
     handleReposPaged(r);
     loading(false)
   }).catch((error) => {
-    console.error(error);
+    console.warn(error);
     errorMessage.value = "User or organisation not found, try again!";
     loading(false)
   })
 
 }
-
-// const handleRepos = (data) => {
-//   searchResults.value[currentPage.value - 1] = data.repos;
-//   itemsPerPage.value = data.itemsPerPage;
-//   totalPages.value = data.totalPages;
-//   hasSearchData.value = true;
-//   displaySearchResults();
-// };
 
 function handleReposPaged(data){
   searchResultsPaged.value = data;
@@ -243,17 +238,6 @@ function handleReposPaged(data){
   
   displaySearchResultsPaged();
 }
-
-// const displaySearchResults = () => {
-//   if(lastUsername.value === ""){
-//     return;
-//   }
-//  
-//   console.log(`Displaying page ${currentPage.value}`);
-//   clearDisplayedResults();
-//   currentResults.value = searchResults.value[currentPage.value - 1];
-//   console.log('CURRENT Results', currentResults.value);
-// };
 
 function displaySearchResultsPaged() {
   resetError();
@@ -285,20 +269,6 @@ const disableButton = () => {
   }, 2000);
 };
 
-// const nextPage = () => {
-//   if (currentPage.value < totalPages.value) {
-//     currentPage.value++;
-//
-//     if (currentPage.value > searchResults.value.length) {
-//       console.log("Retrieving data for next page from server");
-//       getRepos(lastUsername.value, currentPage.value);
-//     } else {
-//       console.log("Already has data for this page");
-//       displaySearchResults();
-//     }
-//   }
-// };
-
 function nextPage(){
   if(currentPage.value < totalPages.value){
     currentPage.value++;
@@ -329,19 +299,6 @@ function loading(state=true){
   isLoading.value = state;
 }
 
-// Handle pagination change event
-// function handlePaginationChange(page) {
-//   // Update the current page and display search results
-//   currentPage.value = page;
-//   if (currentPage.value > searchResults.value.length) {
-//     console.log("Retrieving data for next page from server");
-//     getRepos(lastUsername.value, currentPage.value);
-//   } else {
-//     console.log("Already has data for this page");
-//     displaySearchResults();
-//   }
-//   // displaySearchResults();
-// }
 function resetError(){
   errorMessage.value = "";
 }

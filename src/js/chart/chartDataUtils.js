@@ -20,7 +20,7 @@ class ChartDataUtils{
     //     this.borderColor = 'rgb(255, 172, 28, 0.8)';
     // },
     
-    static chartDataTwelveMonths(dataArray) {
+    static chartDataTwelveMonths(dataArray, labelName="Commits") {
         const currentDate = new Date();
         const lastYearDate = new Date(currentDate);
         lastYearDate.setFullYear(lastYearDate.getFullYear() - 1);
@@ -47,6 +47,7 @@ class ChartDataUtils{
         const chartData = {
             labels: monthLabels,
             datasets: [{
+                label: labelName,
                 backgroundColor: ChartDataUtils.backgroundColor,
                 borderColor : ChartDataUtils.borderColor,
                 data: monthlyEntries,
@@ -59,7 +60,7 @@ class ChartDataUtils{
         return chartData;
     }
 
-    static chartDataWeek(dataArray) {
+    static chartDataWeek(dataArray, labelName="Commits") {
         const currentDate = new Date();
         const lastWeekDate = new Date(currentDate);
         lastWeekDate.setDate(lastWeekDate.getDate() - 7);
@@ -87,6 +88,7 @@ class ChartDataUtils{
         const chartData = {
             labels: rotatedDayLabels,
             datasets: [{
+                label: labelName,
                 backgroundColor : this.backgroundColor,
                 borderColor : this.borderColor,
                 radius : this.RADIUS_DEFAULT,
@@ -99,7 +101,7 @@ class ChartDataUtils{
         return chartData;
     }
 
-    static chartDataThreeMonths(dataArray) {
+    static chartDataThreeMonths(dataArray, labelName="Commits") {
         const currentDate = new Date();
         const lastThreeMonthsDate = new Date(currentDate);
         lastThreeMonthsDate.setMonth(lastThreeMonthsDate.getMonth() - 3);
@@ -126,6 +128,7 @@ class ChartDataUtils{
                 return `${mondayDate.getDate()}/${mondayDate.getMonth() + 1}`;
             }),
             datasets: [{
+                label: labelName,
                 backgroundColor : this.backgroundColor,
                 borderColor : this.borderColor,
                 radius : this.RADIUS_DEFAULT,
@@ -138,7 +141,7 @@ class ChartDataUtils{
         return chartData;
     }
 
-    static chartDataMonth(dataArray) {
+    static chartDataMonth(dataArray, labelName="Commits") {
         const currentDate = new Date();
         const lastMonthDate = new Date(currentDate);
         lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
@@ -162,6 +165,7 @@ class ChartDataUtils{
                 return `${currentDay.getDate()}/${currentDay.getMonth() + 1}`;
             }),
             datasets: [{
+                label: labelName,
                 backgroundColor : this.backgroundColor,
                 borderColor : this.borderColor,
                 radius : this.RADIUS_DEFAULT,

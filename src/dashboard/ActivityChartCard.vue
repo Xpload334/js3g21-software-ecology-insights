@@ -3,12 +3,20 @@
     <!-- Header -->
     <div class="card-header">
       <h2 class="card-title text-center">Activity</h2>
-      <ul class="nav nav-tabs card-header-tabs">
+      <ul class="nav nav-tabs card-header-tabs justify-content-center">
 
         <!-- Lifetime -->
         <li class="nav-item">
           <div v-if="chartState === 'lifetime'">
-            <a class="nav-link active" aria-current="true">Lifetime</a>
+            <a class="nav-link active" aria-current="true">Lifetime
+              <span v-if="commitsChartData.lifetime">
+                <span class="badge bg-primary">{{sumArray(commitsChartData.lifetime.datasets[0].data)}}</span>
+              </span>
+              &nbsp
+              <span v-if="issuesChartData.lifetime">
+                <span class="badge bg-warning" >{{sumArray(issuesChartData.lifetime.datasets[0].data)}}</span>
+              </span>
+            </a>
           </div>
           <div v-else>
             <a class="nav-link" aria-current="true" @click="changeChartState('lifetime')">Lifetime</a>
@@ -18,7 +26,15 @@
         <!-- Last Year -->
         <li class="nav-item">
           <div v-if="chartState === 'year'">
-            <a class="nav-link active" aria-current="true">Last Year</a>
+            <a class="nav-link active" aria-current="true">Last Year
+              <span v-if="commitsChartData.year">
+                <span class="badge bg-primary">{{sumArray(commitsChartData.year.datasets[0].data)}}</span>
+              </span>
+              &nbsp
+              <span v-if="issuesChartData.year">
+                <span class="badge bg-warning" >{{sumArray(issuesChartData.year.datasets[0].data)}}</span>
+              </span>
+            </a>
           </div>
           <div v-else>
             <a class="nav-link" aria-current="true" @click="changeChartState('year')">Last Year</a>
@@ -28,7 +44,15 @@
         <!-- Last 3 Months -->
         <li class="nav-item">
           <div v-if="chartState === 'threeMonths'">
-            <a class="nav-link active" aria-current="true">Last 3 Months</a>
+            <a class="nav-link active" aria-current="true">Last 3 Months
+              <span v-if="commitsChartData.threeMonths">
+                <span class="badge bg-primary">{{sumArray(commitsChartData.threeMonths.datasets[0].data)}}</span>
+              </span>
+              &nbsp
+              <span v-if="issuesChartData.threeMonths">
+                <span class="badge bg-warning" >{{sumArray(issuesChartData.threeMonths.datasets[0].data)}}</span>
+              </span>
+            </a>
           </div>
           <div v-else>
             <a class="nav-link" aria-current="true" @click="changeChartState('threeMonths')">Last 3 Months</a>
@@ -38,7 +62,15 @@
         <!-- Last Month -->
         <li class="nav-item">
           <div v-if="chartState === 'month'">
-            <a class="nav-link active" aria-current="true">Last Month</a>
+            <a class="nav-link active" aria-current="true">Last Month
+              <span v-if="commitsChartData.month">
+                <span class="badge bg-primary">{{sumArray(commitsChartData.month.datasets[0].data)}}</span>
+              </span>
+              &nbsp
+              <span v-if="issuesChartData.month">
+                <span class="badge bg-warning" >{{sumArray(issuesChartData.month.datasets[0].data)}}</span>
+              </span>
+            </a>
           </div>
           <div v-else>
             <a class="nav-link" aria-current="true" @click="changeChartState('month')">Last Month</a>
@@ -48,7 +80,15 @@
         <!-- Last Week -->
         <li class="nav-item">
           <div v-if="chartState === 'week'">
-            <a class="nav-link active" aria-current="true">Last Week</a>
+            <a class="nav-link active" aria-current="true">Last Week
+              <span v-if="commitsChartData.week">
+                <span class="badge bg-primary">{{sumArray(commitsChartData.week.datasets[0].data)}}</span>
+              </span>
+              &nbsp
+              <span v-if="issuesChartData.week">
+                <span class="badge bg-warning" >{{sumArray(issuesChartData.week.datasets[0].data)}}</span>
+              </span>
+            </a>
           </div>
           <div v-else>
             <a class="nav-link" aria-current="true" @click="changeChartState('week')">Last Week</a>
@@ -142,6 +182,7 @@
 // import {dashboardStore} from "./dashboardStore.js";
 import CommitsChart from "./CommitsChart.vue";
 import LineChart_DualYAxes from "./LineChart_DualYAxes.vue";
+import DataConvertUtils from "../js/dataConvertUtils.js";
 
 export default {
   props:{
@@ -217,11 +258,14 @@ export default {
 
         return absoluteMax + buffer;
       } catch(e){
-        console.error(e)
+        console.error(e.stack);
         return 100;
       }
       
     },
+    sumArray(numberArray){
+      return DataConvertUtils.sumArray(numberArray);
+    }
     
   }
 }

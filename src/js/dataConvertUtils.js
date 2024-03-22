@@ -57,11 +57,21 @@ class DataConvertUtils{
             return "a few seconds ago";
         }
     }
-
-// // Example usage:
-// const inputDate = "2022-03-11T02:08:53Z";
-// console.log(formatDate(inputDate));  // Output: "Monday 11th March, 2024"
-// console.log(timeAgo(inputDate));     // Output: "2 years ago" (depending on the current date)
+    
+    static sumArray(numberArray){
+        let sum = 0;
+        
+        numberArray.forEach(num => {
+            if(typeof num === 'number') {
+                if(!Number.isNaN(num)) sum += num;
+            }
+        })
+        // var sum = numberArray.reduce((accumulator, currentValue) => {
+        //     return accumulator + currentValue
+        // },0);
+        return sum
+    }
+    
 }
 
 export default DataConvertUtils;

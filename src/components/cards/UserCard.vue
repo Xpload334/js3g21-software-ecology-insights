@@ -19,9 +19,16 @@
       <div class="col-md-9">
         <div class="card-body">
           <!-- Display user's login with a placeholder if unavailable -->
-          <h5 class="card-title">{{ login || 'Placeholder Login' }}</h5>
+          <h5 class="card-title placeholder-wave">
+            <span v-if="login">{{ login }}</span>
+            <span v-else class="placeholder col-8"></span>
+            
+          </h5>
           <!-- Display user's type with a placeholder if unavailable -->
-          <p class="card-text">{{ type || 'Placeholder Type' }}</p>
+          <p class="card-text placeholder-wave">
+            <span v-if="type">{{ type }}</span>
+            <span v-else class="placeholder col-6"></span>
+          </p>
         </div>
       </div>
     </div>

@@ -9,8 +9,9 @@
 
     <div class="card-body">
       <div v-if="name && url">
-        <div class="d-flex justify-content-between">
-          <p class="card-text">{{ name }}</p>
+        <div class="d-flex justify-content-between flex-wrap">
+<!--          <p class="card-text">{{ name }}</p>-->
+          <span class="badge bg-light text-dark fs-5">{{ name }}</span>
 
           <div v-if="url">
             <a :href="url" class="btn btn-primary">License Info</a>
