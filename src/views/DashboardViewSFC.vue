@@ -8,6 +8,18 @@
     <RepoTitleCard v-bind="repoData" />
 
     <br>
+    
+    <User_OffCanvas_Button
+        :username="owner"
+        :get-user-data="getUserData"
+    />
+
+    <User_OffCanvas_Button
+        username="github"
+        :get-user-data="getUserData"
+    />
+    
+    <br>
 
     <!-- Basic Metrics -->
     <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -30,7 +42,7 @@
             <h5 class="card-title">Owner</h5>
           </div>
           <div class="card-body">
-            <UserCard v-bind="repoData.owner" />
+            <UserCard :user="repoData.owner" :get-user-data="getUserData"/>
           </div>
         </div>
         
@@ -43,7 +55,7 @@
               <h5 class="card-title">Organisation</h5>
             </div>
             <div class="card-body">
-              <UserCard v-bind="repoData.organization" />
+              <UserCard :user="repoData.organization" :get-user-data="getUserData"/>
             </div>
           </div>
           
@@ -57,7 +69,7 @@
       
       <!-- LICENSE -->
       <div class="col">
-        <LicenseCard v-bind="repoData.license" />
+        <LicenseCard v-bind="licenseData" />
       </div>
 
       <!-- COMMITS -->
@@ -108,11 +120,22 @@
           :contributors-chart-data-stacked="contributorsChartDataStacked"
           :suggested-max-stacked="ChartDataContributors.getSuggestedMaxYCommits(contributorsTop)"
           :change-chart-state="changeContributorChartState"
+          
+          :get-user-data="getUserData"
       />
     </div>
     
     
   </div>
+
+  <!-- Offcanvas -->
+  <User_OffCanvas
+      :username="owner"
+      :user-data="currentUserData"
+      :get-user-data="getUserData"
+      :open-dashboard="openDashboard"
+      :loading-repos="isLoadingUserData"
+  />
   
   <!-- Toasts -->
 <!--  <Toast_BottomRight -->
@@ -152,8 +175,14 @@ import GetRepoIssues from "../js/requests/getRepoIssues.js";
 import ChartDataUtils from "../js/chart/chartDataUtils.js";
 import ChartDataContributors from "../js/chart/chartDataContributors.js";
 import ChartDataIssues from "../js/chart/chartDataIssues.js";
+import GetRepoLicense from "../js/requests/getRepoLicense.js";
+import User_OffCanvas from "../dashboard/User_OffCanvas.vue";
+import GetUser from "../js/requests/getUser.js";
+import SearchForRepos from "../js/requests/searchForRepos.js";
+import SortReposUtils from "../js/sortReposUtils.js";
+import User_OffCanvas_Button from "../dashboard/User_OffCanvas_Button.vue";
 
-const USING_TEST_DATA = false;
+const USING_TEST_DATA = true;
 
 const route = useRoute();
 //Base
@@ -210,6 +239,20 @@ const hasIssuesData = ref(false);
 const issuesChartData = ref({});
 const hasIssuesChartData = ref(false);
 const isLoadingIssues = ref(false);
+
+//License data
+const licenseData = ref({});
+const hasLicenseData = ref(false)
+const isLoadingLicenseData = ref(false);
+
+//Users data
+const usersData = ref({});
+const currentUserData = ref({
+  data: null,
+  repos: null,
+});
+const isLoadingUserData = ref(false);
+
 
 //Toasts
 let showToast = ref(false);
@@ -392,9 +435,90 @@ function getIssues(username, repoName){
     hasIssuesChartData.value = true;
   }).catch((error) => {
     console.error(error);
+    //
   }).finally(() => {
     isLoadingIssues.value = false
   });
+}
+
+function getLicense(repoData){
+  if(!repoData.hasOwnProperty("license")){
+    console.error("No license found!");
+  }
+  
+  const licenseKey = repoData.license.key;
+  
+  isLoadingLicenseData.value = true;
+  
+  fetchLicense(licenseKey).then((data) => {
+    console.log("Received license data");
+    
+    licenseData.value = data;
+    hasLicenseData.value = true;
+  }).catch((error) => {
+    console.error(error);
+    //
+  }).finally(() => {
+    isLoadingLicenseData.value = false;
+  });
+}
+
+/**
+ * Call when getting a user details for the side panel
+ * @param username
+ */
+function getUserData(username){
+  if(usersData[username]){
+    console.log(`Data for ${username} already exists`)
+    // return usersData[username].data;
+    currentUserData.value = usersData[username];
+    return;
+  }
+  
+  isLoadingUserData.value = true;
+  currentUserData.value = {
+    data: null,
+    repos: null,
+  };
+  
+  //Get user details
+  fetchUser(username).then((data) => {
+    console.log(`Received user data for ${username}`)
+    
+    usersData[username] = {
+      data : data,
+      repos : []
+    };
+    currentUserData.value.data = data;
+    
+    //Then, get list of repos for that user
+    SearchForRepos.getReposPages(username, 0).then((data) => {
+      console.log(`Repo search for user ${username} returned, sorting`, data)
+      //On repos, sort by matching topics
+      const reposSorted = SortReposUtils.sortByMatchingTopics(data, repoData.value.topics).slice(0, 10);
+      console.log("Matching repos", reposSorted);
+      
+      usersData[username].repos = reposSorted;
+      currentUserData.value.repos = reposSorted;
+      
+    })
+    isLoadingUserData.value = false;
+    
+    //     .catch((error) => {
+    //   console.error(error);
+    // })
+    
+  })
+    //   .catch((error) => {
+    // console.error(error);
+  // }).finally(() => {
+  //   isLoadingUserData.value = false;
+  // });
+  
+  //Get user repos
+  
+  //Sort repos by matching tags with this project
+  //And by last updated
 }
 
 /**
@@ -409,6 +533,9 @@ const handleRepoLinks = () => {
   
   //Get issues
   getIssues(owner.value, repoName.value);
+  
+  //Get License
+  getLicense(repoData.value);
 };
 
 
@@ -474,6 +601,22 @@ async function fetchIssues(username, repoName){
   return data;
 }
 
+async function fetchLicense(licenseKey){
+  
+  const data = await GetRepoLicense.getRepoLicenseFromKey(licenseKey, USING_TEST_DATA);
+  console.log("License Response (Full)", data);
+  
+  // hasLicenseData.value = true;
+  return data;
+}
+
+async function fetchUser(username){
+  const data = await GetUser.getUser(username, USING_TEST_DATA);
+  console.log(`${username} Data Response (Full)`, data)
+  
+  return data;
+}
+
 const countUniqueAuthors = () => {
   return GetRepoCommits.countUniqueAuthors(commitsData.value);
 };
@@ -521,6 +664,13 @@ const displayToast= (message) => {
     , toastLifetime.value)
   }
 }
+
+const openDashboard = (owner, repo) => {
+  const dashboardUrl = `/dashboard/${owner}/${repo}`;
+  window.open(dashboardUrl, '_blank');
+
+  // appState.value.openDashboard(owner, repo);
+};
 
 const closeToast = () => {
   showToast.value = false

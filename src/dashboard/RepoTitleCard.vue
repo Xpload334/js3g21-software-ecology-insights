@@ -31,7 +31,7 @@
           <!-- HTML URL -->
           <div>
             <div v-if="html_url">
-              <a :href="html_url" class="btn btn-primary">See On GitHub</a>
+              <a :href="html_url" class="btn btn-primary" target="_blank">See On GitHub</a>
             </div>
             <div v-else>
               <a :href="'/'" class="btn btn-primary disabled placeholder col-md-auto">See On GitHub</a>

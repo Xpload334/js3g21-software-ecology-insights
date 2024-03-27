@@ -42,6 +42,8 @@
               :contributors-top="contributorsTop"
               :suggested-max="suggestedMax"
               :suggested-max-y1="suggestedMaxY1"
+              
+              :get-user-data="getUserData"
           />
         </div>
         <div v-else>
@@ -88,7 +90,11 @@ export default {
     contributorsChartDataStacked : Object,
     suggestedMaxStacked : Number,
     
-    changeChartState : Function
+    changeChartState : Function,
+    getUserData : {
+      type: Function,
+      required : true
+    }
     
   },
   components: {

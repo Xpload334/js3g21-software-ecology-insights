@@ -184,6 +184,8 @@ import CommitsChart from "./CommitsChart.vue";
 import LineChart_DualYAxes from "./LineChart_DualYAxes.vue";
 import DataConvertUtils from "../js/dataConvertUtils.js";
 
+let maxYLeft = 0;
+
 export default {
   props:{
     chartState: String,
@@ -197,13 +199,16 @@ export default {
     change_chart_state : {
       type : Function
     },
-    is_loading : [Boolean, String]
+    is_loading : [Boolean, String],
   },
   components:{
     LineChart_DualYAxes,
     CommitsChart
   },
   methods: {
+    setMaxY(newVal=100){
+      maxYLeft = newVal
+    },
     changeChartState(newState){
       //Emit an event to notify parent
       this.$emit('change-activity-chart-state', newState);
@@ -258,6 +263,7 @@ export default {
 
         return absoluteMax + buffer;
       } catch(e){
+        console.error("Broken chart data", chartData);
         console.error(e.stack);
         return 100;
       }

@@ -5,7 +5,7 @@
       <div class="col">
         <div class="card">
           <!-- UserCard component to display contributor info -->
-          <UserCard v-bind="item.author"/>
+          <UserCard :user="item.author" :get-user-data="getUserData"/>
 
           <!-- CommitsChart component for contributor's commit chart -->
           <LineChart_DualYAxes
@@ -27,6 +27,11 @@ export default {
     contributorsTop: Object,
     suggestedMax: Number,
     suggestedMaxY1: Number,
+
+    getUserData : {
+      type: Function,
+      required : true
+    }
   },
   components: {
     LineChart_DualYAxes, UserCard

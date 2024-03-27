@@ -11,11 +11,14 @@
       </div>
       <div class="card-body">
         <p class="card-text">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque molestie non leo in luctus. Cras a enim
-          sed nisl tincidunt vestibulum. Mauris quis metus et risus iaculis suscipit. Etiam nisl purus, mattis eu quam
-          quis, cursus ultricies ipsum. Nam vel facilisis nulla. Vivamus auctor fermentum posuere. Maecenas hendrerit non
-          mauris eu hendrerit. Phasellus consequat metus nunc, sit amet malesuada purus vulputate nec. Cras pharetra nisl
-          at turpis semper, nec condimentum dolor pellentesque.
+          Welcome!
+          
+          <br> This web app is designed to help you quickly gather key information around any public repository on GitHub.
+          You can do this to see who contributed to a project, find out how it has developed over time and get information
+          on a repository's license and linked publications.
+          
+          <br> Search for any User or Organisation on GitHub to get their list of projects. Press "Open Dashboard" to open
+          the repository's software ecology dashboard in a new tab!
 
           <br> Donec dapibus quis nibh quis finibus. Proin orci augue, blandit sit amet dolor a, placerat sagittis magna.
           Proin augue velit, condimentum quis eleifend id, dictum eu enim. Integer eleifend nisl tempor auctor dignissim.
@@ -43,12 +46,13 @@
           <div class="accordion-item">
             <h2 class="accordion-header" id="headingOne">
               <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                Question 1: What is Lorem Ipsum?
+                What is software ecology?
               </button>
             </h2>
             <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
               <div class="accordion-body">
-                Answer 1: Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Software ecology is the field of research into software lifecycles and sustainability. Analysing a project's history, looking at
+                what went well and what could be improved is a key way to make better software, and better software developers.
               </div>
             </div>
           </div>
@@ -66,8 +70,19 @@
               </div>
             </div>
           </div>
-  
-          <!-- Add more FAQ items as needed -->
+
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                Question 2: Why do we use it?
+              </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                Answer 2: It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

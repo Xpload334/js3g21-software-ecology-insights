@@ -37,13 +37,16 @@ class ChartDataIssues {
             monthLabels.push(labelDate.toLocaleString('default', { month: 'long' }));
         }
 
+        // Map the counts, replacing NaN values with zeros
+        const data = monthlyEntries.map(count => isNaN(count) ? 0 : count);
+
         const chartData = {
             labels: monthLabels,
             datasets: [{
                 label: this.LABEL,
                 backgroundColor: this.backgroundColor,
                 borderColor : this.borderColor,
-                data: monthlyEntries,
+                data: data,
                 radius : this.RADIUS_DEFAULT,
             }]
         };
@@ -80,6 +83,9 @@ class ChartDataIssues {
         const todayIndex = currentDate.getDay();
         const rotatedDayLabels = [...dayLabels.slice(todayIndex), ...dayLabels.slice(0, todayIndex)];
 
+        // Map the counts, replacing NaN values with zeros
+        const data = dailyEntries.map(count => isNaN(count) ? 0 : count);
+
         const chartData = {
             labels: rotatedDayLabels,
             datasets: [{
@@ -87,7 +93,7 @@ class ChartDataIssues {
                 backgroundColor : this.backgroundColor,
                 borderColor : this.borderColor,
                 radius : this.RADIUS_DEFAULT,
-                data: dailyEntries
+                data: data
             }]
         };
 
@@ -118,6 +124,9 @@ class ChartDataIssues {
             }
         });
 
+        // Map the counts, replacing NaN values with zeros
+        const data = weeklyEntries.map(count => isNaN(count) ? 0 : count);
+
         const chartData = {
             labels: Array(12).fill().map((_, index) => {
                 const mondayDate = new Date(lastThreeMonthsDate);
@@ -129,7 +138,7 @@ class ChartDataIssues {
                 backgroundColor : this.backgroundColor,
                 borderColor : this.borderColor,
                 radius : this.RADIUS_DEFAULT,
-                data: weeklyEntries
+                data: data
             }]
         };
 
@@ -157,6 +166,9 @@ class ChartDataIssues {
             }
         });
 
+        // Map the counts, replacing NaN values with zeros
+        const data = dailyEntries.map(count => isNaN(count) ? 0 : count);
+        
         const chartData = {
             labels: Array(30).fill().map((_, index) => {
                 const currentDay = new Date(lastMonthDate);
@@ -168,7 +180,7 @@ class ChartDataIssues {
                 backgroundColor : this.backgroundColor,
                 borderColor : this.borderColor,
                 radius : this.RADIUS_DEFAULT,
-                data: dailyEntries
+                data: data
             }]
         };
 
@@ -201,6 +213,9 @@ class ChartDataIssues {
 
         const monthLabels = sortedMonth.map(([yearMonth]) => yearMonth);
 
+        // Map the counts, replacing NaN values with zeros
+        const data = sortedMonth.map(([, count]) => isNaN(count) ? 0 : count);
+
         const chartData = {
             labels: monthLabels,
             datasets: [{
@@ -208,305 +223,14 @@ class ChartDataIssues {
                 backgroundColor : this.backgroundColor,
                 borderColor : this.borderColor,
                 radius : this.RADIUS_DEFAULT,
-                data: sortedMonth.map(([, count]) => count)
+                // data: sortedMonth.map(([, count]) => count)
+                data : data,
             }]
         };
 
-        console.log("Chart Data (Lifetime)", chartData);
+        // console.log("Chart Data (Lifetime)", chartData);
 
         return chartData;
     }
-    
-    
-    
-    // COMMITS function to generate chart data based on a date property and aggregation type
-    // generateChartData(dataArray, dateProperty, dateComparison, aggregationType) {
-    //     const currentDate = new Date();
-    //
-    //     const entriesMap = new Map();
-    //
-    //     dataArray.forEach(item => {
-    //         const date = new Date(item[dateProperty]);
-    //
-    //         // Check if the item is within the specified date range
-    //         if (date > dateComparison(currentDate)) {
-    //             let key;
-    //             if (aggregationType === 'month') {
-    //                 key = date.toLocaleString('default', { month: 'long' });
-    //             } else if (aggregationType === 'week') {
-    //                 const mondayOfCurrentWeek = new Date(date);
-    //                 mondayOfCurrentWeek.setDate(date.getDate() - date.getDay() + (date.getDay() === 0 ? -6 : 1));
-    //                 key = `${mondayOfCurrentWeek.getDate()}/${mondayOfCurrentWeek.getMonth() + 1}`;
-    //             } else if (aggregationType === 'day') {
-    //                 key = `${date.getDate()}/${date.getMonth() + 1}`;
-    //             }
-    //
-    //             if (entriesMap.has(key)) {
-    //                 entriesMap.set(key, entriesMap.get(key) + 1);
-    //             } else {
-    //                 entriesMap.set(key, 1);
-    //             }
-    //         }
-    //     });
-    //
-    //     const sortedEntries = [...entriesMap.entries()].sort(([a], [b]) => {
-    //         const dateA = new Date(a);
-    //         const dateB = new Date(b);
-    //         return dateA - dateB;
-    //     });
-    //
-    //     const labels = sortedEntries.map(([key]) => key);
-    //
-    //     const chartData = {
-    //         labels: labels,
-    //         datasets: [{
-    //             backgroundColor: this.backgroundColor,
-    //             borderColor: this.borderColor,
-    //             radius: this.RADIUS_DEFAULT,
-    //             data: sortedEntries.map(([, count]) => count)
-    //         }]
-    //     };
-    //
-    //     console.log("Chart Data", chartData);
-    //
-    //     return chartData;
-    // },
-    // ISSUES function to generate chart data based on date properties and aggregation type
-    // generateChartData(issuesData, dateComparison, aggregationType) {
-    //     console.log("Generating issues chart data");
-    //
-    //     const entriesMap = issuesData.reduce((map, item) => {
-    //         const createdDate = new Date(item.created_at);
-    //
-    //         // Determine the start and end dates based on the aggregation type
-    //         const startDate = dateComparison(new Date());
-    //         const endDate = new Date();
-    //
-    //         let loopDate = new Date(startDate);
-    //
-    //         while (loopDate <= endDate) {
-    //             let key;
-    //
-    //             if (aggregationType === 'month') {
-    //                 key = loopDate.toLocaleString('default', { month: 'long' });
-    //             } else if (aggregationType === 'week') {
-    //                 const mondayOfCurrentWeek = new Date(loopDate);
-    //                 mondayOfCurrentWeek.setDate(loopDate.getDate() - loopDate.getDay() + (loopDate.getDay() === 0 ? -6 : 1));
-    //                 key = `${mondayOfCurrentWeek.getDate()}/${mondayOfCurrentWeek.getMonth() + 1}`;
-    //             } else if (aggregationType === 'day') {
-    //                 key = `${loopDate.getDate()}/${loopDate.getMonth() + 1}`;
-    //             }
-    //
-    //             // Check if the item is within the specified date range
-    //             if (createdDate <= loopDate) {
-    //                 map.set(key, (map.get(key) || 0) + 1);
-    //             }
-    //
-    //             // Move to the next date
-    //             loopDate.setDate(loopDate.getDate() + 1);
-    //         }
-    //
-    //         return map;
-    //     }, new Map());
-    //
-    //     const sortedEntries = [...entriesMap.entries()].sort(([a], [b]) => {
-    //         const dateA = new Date(a);
-    //         const dateB = new Date(b);
-    //         return dateA - dateB;
-    //     });
-    //
-    //     const labels = sortedEntries.map(([key]) => key);
-    //
-    //     const chartData = {
-    //         labels: labels,
-    //         datasets: [{
-    //             backgroundColor: this.backgroundColor,
-    //             borderColor: this.borderColor,
-    //             radius: this.RADIUS_DEFAULT,
-    //             data: sortedEntries.map(([, count]) => count)
-    //         }]
-    //     };
-    //
-    //     return chartData;
-    // },
-    // generateChartData(issuesData, dateComparison, aggregationType) {
-    //     console.log("Generating issues chart data");
-    //
-    //     const entriesMap = issuesData.reduce((map, item) => {
-    //         const createdDate = new Date(item.created_at);
-    //         const closedDate = item.closed_at ? new Date(item.closed_at) : null;
-    //
-    //         // Determine the start and end dates based on the aggregation type
-    //         const startDate = dateComparison(new Date());
-    //         const endDate = new Date();
-    //
-    //         let loopDate = new Date(startDate);
-    //
-    //         while (loopDate <= endDate) {
-    //             let key;
-    //
-    //             if (aggregationType === 'month') {
-    //                 key = loopDate.toLocaleString('default', { month: 'long' });
-    //             } else if (aggregationType === 'week') {
-    //                 const mondayOfCurrentWeek = new Date(loopDate);
-    //                 mondayOfCurrentWeek.setDate(loopDate.getDate() - loopDate.getDay() + (loopDate.getDay() === 0 ? -6 : 1));
-    //                 key = `${mondayOfCurrentWeek.getDate()}/${mondayOfCurrentWeek.getMonth() + 1}`;
-    //             } else if (aggregationType === 'day') {
-    //                 key = `${loopDate.getDate()}/${loopDate.getMonth() + 1}`;
-    //             }
-    //
-    //             // Check if the item is within the specified date range
-    //             if (createdDate <= loopDate && (!closedDate || closedDate >= loopDate)) {
-    //                 map.set(key, (map.get(key) || 0) + 1);
-    //             }
-    //
-    //             // Move to the next date
-    //             loopDate.setDate(loopDate.getDate() + 1);
-    //         }
-    //
-    //         return map;
-    //     }, new Map());
-    //
-    //     const sortedEntries = [...entriesMap.entries()].sort(([a], [b]) => {
-    //         const dateA = new Date(a);
-    //         const dateB = new Date(b);
-    //         return dateA - dateB;
-    //     });
-    //
-    //     const labels = sortedEntries.map(([key]) => key);
-    //
-    //     const chartData = {
-    //         labels: labels,
-    //         datasets: [{
-    //             backgroundColor: this.backgroundColor,
-    //             borderColor: this.borderColor,
-    //             radius: this.RADIUS_DEFAULT,
-    //             data: sortedEntries.map(([, count]) => count)
-    //         }]
-    //     };
-    //    
-    //     return chartData;
-    // },
-    // generateChartData(issuesData, dateComparison, aggregationType) {
-    //     console.log("Generating issues chart data")
-    //     const currentDate = new Date();
-    //
-    //     const entriesMap = new Map();
-    //
-    //     issuesData.forEach(item => {
-    //         const createdDate = new Date(item.created_at);
-    //         const closedDate = item.closed_at ? new Date(item.closed_at) : null;
-    //
-    //         // Determine the start and end dates based on the aggregation type
-    //         const startDate = dateComparison(currentDate);
-    //         const endDate = currentDate;
-    //        
-    //         // console.log(`Start date of issue #${item.number}`, startDate);
-    //         // console.log(`End date of issue #${item.number}`, endDate)
-    //
-    //         let loopDate = new Date(startDate);
-    //
-    //         while (loopDate <= endDate) {
-    //             let key;
-    //
-    //             if (aggregationType === 'month') {
-    //                 key = loopDate.toLocaleString('default', { month: 'long' });
-    //             } else if (aggregationType === 'week') {
-    //                 const mondayOfCurrentWeek = new Date(loopDate);
-    //                 mondayOfCurrentWeek.setDate(loopDate.getDate() - loopDate.getDay() + (loopDate.getDay() === 0 ? -6 : 1));
-    //                 key = `${mondayOfCurrentWeek.getDate()}/${mondayOfCurrentWeek.getMonth() + 1}`;
-    //             } else if (aggregationType === 'day') {
-    //                 key = `${loopDate.getDate()}/${loopDate.getMonth() + 1}`;
-    //             }
-    //
-    //             // Check if the item is within the specified date range
-    //             if (createdDate <= loopDate && (!closedDate || closedDate >= loopDate)) {
-    //                 if (entriesMap.has(key)) {
-    //                     entriesMap.set(key, entriesMap.get(key) + 1);
-    //                 } else {
-    //                     entriesMap.set(key, 1);
-    //                 }
-    //             }
-    //
-    //             // Move to the next date
-    //             loopDate.setDate(loopDate.getDate() + 1);
-    //         }
-    //     });
-    //
-    //     const sortedEntries = [...entriesMap.entries()].sort(([a], [b]) => {
-    //         const dateA = new Date(a);
-    //         const dateB = new Date(b);
-    //         return dateA - dateB;
-    //     });
-    //
-    //     const labels = sortedEntries.map(([key]) => key);
-    //
-    //     const chartData = {
-    //         labels: labels,
-    //         datasets: [{
-    //             backgroundColor: this.backgroundColor,
-    //             borderColor: this.borderColor,
-    //             radius: this.RADIUS_DEFAULT,
-    //             data: sortedEntries.map(([, count]) => count)
-    //         }]
-    //     };
-    //
-    //     console.log("Chart Data", chartData);
-    //
-    //     return chartData;
-    // },
-    // // Function to generate chart data for the last 12 months
-    // chartDataTwelveMonths(issuesData) {
-    //     const dateComparison = currentDate => {
-    //         const lastYearDate = new Date(currentDate);
-    //         lastYearDate.setFullYear(lastYearDate.getFullYear() - 1);
-    //         return lastYearDate;
-    //     };
-    //
-    //     const yearData = this.generateChartData(issuesData, dateComparison, 'month');
-    //     console.log("Chart Data", yearData);
-    //     return yearData;
-    //     // return this.generateChartData(issuesData, dateComparison, 'month');
-    // },
-    //
-    // // Function to generate chart data for the last 3 months
-    // chartDataThreeMonths(issuesData) {
-    //     const dateComparison = currentDate => {
-    //         const lastThreeMonthsDate = new Date(currentDate);
-    //         lastThreeMonthsDate.setMonth(lastThreeMonthsDate.getMonth() - 3);
-    //         return lastThreeMonthsDate;
-    //     };
-    //
-    //     return this.generateChartData(issuesData, dateComparison, 'week');
-    // },
-    //
-    // // Function to generate chart data for the last month
-    // chartDataMonth(issuesData) {
-    //     const dateComparison = currentDate => {
-    //         const lastMonthDate = new Date(currentDate);
-    //         lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
-    //         return lastMonthDate;
-    //     };
-    //
-    //     return this.generateChartData(issuesData, dateComparison, 'day');
-    // },
-    //
-    // // Function to generate chart data for the lifetime
-    // chartDataLifetime(issuesData) {
-    //     const dateComparison = currentDate => currentDate;
-    //
-    //     return this.generateChartData(issuesData, dateComparison, 'month');
-    // },
-    //
-    // // Function to generate chart data for the last week
-    // chartDataWeek(issuesData) {
-    //     const dateComparison = currentDate => {
-    //         const lastWeekDate = new Date(currentDate);
-    //         lastWeekDate.setDate(lastWeekDate.getDate() - 7);
-    //         return lastWeekDate;
-    //     };
-    //
-    //     return this.generateChartData(issuesData, dateComparison, 'day');
-    // },
 }
 export default ChartDataIssues;
