@@ -31,6 +31,19 @@
             <a class="nav-link" aria-current="true" @click="changeChartState('stacked')">Stacked Commits</a>
           </div>
         </li>
+
+        <!-- Reload Button -->
+        <li class="nav-item">
+          <div v-if="isLoading">
+            <button class="btn btn-primary" type="button" disabled>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Refresh Contributors
+            </button>
+          </div>
+          <div v-else>
+            <button @click="refreshContributors()" class="btn btn-primary" :disabled="isLoading">Refresh Contributors</button>
+          </div>
+        </li>
       </ul>
     </div>
 
@@ -78,6 +91,7 @@ import StackedLineChart from "../components/charts/StackedLineChart.vue";
 
 export default {
   props: {
+    isLoading : Boolean,
     chartState : {
       type: String,
       default: "multi"
@@ -103,6 +117,11 @@ export default {
     LineChart_DualYAxes,
     CommitsChart,
     UserCard
+  },
+  methods: {
+    refreshContributors(){
+      this.$emit('refresh-contributors');
+    }
   }
 }
 </script>

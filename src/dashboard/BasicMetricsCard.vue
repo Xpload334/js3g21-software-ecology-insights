@@ -5,9 +5,9 @@
     </div>
     
     <div class="card-body">
-      <div class="d-flex flex-wrap">
+      <div class="d-flex justify-content-between flex-wrap">
 <!--      <div class="row row-cols-1 row-cols-md-3 g-4">-->
-        <div class="col-md placeholder-wave">
+        <div class="col-md-auto placeholder-wave">
           <span v-if="language" class="badge bg-light text-dark fs-5">
             <span>{{ language }}</span>
           </span>
@@ -16,7 +16,7 @@
           <p>Language</p>
         </div>
         
-        <div class="col-md placeholder-wave">
+        <div class="col-md-auto placeholder-wave">
           <span v-if="watchers_count" class="badge bg-light text-dark fs-5">
             <span>{{ watchers_count }}</span>
           </span>
@@ -25,7 +25,7 @@
           <p>Watchers</p>
         </div>
 
-        <div class="col-md placeholder-wave">
+        <div class="col-md-auto placeholder-wave">
           <span v-if="subscribers_count" class="badge bg-light text-dark fs-5">
             <span>{{ subscribers_count }}</span>
           </span>
@@ -34,7 +34,7 @@
           <p>Subscribers</p>
         </div>
 
-        <div class="col-md placeholder-wave">
+        <div class="col-md-auto placeholder-wave">
           <span v-if="stargazers_count" class="badge bg-light text-dark fs-5">
             <span>{{ stargazers_count }}</span>
           </span>
@@ -43,7 +43,7 @@
           <p>Stargazers</p>
         </div>
 
-        <div class="col-md placeholder-wave">
+        <div class="col-md-auto placeholder-wave">
           <span v-if="forks_count" class="badge bg-light text-dark fs-5">
             <span>{{ forks_count }}</span>
           </span>

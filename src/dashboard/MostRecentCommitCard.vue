@@ -4,19 +4,17 @@
       <h5 class="card-title">Most Recent Commit</h5>
     </div>
     <div class="card-body">
-      <div class="row">
-        <div v-if="author" class="col-md-4">
+      <div v-if="author" class="col-md-4">
           <span class="badge bg-light ">
             <span class="text-dark fs-5">{{ author }}</span>
           </span>
-<!--          <p>Author</p>-->
-        </div>
-        
-        <div v-if="message" class="col-md-auto">
-          <span class="card-text text-muted">"{{ message }}"</span>
-        </div>
+        <!--          <p>Author</p>-->
       </div>
-      
+
+      <div v-if="message" class="col-md-auto">
+        <span class="card-text text-muted">"{{ message }}"</span>
+      </div>
+
       <div v-if="date">
         <br>
         <span class="badge bg-light text-dark text-muted">{{relativeDate(date)}}</span>

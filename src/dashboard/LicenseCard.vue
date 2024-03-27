@@ -1,10 +1,8 @@
 ﻿<template>
   <div class="card">
     <div class="card-header">
-      <div class="d-flex justify-content-between align-items-center">
-        <h5 class="card-title">Licensing</h5>
-      </div>
-      
+      <h5 class="card-title">Licensing</h5>
+
     </div>
 
     <div class="card-body">

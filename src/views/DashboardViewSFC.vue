@@ -9,23 +9,14 @@
 
     <br>
     
-    <User_OffCanvas_Button
-        :username="owner"
-        :get-user-data="getUserData"
-    />
-
-    <User_OffCanvas_Button
-        username="github"
-        :get-user-data="getUserData"
-    />
-    
     <br>
 
     <!-- Basic Metrics -->
-    <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="row">
+<!--    <div class="row row-cols-1 row-cols-md-3 g-4">-->
       
       <!-- OWNER/ORGANISATION -->
-      <div class="col">
+      <div class="col-md-4">
         
         <!-- Owner -->
 <!--        <div class="card" v-if="Object.keys(repoData).length > 0">-->
@@ -63,36 +54,56 @@
       </div>
       
       <!-- Stats card-->
-      <div class="col">
+      <div class="col-md">
         <BasicMetricsCard v-bind="repoData" />
       </div>
       
-      <!-- LICENSE -->
-      <div class="col">
-        <LicenseCard v-bind="licenseData" />
-      </div>
-
-      <!-- COMMITS -->
-      <div class="col">
-        <CommitsOverviewCard
-            :commits_count="commitsCount"
-            :authors_count="uniqueAuthors"
-        />
-      </div>
-      
-      <!-- Most Recent Commit -->
-      <div class="col">
-        <MostRecentCommitCard v-bind="mostRecentCommit"/>
-      </div>
-      
       <!-- TOPICS -->
-      <div class="col">
+      <div class="col-md">
         <TopicsCard
             :topics="repoData.topics"
         />
       </div>
     </div>
+    
+    <br>
+    
+    <div class="row">
+      <!-- LICENSE -->
+      <div class="col-md-4">
+        <LicenseCard v-bind="licenseData" />
+      </div>
+      
+      <!-- COMMITS -->
+      <div class="col-md">
+        <CommitsOverviewCard
+            :commits_count="commitsCount"
+            :authors_count="uniqueAuthors"
+        />
+        
+        <br>
+        
+        <MostRecentCommitCard v-bind="mostRecentCommit"/>
+      </div>
+      
+<!--      &lt;!&ndash; Most Recent Commit &ndash;&gt;-->
+<!--      <div class="col-md">-->
+<!--        -->
+<!--      </div>-->
+      
+      <!-- Citations -->
+      <div class="col-md-4">
+        <CitationsCard
+            :citations-data="citationsData"
+        />
+      </div>
+    </div>
 
+    <br>
+    
+    
+    
+    
     <br>
 
     <!-- ACTIVITY CHART -->
@@ -101,9 +112,13 @@
           :chart-state="commitsChartState"
           :commits-chart-data="commitsChartData"
           :issues-chart-data="issuesChartData"
-          :is-loading="isLoadingCommits"
+          
+          :is_loading_commits="isLoadingCommits"
+          :is_loading_issues="isLoadingIssues"
+          
           @change-activity-chart-state="setActivityChartState"
           @refresh-commits="refreshCommits"
+          @refresh-issues="refreshIssues"
       />
     </div>
 
@@ -112,6 +127,7 @@
     <!-- CONTRIBUTORS CARD -->
     <div class="col-md-auto">
       <ContributorsCard
+          :is-loading="isLoadingContributors"
           :chart-state="contributorChartState"
           :contributors-top="contributorsChartData"
           :suggested-max="ChartDataContributors.getSuggestedMaxY(contributorsTop)"
@@ -122,6 +138,7 @@
           :change-chart-state="changeContributorChartState"
           
           :get-user-data="getUserData"
+          @refresh-contributors="refreshContributors"
       />
     </div>
     
@@ -181,8 +198,10 @@ import GetUser from "../js/requests/getUser.js";
 import SearchForRepos from "../js/requests/searchForRepos.js";
 import SortReposUtils from "../js/sortReposUtils.js";
 import User_OffCanvas_Button from "../dashboard/User_OffCanvas_Button.vue";
+import GetRepoCitations from "../js/getRepoCitations.js";
+import CitationsCard from "../dashboard/CitationsCard.vue";
 
-const USING_TEST_DATA = true;
+const USING_TEST_DATA = false;
 
 const route = useRoute();
 //Base
@@ -252,6 +271,11 @@ const currentUserData = ref({
   repos: null,
 });
 const isLoadingUserData = ref(false);
+
+//Citations
+const citationsData = ref({});
+const hasCitationsData = ref(false);
+const isLoadingCitations = ref(false);
 
 
 //Toasts
@@ -324,15 +348,15 @@ const getRepoStats = (username, repoName) => {
 function getCommits(username, repoName){
   isLoadingCommits.value = true;
   // commitsChartData.value = null;
-  
+
   // mostRecentCommit.value = null;
   hasMostRecentCommit.value = false;
-  
+
   hasCommitsChartData.value = false;
   hasCommitsData.value = false;
   commitsCount.value = 0;
   uniqueAuthors.value = 0;
-  
+
   fetchCommits(username, repoName).then((data) => {
     // console.log("Commits Response (Full)", data);
     commitsData.value = data;
@@ -352,7 +376,7 @@ function getCommits(username, repoName){
       message : mostRecentCommitFull.message,
       date : mostRecentCommitFull.author.date
     };
-    
+
     hasMostRecentCommit.value = true
 
     // //Use chart data module to transform into chart data
@@ -379,6 +403,52 @@ function getCommits(username, repoName){
     isLoadingCommits.value = false
   });
 }
+// function getCommits(username, repoName) {
+//   return new Promise((resolve, reject) => {
+//     isLoadingCommits.value = true;
+//     hasMostRecentCommit.value = false;
+//     hasCommitsChartData.value = false;
+//     hasCommitsData.value = false;
+//     commitsCount.value = 0;
+//     uniqueAuthors.value = 0;
+//
+//     fetchCommits(username, repoName)
+//         .then((data) => {
+//           commitsData.value = data;
+//           hasCommitsData.value = true;
+//
+//           commitsCount.value = commitsData.value.length;
+//           uniqueAuthors.value = countUniqueAuthors();
+//
+//           const mostRecentCommitFull = findMostRecentCommit();
+//           mostRecentCommit.value = {
+//             author: mostRecentCommitFull.author.name,
+//             message: mostRecentCommitFull.message,
+//             date: mostRecentCommitFull.author.date
+//           };
+//           hasMostRecentCommit.value = true;
+//
+//           commitsChartData.value = {
+//             lifetime: ChartDataUtils.chartDataLifetime(commitsData.value),
+//             year: ChartDataUtils.chartDataTwelveMonths(commitsData.value),
+//             threeMonths: ChartDataUtils.chartDataThreeMonths(commitsData.value),
+//             month: ChartDataUtils.chartDataMonth(commitsData.value),
+//             week: ChartDataUtils.chartDataWeek(commitsData.value)
+//           };
+//
+//           hasCommitsChartData.value = true;
+//           resolve(); // Resolve the Promise since the operation is successful
+//         })
+//         .catch((error) => {
+//           console.error(error.stack);
+//           reject(error); // Reject the Promise if an error occurs
+//         })
+//         .finally(() => {
+//           isLoadingCommits.value = false;
+//         });
+//   });
+// }
+
 
 /**
  * Retrieve the contributor history for the repo. Get the top N contributors and transform this data into an
@@ -391,6 +461,12 @@ const getContributors = (username, repoName) => {
   
   fetchContributors(username, repoName).then((data) => {
     // console.log("Contributors Response (Full)", data)
+    if(data.length <= 0){
+      console.error(`Error fetching contributors for ${username}/${repoName}, data empty`)
+      isLoadingContributors.value = false
+      return;
+    }
+    
     contributorsData.value = data;
 
     contributorsTop.value = ChartDataContributors.getTopNContributors(contributorsData.value, NUM_TOP_CONTRIBUTORS);
@@ -521,6 +597,24 @@ function getUserData(username){
   //And by last updated
 }
 
+function getCitations(repoData){
+  const htmlUrl = repoData.html_url;
+  
+  isLoadingCitations.value = true;
+  
+  fetchCitations(htmlUrl).then((data) => {
+    console.log("Received citations");
+    
+    citationsData.value = data;
+    hasCitationsData.value = true;
+  }).catch((error) => {
+    console.error(error);
+    //
+  }).finally(() => {
+    isLoadingCitations.value = false;
+  });
+}
+
 /**
  * Once the repo stats are retrieved, call requests to other endpoints.
  */
@@ -536,6 +630,9 @@ const handleRepoLinks = () => {
   
   //Get License
   getLicense(repoData.value);
+  
+  //Get citations
+  getCitations(repoData.value);
 };
 
 
@@ -617,6 +714,13 @@ async function fetchUser(username){
   return data;
 }
 
+async function fetchCitations(htmlUrl){
+  const data = await GetRepoCitations.getCitations(htmlUrl, USING_TEST_DATA);
+  console.log(`${htmlUrl} Citations Data Response (Full)`, data)
+  
+  return data;
+}
+
 const countUniqueAuthors = () => {
   return GetRepoCommits.countUniqueAuthors(commitsData.value);
 };
@@ -630,7 +734,8 @@ const setActivityChartState = (newState) => {
 };
 
 const refreshCommits = () => {
-  if(isLoadingCommits){
+  // console.log(`Loading commits = ${isLoadingCommits.value}`)
+  if(isLoadingCommits.value){
     return;
   }
   
@@ -639,8 +744,19 @@ const refreshCommits = () => {
   getCommits(owner.value, repoName.value);
 };
 
+const refreshIssues = () => {
+  // console.log(`Loading issues = ${isLoadingIssues.value}`)
+  if(isLoadingIssues.value){
+    return;
+  }
+
+  displayToast("Refreshing issues...")
+  getIssues(owner.value, repoName.value);
+}
+
 const refreshContributors = () => {
-  if(isLoadingContributors){
+  // console.log(`Loading contributors = ${isLoadingContributors.value}`)
+  if(isLoadingContributors.value){
     return;
   }
   
@@ -653,6 +769,7 @@ function changeContributorChartState(newState="multi"){
 }
 
 const displayToast= (message) => {
+  console.log(`Toast`, message)
   toastMessage.value = message;
   showToast.value = true;
   

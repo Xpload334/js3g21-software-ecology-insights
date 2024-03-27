@@ -8,7 +8,8 @@
     <div class="card">
       <div class="card-header">
         <h1 class="title text-center mt-3">Search for Repos</h1>
-        <button @click="openDashboard('openai', 'openai-cookbook')">QUICK DB</button>
+        
+        <button @click="openDashboard('openai', 'openai-cookbook')" style="opacity: 0">QUICK DB</button>
       </div>
       
       
@@ -18,21 +19,21 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Find a Creator</h5>
-              <p class="card-text">Search for a username on GitHub</p>
+              <p class="card-text">Search for a user or organisation on GitHub!</p>
 <!--              <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>-->
             </div>
           </div>
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Launch the Dashboard</h5>
-              <p class="card-text">Dashboards display quick stats about a project! Who were the most influential? </p>
+              <p class="card-text">Dashboards display quick stats about a project! Who were the most influential users? </p>
 <!--              <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>-->
             </div>
           </div>
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Easily Find Trends</h5>
-              <p class="card-text">What went well and what didn't? How can we use this information to make our projects even better?</p>
+              <p class="card-text">What went well and what didn't? What sources were used in the project? How can we use this information to make our projects even better?</p>
 <!--              <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>-->
             </div>
           </div>
@@ -63,7 +64,7 @@
               </button>
             </div>
             <div v-else>
-              <button @click="getReposByUsername" class="btn btn-primary" :disabled="isLoading">Search</button>
+              <button type="submit" @click="getReposByUsername" class="btn btn-primary" :disabled="isLoading">Search</button>
             </div>
           </div>
 
@@ -76,7 +77,7 @@
               </button>
             </div>
             <div v-else>
-              <button @click="displaySearchResultsPaged" class="btn btn-primary" :disabled="isLoading">Reload</button>
+              <button type="button" @click="displaySearchResultsPaged" class="btn btn-primary" :disabled="isLoading">Reload</button>
             </div>
           </div>
         </div>

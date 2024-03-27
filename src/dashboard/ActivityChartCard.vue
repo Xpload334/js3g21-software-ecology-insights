@@ -95,22 +95,30 @@
           </div>
         </li>
         
-<!--        &lt;!&ndash; Refresh Button&ndash;&gt;-->
-<!--        <li class="nav-item">-->
-<!--          <div id="commits-refresh-button">-->
-<!--            <button @click="refreshCommits()" class="btn btn-outline-primary" :disabled="is_loading">Refresh</button>-->
-<!--          </div>-->
-<!--        </li>-->
         <!-- Reload Button -->
         <li class="nav-item">
-          <div v-if="is_loading">
+          <div v-if="is_loading_commits">
             <button class="btn btn-primary" type="button" disabled>
               <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-              Refresh
+              Refresh Commits
             </button>
           </div>
           <div v-else>
-            <button @click="refreshCommits()" class="btn btn-primary" :disabled="is_loading">Reload</button>
+            <button @click="refreshCommits()" class="btn btn-primary" :disabled="is_loading_commits">Refresh Commits</button>
+          </div>
+        </li>
+        <!-- Reload Button -->
+        <li class="nav-item">
+          <div v-if="is_loading_issues">
+            <button class="btn btn-primary" type="button" disabled>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Refresh Issues
+            </button>
+          </div>
+          <div v-else>
+            <button @click="refreshIssues()" class="btn btn-primary" :disabled="is_loading_issues">
+              Refresh Issues
+            </button>
           </div>
         </li>
         
@@ -120,7 +128,7 @@
     
     <!-- Body -->
     <div class="card-body">
-      <div v-if="commitsChartData !== null && Object.keys(commitsChartData).length > 0">
+      <div v-if="commitsChartData !== null && Object.keys(commitsChartData).length > 0 && issuesChartData !== null && Object.keys(issuesChartData).length > 0">
         <!-- Chart Lifetime -->
         <div v-if="chartState === 'lifetime'">
           <LineChart_DualYAxes
@@ -199,7 +207,8 @@ export default {
     change_chart_state : {
       type : Function
     },
-    is_loading : [Boolean, String],
+    is_loading_commits : Boolean,
+    is_loading_issues: Boolean
   },
   components:{
     LineChart_DualYAxes,
@@ -215,6 +224,9 @@ export default {
     },
     refreshCommits(){
       this.$emit('refresh-commits');
+    },
+    refreshIssues(){
+      this.$emit('refresh-issues');
     },
     combineChartData(commitsData, issuesData){
       // if(!commitsData.labels) return null;
