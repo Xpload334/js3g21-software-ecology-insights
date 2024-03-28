@@ -11,7 +11,7 @@
         
         <!-- NAVBAR -->
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <ul class="navbar-nav">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <!-- SEARCH -->
             <li class="nav-item">
               <div v-if="state === 'search'">
@@ -48,8 +48,12 @@
 <!--              <a class="nav-link disabled">Disabled</a>-->
 <!--            </li>-->
           </ul>
-          </div>
+          
+          <span class="navbar-text">
+            Joshua Severn
+          </span>
         </div>
+      </div>
     </nav>
   </div>
 </template>
