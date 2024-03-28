@@ -54,64 +54,82 @@
             <a class="nav-link" aria-current="true" @click="changeChartState('week')">Last Week</a>
           </div>
         </li>
+        
+<!--        &lt;!&ndash; Refresh Button&ndash;&gt;-->
+<!--        <li class="nav-item">-->
+<!--          <div id="commits-refresh-button">-->
+<!--            <button @click="refreshCommits()" class="btn btn-outline-primary" :disabled="is_loading">Refresh</button>-->
+<!--          </div>-->
+<!--        </li>-->
+        <!-- Reload Button -->
+        <li class="nav-item">
+          <div v-if="is_loading">
+            <button class="btn btn-primary" type="button" disabled>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Refresh
+            </button>
+          </div>
+          <div v-else>
+            <button @click="refreshCommits()" class="btn btn-primary" :disabled="is_loading">Reload</button>
+          </div>
+        </li>
+        
+        
       </ul>
     </div>
     
     <!-- Body -->
     <div class="card-body">
-      <div v-if="chartData">
+      <div v-if="commitsChartData !== null && Object.keys(commitsChartData).length > 0">
         <!-- Chart Lifetime -->
         <div v-if="chartState === 'lifetime'">
-          <CommitsChart :chart-data="chartData.lifetime"/>
+          <CommitsChart :chart-data="commitsChartData.lifetime"/>
         </div>
 
         <!-- Chart Last Year -->
         <div v-else-if="chartState === 'year'">
-          <CommitsChart :chart-data="chartData.year"/>
+          <CommitsChart :chart-data="commitsChartData.year"/>
         </div>
 
         <!-- Chart Last 3 Months -->
         <div v-else-if="chartState === 'threeMonths'">
-          <CommitsChart :chart-data="chartData.threeMonths"/>
+          <CommitsChart :chart-data="commitsChartData.threeMonths"/>
         </div>
 
         <!-- Chart Last Month -->
         <div v-else-if="chartState === 'month'">
-          <CommitsChart :chart-data="chartData.month"/>
+          <CommitsChart :chart-data="commitsChartData.month"/>
         </div>
 
         <!-- Chart Last Week -->
         <div v-else-if="chartState === 'week'">
-          <CommitsChart :chart-data="chartData.week"/>
+          <CommitsChart :chart-data="commitsChartData.week"/>
         </div>
         <div v-else>
           <p>No commits data available.</p>
         </div>
       </div>
       <div v-else>
-        <p>No commit data available. Please try again.</p>
+        <p>Loading...</p> <!-- Placeholder while data is being loaded -->
       </div>
-      
-      
-      
-      
     </div>
   </div>
       
 </template>
 
 <script>
+// <div v-if="chartData !== null && Object.keys(chartData).length > 0">
 // import {dashboardStore} from "./dashboardStore.js";
 import CommitsChart from "./CommitsChart.vue";
 
 export default {
   props:{
     chartState: String,
-    chartData: Object,
-    //UNFINISHED
+    commitsChartData : Object,
     change_chart_state : {
       type : Function
-    }
+    },
+    is_loading : [Boolean, String]
   },
   components:{
     CommitsChart
@@ -120,6 +138,9 @@ export default {
     changeChartState(newState){
       //Emit an event to notify parent
       this.$emit('change-activity-chart-state', newState);
+    },
+    refreshCommits(){
+      this.$emit('refresh-commits');
     }
   }
 }

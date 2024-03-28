@@ -1,60 +1,68 @@
-﻿<script>
-export default {
-  props:{
-    // details: Object
-    avatar_url: String,
-    login: String,
-    type: String,
-    html_url: String
-  }
-}
-// "owner": {
-//   "login": "openai",
-//       "id": 14957082,
-//       "node_id": "MDEyOk9yZ2FuaXphdGlvbjE0OTU3MDgy",
-//       "avatar_url": "https://avatars.githubusercontent.com/u/14957082?v=4",
-//       "gravatar_id": "",
-//       "url": "https://api.github.com/users/openai",
-//       "html_url": "https://github.com/openai",
-//       "followers_url": "https://api.github.com/users/openai/followers",
-//       "following_url": "https://api.github.com/users/openai/following{/other_user}",
-//       "gists_url": "https://api.github.com/users/openai/gists{/gist_id}",
-//       "starred_url": "https://api.github.com/users/openai/starred{/owner}{/repo}",
-//       "subscriptions_url": "https://api.github.com/users/openai/subscriptions",
-//       "organizations_url": "https://api.github.com/users/openai/orgs",
-//       "repos_url": "https://api.github.com/users/openai/repos",
-//       "events_url": "https://api.github.com/users/openai/events{/privacy}",
-//       "received_events_url": "https://api.github.com/users/openai/received_events",
-//       "type": "Organization",
-//       "site_admin": false
-// }
-
-</script>
-
-<template>
+﻿<template>
   <div class="card">
-    <div class="row">
-      <div class="col-md-2">
-        <div v-if="avatar_url">
-          <a :href=html_url target="_blank"><img :src='avatar_url' class="img-fluid rounded-start" :alt=login></a>
+    <div class="d-flex bd-highlight">
+      <div class="col-md-3 p-2 bd-highlight">
+        <!-- Check if avatar_url is available -->
+        <div v-if="user">
+          <!-- Display user's avatar with a link to their GitHub profile -->
+          <a :href="user.html_url" target="_blank">
+            <img :src="user.avatar_url" class="img-fluid rounded-start" :alt="user.login">
+          </a>
         </div>
+        <!-- If avatar_url is not available, display a placeholder image -->
         <div v-else>
           <img src="https://placehold.co/400" class="img-fluid rounded-start" alt="placeholder">
         </div>
-
       </div>
-      <div class="col-md-6">
+      
+      
+      <div class="p-2 bd-highlight">
         <div class="card-body">
-          <h5 class="card-title">{{login}}</h5>
-          <p class="card-text">{{type}}</p>
-<!--          <p class="card-text"><small class="text-muted">Created {{repoData.created_at}}</small></p>-->
-<!--          <p class="card-text"><small class="text-muted">Last Updated {{repoData.updated_at}}</small></p>-->
+          <!-- Display user's login with a placeholder if unavailable -->
+          <h5 class="card-title placeholder-wave" v-if="user">
+            <span v-if="user.login">{{ user.login }}</span>
+            <span v-else class="placeholder col-8"></span>
+            
+          </h5>
+          <!-- Display user's type with a placeholder if unavailable -->
+          <p class="card-text placeholder-wave" v-if="user">
+            <span v-if="user.type">{{ user.type }}</span>
+            <span v-else class="placeholder col-6"></span>
+          </p>
         </div>
       </div>
+
+      <div class="ms-auto p-2 bd-highlight">
+        <div v-if="user" class="card-body">
+          <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasScrolling"
+             role="button" aria-controls="offcanvasScrolling" @click="getUserData(user.login)">
+            View More
+          </a>
+        </div>
+      </div>
+      
     </div>
   </div>
 </template>
 
-<style scoped>
+<script>
+export default {
+  props: {
+    user:{
+      avatar_url: String,
+      login: String,
+      type: String,
+      html_url: String,
+    },
+    
+    getUserData : {
+      type: Function,
+      required : true
+    }
+  }
+}
+</script>
 
+<style scoped>
+/* Add your styles here */
 </style>

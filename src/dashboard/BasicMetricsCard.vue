@@ -5,11 +5,53 @@
     </div>
     
     <div class="card-body">
-      <p class="card-text">Language: <b>{{language}}</b></p>
-      <p class="card-text"><b>{{watchers_count}}</b> Watching</p>
-      <p class="card-text"><b>{{subscribers_count}}</b> Subscribed</p>
-      <p class="card-text"><b>{{stargazers_count}}</b> Starred</p>
-      <p class="card-text"><b>{{forks_count}}</b> Forks</p>
+      <div class="d-flex justify-content-between flex-wrap">
+<!--      <div class="row row-cols-1 row-cols-md-3 g-4">-->
+        <div class="col-md-auto placeholder-wave">
+          <span v-if="language" class="badge bg-light text-dark fs-5">
+            <span>{{ language }}</span>
+          </span>
+          <span v-else class="placeholder col-12"></span>
+          
+          <p>Language</p>
+        </div>
+        
+        <div class="col-md-auto placeholder-wave">
+          <span v-if="watchers_count" class="badge bg-light text-dark fs-5">
+            <span>{{ watchers_count }}</span>
+          </span>
+          <span v-else class="placeholder col-12"></span>
+          
+          <p>Watchers</p>
+        </div>
+
+        <div class="col-md-auto placeholder-wave">
+          <span v-if="subscribers_count" class="badge bg-light text-dark fs-5">
+            <span>{{ subscribers_count }}</span>
+          </span>
+          <span v-else class="placeholder col-12"></span>
+          
+          <p>Subscribers</p>
+        </div>
+
+        <div class="col-md-auto placeholder-wave">
+          <span v-if="stargazers_count" class="badge bg-light text-dark fs-5">
+            <span>{{ stargazers_count }}</span>
+          </span>
+          <span v-else class="placeholder col-12"></span>
+          
+          <p>Stargazers</p>
+        </div>
+
+        <div class="col-md-auto placeholder-wave">
+          <span v-if="forks_count" class="badge bg-light text-dark fs-5">
+            <span>{{ forks_count }}</span>
+          </span>
+          <span v-else class="placeholder col-12"></span>
+          
+          <p>Forks</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>

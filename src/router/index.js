@@ -9,14 +9,27 @@ import '../css/main.css'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
 
+//BootstrapVue
+// import "bootstrap-vue/dist/bootstrap-vue.min.css"
+// import "bootstrap-vue"
+
 //Import components
-import Home from "../views/Home.vue";
+// import Home from "../views/Home.vue";
+import SearchViewSFC from "../views/SearchViewSFC.vue"
+// import DashboardViewSFC from "../views/DashboardViewSFC.vue"
+import HelpViewSFC from "../views/HelpViewSFC.vue"
 import NotFound from "../connectionFail/NotFound.vue";
+import HomeDashboard from "../views/HomeDashboard.vue";
 
 
 const routes = [
-    { path: '/', component: Home },
-    { path: '/:owner/:repo', component: Home},
+    { path: '/', component: SearchViewSFC },
+    { path: '/search', component: SearchViewSFC },
+    { path: '/help', component: HelpViewSFC },
+    { path: '/dashboard/:owner/:repo', component: HomeDashboard},
+    // { path: '/', component: Home },
+    // { path: '/search', component: Home },
+    // { path: '/dashboard/:owner/:repo', component: Home},
     // Add a wildcard route for 404 errors
     {
         path: '/:pathMatch(.*)*',

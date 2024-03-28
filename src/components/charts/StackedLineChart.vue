@@ -49,7 +49,8 @@ export default {
             suggestedMax: this.suggestedMaxY || undefined, // Use the prop if available
             ticks: {
               precision: 0 // Display only whole numbers on the y-axis
-            }
+            },
+            stacked: true,
           },
           x: {
             type: 'category',

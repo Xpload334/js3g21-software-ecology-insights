@@ -1,26 +1,19 @@
-﻿import {reactive} from "vue";
-import ChartDataIssues from "./chartDataIssues.js";
+﻿import { reactive } from 'vue';
+import {chartDataAggregate} from "./chartDataAggregate.js";
+import DataConvertUtils from "../dataConvertUtils.js";
 
-class ChartDataUtils{
+class ChartDataIssues {
     static RADIUS_ZERO = 0;
     static RADIUS_DEFAULT = 5;
-    
-    static backgroundColor = 'rgb(135, 206, 235, 0.2)';
-    static borderColor = 'rgb(135, 206, 235, 0.8)';
+    static LABEL = "Issues"
 
-    // generateRandomColor() {
-    //     return this.colors[Math.floor(Math.random() * this.colors.length)];
-    // },
-    // setColorCommits(){
-    //     this.backgroundColor = 'rgb(135, 206, 235, 0.2)';
-    //     this.borderColor = 'rgb(135, 206, 235, 0.8)';
-    // },
-    // setColorIssues(){
-    //     this.backgroundColor = 'rgb(255, 172, 28, 0.2)';
-    //     this.borderColor = 'rgb(255, 172, 28, 0.8)';
-    // },
+    static backgroundColor = 'rgb(255, 172, 28, 0.2)';
+    static borderColor = 'rgb(255, 172, 28, 0.8)';
     
-    static chartDataTwelveMonths(dataArray, labelName="Commits") {
+    // static chartDataTwelveMonths(issuesData){
+    //     return chartDataAggregate.chartDataTwelveMonths(issuesData, 'created_at', 'month', ChartDataIssues.backgroundColor, ChartDataIssues.borderColor);
+    // }
+    static chartDataTwelveMonths(dataArray) {
         const currentDate = new Date();
         const lastYearDate = new Date(currentDate);
         lastYearDate.setFullYear(lastYearDate.getFullYear() - 1);
@@ -28,7 +21,7 @@ class ChartDataUtils{
         const monthlyEntries = Array(12).fill(0);
 
         dataArray.forEach(item => {
-            const date = new Date(item.author.date);
+            const date = new Date(item.created_at);
 
             // Check if the commit is within the last 12 months
             if (date > lastYearDate) {
@@ -44,14 +37,17 @@ class ChartDataUtils{
             monthLabels.push(labelDate.toLocaleString('default', { month: 'long' }));
         }
 
+        // Map the counts, replacing NaN values with zeros
+        const data = monthlyEntries.map(count => isNaN(count) ? 0 : count);
+
         const chartData = {
             labels: monthLabels,
             datasets: [{
-                label: labelName,
-                backgroundColor: ChartDataUtils.backgroundColor,
-                borderColor : ChartDataUtils.borderColor,
-                data: monthlyEntries,
-                radius : ChartDataUtils.RADIUS_DEFAULT,
+                label: this.LABEL,
+                backgroundColor: this.backgroundColor,
+                borderColor : this.borderColor,
+                data: data,
+                radius : this.RADIUS_DEFAULT,
             }]
         };
 
@@ -59,8 +55,10 @@ class ChartDataUtils{
 
         return chartData;
     }
-
-    static chartDataWeek(dataArray, labelName="Commits") {
+    // static chartDataWeek(issuesData){
+    //     return chartDataAggregate.chartDataWeek(issuesData, 'created_at', 'day', ChartDataIssues.backgroundColor, ChartDataIssues.borderColor);
+    // }
+    static chartDataWeek(dataArray) {
         const currentDate = new Date();
         const lastWeekDate = new Date(currentDate);
         lastWeekDate.setDate(lastWeekDate.getDate() - 7);
@@ -68,7 +66,7 @@ class ChartDataUtils{
         const dailyEntries = Array(7).fill(0);
 
         dataArray.forEach(item => {
-            const date = new Date(item.author.date);
+            const date = new Date(item.created_at);
 
             // Check if the item is within the last week
             if (date > lastWeekDate) {
@@ -85,14 +83,17 @@ class ChartDataUtils{
         const todayIndex = currentDate.getDay();
         const rotatedDayLabels = [...dayLabels.slice(todayIndex), ...dayLabels.slice(0, todayIndex)];
 
+        // Map the counts, replacing NaN values with zeros
+        const data = dailyEntries.map(count => isNaN(count) ? 0 : count);
+
         const chartData = {
             labels: rotatedDayLabels,
             datasets: [{
-                label: labelName,
+                label : this.LABEL,
                 backgroundColor : this.backgroundColor,
                 borderColor : this.borderColor,
                 radius : this.RADIUS_DEFAULT,
-                data: dailyEntries
+                data: data
             }]
         };
 
@@ -100,8 +101,10 @@ class ChartDataUtils{
 
         return chartData;
     }
-
-    static chartDataThreeMonths(dataArray, labelName="Commits") {
+    // static chartDataThreeMonths(issuesData){
+    //     return chartDataAggregate.chartDataThreeMonths(issuesData, 'created_at', 'week', ChartDataIssues.backgroundColor, ChartDataIssues.borderColor);
+    // }
+    static chartDataThreeMonths(dataArray) {
         const currentDate = new Date();
         const lastThreeMonthsDate = new Date(currentDate);
         lastThreeMonthsDate.setMonth(lastThreeMonthsDate.getMonth() - 3);
@@ -109,7 +112,7 @@ class ChartDataUtils{
         const weeklyEntries = Array(12).fill(0);
 
         dataArray.forEach(item => {
-            const date = new Date(item.author.date);
+            const date = new Date(item.created_at);
 
             // Check if the item is within the last 3 months
             if (date > lastThreeMonthsDate) {
@@ -121,6 +124,9 @@ class ChartDataUtils{
             }
         });
 
+        // Map the counts, replacing NaN values with zeros
+        const data = weeklyEntries.map(count => isNaN(count) ? 0 : count);
+
         const chartData = {
             labels: Array(12).fill().map((_, index) => {
                 const mondayDate = new Date(lastThreeMonthsDate);
@@ -128,11 +134,11 @@ class ChartDataUtils{
                 return `${mondayDate.getDate()}/${mondayDate.getMonth() + 1}`;
             }),
             datasets: [{
-                label: labelName,
+                label : this.LABEL,
                 backgroundColor : this.backgroundColor,
                 borderColor : this.borderColor,
                 radius : this.RADIUS_DEFAULT,
-                data: weeklyEntries
+                data: data
             }]
         };
 
@@ -140,8 +146,10 @@ class ChartDataUtils{
 
         return chartData;
     }
-
-    static chartDataMonth(dataArray, labelName="Commits") {
+    // static chartDataMonth(issuesData){
+    //     return chartDataAggregate.chartDataMonth(issuesData, 'created_at', 'day', ChartDataIssues.backgroundColor, ChartDataIssues.borderColor);
+    // }
+    static chartDataMonth(dataArray) {
         const currentDate = new Date();
         const lastMonthDate = new Date(currentDate);
         lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
@@ -149,7 +157,7 @@ class ChartDataUtils{
         const dailyEntries = Array(30).fill(0);
 
         dataArray.forEach(item => {
-            const date = new Date(item.author.date);
+            const date = new Date(item.created_at);
 
             // Check if the item is within the last month
             if (date > lastMonthDate) {
@@ -158,6 +166,9 @@ class ChartDataUtils{
             }
         });
 
+        // Map the counts, replacing NaN values with zeros
+        const data = dailyEntries.map(count => isNaN(count) ? 0 : count);
+        
         const chartData = {
             labels: Array(30).fill().map((_, index) => {
                 const currentDay = new Date(lastMonthDate);
@@ -165,11 +176,11 @@ class ChartDataUtils{
                 return `${currentDay.getDate()}/${currentDay.getMonth() + 1}`;
             }),
             datasets: [{
-                label: labelName,
+                label: this.LABEL,
                 backgroundColor : this.backgroundColor,
                 borderColor : this.borderColor,
                 radius : this.RADIUS_DEFAULT,
-                data: dailyEntries
+                data: data
             }]
         };
 
@@ -177,13 +188,19 @@ class ChartDataUtils{
 
         return chartData;
     }
-
-    static chartDataLifetime(commitsData, labelName='Commits') {
+    
+    
+    
+    // static chartDataLifetime(issuesData){
+    //     return chartDataAggregate.chartDataLifetime(issuesData, 'created_at', 'month', ChartDataIssues.backgroundColor, ChartDataIssues.borderColor);
+    // }
+    
+    static chartDataLifetime(issuesData){
         const monthEntriesMap = new Map();
 
-        commitsData.forEach(item => {
-            const commitDate = new Date(item.author.date);
-            const yearMonth = `${commitDate.toLocaleString('default', { month: 'long' })}/${commitDate.getFullYear()}`;
+        issuesData.forEach(item => {
+            const date = new Date(item.created_at);
+            const yearMonth = `${date.toLocaleString('default', { month: 'long' })}/${date.getFullYear()}`;
 
             if (monthEntriesMap.has(yearMonth)) {
                 monthEntriesMap.set(yearMonth, monthEntriesMap.get(yearMonth) + 1);
@@ -192,18 +209,22 @@ class ChartDataUtils{
             }
         });
 
-        const sortedMonthCommits = [...monthEntriesMap.entries()].sort(([a], [b]) => new Date(a) - new Date(b));
+        const sortedMonth = [...monthEntriesMap.entries()].sort(([a], [b]) => new Date(a) - new Date(b));
 
-        const monthLabels = sortedMonthCommits.map(([yearMonth]) => yearMonth);
+        const monthLabels = sortedMonth.map(([yearMonth]) => yearMonth);
+
+        // Map the counts, replacing NaN values with zeros
+        const data = sortedMonth.map(([, count]) => isNaN(count) ? 0 : count);
 
         const chartData = {
             labels: monthLabels,
             datasets: [{
-                label: labelName,
+                label: this.LABEL,
                 backgroundColor : this.backgroundColor,
                 borderColor : this.borderColor,
                 radius : this.RADIUS_DEFAULT,
-                data: sortedMonthCommits.map(([, count]) => count)
+                // data: sortedMonth.map(([, count]) => count)
+                data : data,
             }]
         };
 
@@ -212,5 +233,4 @@ class ChartDataUtils{
         return chartData;
     }
 }
-export default ChartDataUtils;
-
+export default ChartDataIssues;

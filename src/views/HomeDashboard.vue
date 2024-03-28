@@ -1,25 +1,27 @@
-﻿<!-- /src/views/Home.vue -->
+﻿
 <template>
   <div>
-    <SearchViewSFC v-if="!$route.params.owner" />
+<!--    <SearchViewSFC v-if="!$route.params.owner" />-->
     <DashboardViewSFC
-        v-else
         :owner="$route.params.owner"
         :repo="$route.params.repo"
     />
+    
+<!--    <MainFooter/>-->
   </div>
 </template>
 
 <script>
-
-import SearchViewSFC from "./SearchViewSFC.vue";
+// import SearchViewSFC from "./SearchViewSFC.vue";
 import DashboardViewSFC from "./DashboardViewSFC.vue";
+import MainFooter from "../components/MainFooter.vue";
 
 
 export default {
   components: {
+    MainFooter,
     DashboardViewSFC,
-    SearchViewSFC
+    // SearchViewSFC
     
   },
 };

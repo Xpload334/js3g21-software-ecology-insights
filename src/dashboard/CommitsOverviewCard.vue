@@ -4,23 +4,28 @@
     <div class="card-header">
       <h5 class="card-title">Commits Overview</h5>
     </div>
-    
+
     <div class="card-body">
       <!-- Overview -->
-      <div>
-        <p class="card-text"><b>{{commits_count}}</b> Commits</p>
-        <p class="card-text"><b>{{authors_count}}</b> Unique Authors</p>
-      </div>
-    </div>
-    <div class="card-header">
-      <h5 class="card-title">Most Recent Commit</h5>
-    </div>
-    <div class="card-body">
-      <!-- Most recent commit-->
-      <div>
-        <p class="card-text">Author: <b>{{last_commit_name}}</b></p>
-        <p class="card-text text-muted">"{{last_commit_message}}"</p>
-        <p class="card-text text-muted">{{last_commit_date}}</p>
+      <div class="d-flex justify-content-between flex-wrap">
+<!--        <p class="card-text"><b>{{ commits_count }}</b> Commits</p>-->
+        <div class="placeholder-wave">
+          <span v-if="commits_count !== null" class="badge bg-light text-dark fs-5">
+            <span>{{ commits_count }}</span>
+          </span>
+          <span v-else class="placeholder col-12"></span>
+          <p>Total Commits</p>
+        </div>
+        
+        <div class="placeholder-wave">
+          <span v-if="authors_count !== null" class="badge bg-light text-dark fs-5">
+            <span>{{ authors_count }}</span>
+          </span>
+          <span v-else class="placeholder col-12"></span>
+          <p>Unique Authors</p>
+        </div>
+<!--        <p class="card-text"><b>{{ authors_count }}</b> Unique Authors</p>-->
+        
       </div>
     </div>
   </div>
@@ -28,17 +33,19 @@
 
 <script>
 export default {
-  props:{
-    commits_count: Number,
-    authors_count: Number,
-    
-    last_commit_name : String,
-    last_commit_message : String,
-    last_commit_date : String,
-  }
-}
+  props: {
+    commits_count: {
+      type: Number,
+      default: null,
+    },
+    authors_count: {
+      type: Number,
+      default: null,
+    },
+  },
+};
 </script>
 
 <style scoped>
-
+/* Your styles here */
 </style>
