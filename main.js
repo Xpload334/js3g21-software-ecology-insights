@@ -1,7 +1,8 @@
 ﻿// /src/main.js
-import { createApp } from 'vue';
 import AppRouter from "./AppRouter.vue";
 import router from './src/router'
+
+import { createApp } from 'vue';
 
 //Import BootstrapVue
 // import 'bootstrap/dist/css/bootstrap.css'

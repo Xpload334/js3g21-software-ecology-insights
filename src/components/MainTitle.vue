@@ -14,12 +14,14 @@
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <!-- SEARCH -->
             <li class="nav-item">
-              <div v-if="state === 'search'">
-                <a class="nav-link active" aria-current="page">Search</a>
-              </div>
-              <div v-else>
-                <a class="nav-link" aria-current="page" href="/search">Search</a>
-              </div>
+<!--              <div v-if="state === 'search'">-->
+<!--                <a class="nav-link active" aria-current="page">Search</a>-->
+<!--              </div>-->
+<!--              <div v-else>-->
+<!--                <a class="nav-link" aria-current="page" href="/search">Search</a>-->
+<!--              </div>-->
+
+              <a class="nav-link" aria-current="page" href="/search">Search</a>
             </li>
             
             <!-- DASHBOARD -->

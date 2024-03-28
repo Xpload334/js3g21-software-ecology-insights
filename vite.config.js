@@ -3,7 +3,7 @@ import vue from '@vitejs/plugin-vue'
 import path from "path";
 
 export default defineConfig({
-    base: "/",
+    base: "/js3g21-software-ecology-insights/",
     plugins: [vue()],
     resolve: {
         alias: {
