@@ -1,7 +1,7 @@
 ﻿// import {reactive} from "vue";
 // import {Octokit} from "@octokit/rest";
 
-import testData from '../../assets/TestCommitData.json'
+// import testData from '../../assets/TestCommitData.json'
 import RequestUtils from "./requestUtils.js";
 
 // const octokit = new Octokit({
@@ -11,10 +11,10 @@ import RequestUtils from "./requestUtils.js";
 
 class GetRepoCommits{
     static async getCommits(owner, repo, usingTestData=false){
-        if(usingTestData){
-            console.log("TEST COMMIT DATA");
-            return testData.commits;
-        }
+        // if(usingTestData){
+        //     console.log("TEST COMMIT DATA");
+        //     return testData.commits;
+        // }
 
 
         const iterator = await this.getCommitsIterator(owner, repo);

@@ -1,6 +1,6 @@
 ﻿// import {reactive} from "vue";
 // import {Octokit} from "@octokit/rest";
-import testData from "../../assets/TestContributorsData.json";
+// import testData from "../../assets/TestContributorsData.json";
 import RequestUtils from "./requestUtils.js";
 
 // const octokit = new Octokit({
@@ -10,10 +10,10 @@ import RequestUtils from "./requestUtils.js";
 
 class GetRepoContributors{
     static async getContributorData(owner, repo, usingTestData=false) {
-        if(usingTestData){
-            console.log("TEST CONTRIBUTOR DATA");
-            return testData.contributors;
-        }
+        // if(usingTestData){
+        //     console.log("TEST CONTRIBUTOR DATA");
+        //     return testData.contributors;
+        // }
 
         try {
             // Fetch data from GitHub API using Octokit
