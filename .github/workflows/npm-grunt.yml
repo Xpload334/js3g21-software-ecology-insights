@@ -38,8 +38,8 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
-        env :
-          AUTHENTICATION_TOKEN: ${{secrets.AUTHENTICATION_TOKEN}}
+#        env :
+#          AUTHENTICATION_TOKEN: ${{secrets.AUTHENTICATION_TOKEN}}
         
       - name: Setup Pages
         uses: actions/configure-pages@v4
