@@ -4,10 +4,6 @@
 // import testData from '../../assets/TestCommitData.json'
 import RequestUtils from "./requestUtils.js";
 
-// const octokit = new Octokit({
-//     // auth: process.env.AUTHENTICATION_TOKEN,
-//     auth : "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"
-// });
 
 class GetRepoCommits{
     static async getCommits(owner, repo, usingTestData=false){

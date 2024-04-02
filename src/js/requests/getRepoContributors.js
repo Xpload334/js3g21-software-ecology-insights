@@ -3,10 +3,6 @@
 // import testData from "../../assets/TestContributorsData.json";
 import RequestUtils from "./requestUtils.js";
 
-// const octokit = new Octokit({
-//     // auth: process.env.AUTHENTICATION_TOKEN,
-//     auth : "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"
-// });
 
 class GetRepoContributors{
     static async getContributorData(owner, repo, usingTestData=false) {
