@@ -26,3 +26,5 @@ jobs:
       run: |
         npm install
         grunt
+      env:
+        AUTHENTICATION_TOKEN: ${{secrets.AUTHENTICATION_TOKEN}}
