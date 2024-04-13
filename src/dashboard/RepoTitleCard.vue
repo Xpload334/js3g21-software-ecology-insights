@@ -1,55 +1,43 @@
 ﻿<template>
   <div class="card">
-    <h1 class="card-header text-center placeholder-wave">
+    <h1 class="card-header text-center azur-gradient">
       <span v-if="name !== null">
-        {{name}}
+        <b>{{name}}</b>
       </span>
-      <span v-else class="placeholder-lg col-6"></span>
+      <span v-else class="placeholder-wave placeholder-lg col-6"></span>
     </h1>
     
     <div class="card-body">
-      <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <!-- DESCRIPTION -->
+        <div v-if="description" class="card-text">
+          {{description}}
+        </div>
+        <div v-else>
+          <span class="placeholder col-12"/>
+          <span class="placeholder col-12"/>
+        </div>
+
+        <br>
+
+        <!-- HTML URL -->
         <div>
-          <!-- DESCRIPTION -->
-          <div v-if="description" class="card-text">
-            {{description}}
+          <div v-if="html_url">
+            <a :href="html_url" class="btn btn-outline-primary" target="_blank">See On GitHub</a>
           </div>
           <div v-else>
-            <span class="placeholder col-12"/>
-            <span class="placeholder col-12"/>
-          </div>
-          
-<!--          <div v-if="description">-->
-<!--            <p class="card-text">{{description}}</p>-->
-<!--          </div>-->
-<!--          <div v-else>-->
-<!--            <span class="placeholder placeholder-glow col-md-auto"></span>-->
-<!--          </div>-->
-          
-          <br>
-
-          <!-- HTML URL -->
-          <div>
-            <div v-if="html_url">
-              <a :href="html_url" class="btn btn-primary" target="_blank">See On GitHub</a>
-            </div>
-            <div v-else>
-              <a :href="'/'" class="btn btn-primary disabled placeholder col-md-auto">See On GitHub</a>
-            </div>
+            <a :href="'/'" class="btn btn-primary disabled placeholder col-md-auto">See On GitHub</a>
           </div>
         </div>
-
-        <!-- DATES -->
-        <div class="card-text text-muted text-end">
-          <span class="badge bg-light text-dark text-muted fs-6">Created {{ formatDate(created_at) }}</span>
-          
-          <br>
-          <br>
-          
-          <span class="badge bg-light text-dark text-muted fs-6">Last updated {{ formatDate(updated_at) }}</span>
-<!--          <p>Created:<br>{{ formatDate(created_at) }}</p>-->
-<!--          <p>Last Updated:<br>{{ relativeDate(updated_at) }}</p>-->
-        </div>
+      </div>
+    </div>
+    
+    <div class="card-footer">
+      <!-- DATES -->
+      <div class="card-text text-muted">
+        <span class="badge bg-light text-dark text-muted">Created {{ formatDate(created_at) }}</span>
+        &nbsp;
+        <span class="badge bg-light text-dark text-muted">Last updated {{ formatDate(updated_at) }}</span>
       </div>
     </div>
   </div>

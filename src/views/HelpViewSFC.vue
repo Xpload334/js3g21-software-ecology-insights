@@ -17,6 +17,10 @@
             You can do this to see who contributed to a project, find out how it has developed over time and get information
             on a repository's license and linked publications.</p>
           
+          <p>Using the dashboard is a great first step to exploring a repository's history. Get the big picture of a project before exploring
+            the collaborators and similar projects they have worked on.
+          </p>
+          
           <p>Search for any User or Organisation on GitHub to get their list of projects. Press "Open Dashboard" to open
             the repository's software ecology dashboard in a new tab!</p>
           
@@ -69,6 +73,7 @@
             </div>
           </div>
 
+          <!-- FAQ Item 3 -->
           <div class="accordion-item">
             <h2 class="accordion-header" id="headingThree">
               <button class="accordion-button collapsed" type="button" 
@@ -80,6 +85,24 @@
               <div class="accordion-body">
                 Your connection may affect if a GitHub API request can be sent or data received. Use the Refresh buttons to reload data, 
                 check your own Internet connection, and reload the page if necessary.
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 4 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="heading4">
+              <button class="accordion-button collapsed" type="button"
+                      data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
+                <b>
+                  Why does the graph sometimes get cut off?
+                </b>
+              </button>
+            </h2>
+            <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="heading4" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                On very large projects, such as open source projects, the amount of issues may cause problems when constructing graph data.
+                Be sure to switch to a view with a shorter time window, such as Three Months or One Month in order to see recent data.
               </div>
             </div>
           </div>

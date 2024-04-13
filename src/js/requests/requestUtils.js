@@ -2,8 +2,7 @@
 
 class RequestUtils{
     static octokit = new Octokit({
-        // auth: process.env.AUTHENTICATION_TOKEN,
-        auth : "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"
+        auth: import.meta.env.AUTHENTICATION_TOKEN,
     });
 }
 export default RequestUtils;

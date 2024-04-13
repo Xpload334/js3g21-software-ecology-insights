@@ -11,15 +11,21 @@ class SearchForRepos{
     static async getReposPages(owner, searchTypeIndex=0){
         let iterator = null;
         console.log("Search Type Index", searchTypeIndex)
-
-
-        if(searchTypeIndex === 0){
-            iterator = await this.getSearchIterator(owner);
-        } else if(searchTypeIndex === 1){
-            iterator = await this.getSearchIteratorOrgs(owner);
-        } else {
-            throw new Error("Invalid search type");
+        
+        try{
+            if(searchTypeIndex === 0){
+                iterator = await this.getSearchIterator(owner);
+            } else if(searchTypeIndex === 1){
+                iterator = await this.getSearchIteratorOrgs(owner);
+            } else {
+                return new Error("Invalid search type");
+            }
+            
+            // console.log("Has iterator");
+        } catch (e){
+            throw e;
         }
+        
 
         let reposData = []
         //Iterate through responses
@@ -33,7 +39,8 @@ class SearchForRepos{
                 reposData.push(list);
             }
         } catch (e) {
-            throw new Error("Failed to parse repos");
+            console.error(e.stack)
+            throw e;
         }
 
         return reposData;
@@ -72,7 +79,7 @@ class SearchForRepos{
                 },
             });
         } catch (error) {
-            console.error('Error fetching repos:', error.message);
+            console.error('Error fetching repos:', error.stack);
             throw error;
         }
     }
