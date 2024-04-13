@@ -1,18 +1,24 @@
 ﻿<template>
-  <div class="row row-cols-1 row-cols-md-2 g-4">
+  <div class="row row-cols-1 row-cols-lg-2 g-3">
     <!-- For each contributor card -->
     <div v-for="item in contributorsTop">
       <div class="col">
-        <div class="card">
-          <!-- UserCard component to display contributor info -->
-          <UserCard :user="item.author" :get-user-data="getUserData"/>
+        <div class="card h-100">
+          <div class="card-header ">
+            <!-- UserCard component to display contributor info -->
+            <UserCard :user="item.author" :get-user-data="getUserData"/>
+          </div>
+          <div class="card-body">
+            <!-- CommitsChart component for contributor's commit chart -->
+            <LineChart_DualYAxes
+                :chart-data="item.chartData"
+                :suggested-max-y="suggestedMax"
+                :suggested-max-y1="suggestedMaxY1"
+            />
+          </div>
+          
 
-          <!-- CommitsChart component for contributor's commit chart -->
-          <LineChart_DualYAxes
-              :chart-data="item.chartData"
-              :suggested-max-y="suggestedMax"
-              :suggested-max-y1="suggestedMaxY1"
-          />
+          
         </div>
       </div>
     </div>

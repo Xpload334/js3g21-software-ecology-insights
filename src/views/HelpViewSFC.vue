@@ -17,6 +17,10 @@
             You can do this to see who contributed to a project, find out how it has developed over time and get information
             on a repository's license and linked publications.</p>
           
+          <p>Using the dashboard is a great first step to exploring a repository's history. Get the big picture of a project before exploring
+            the collaborators and similar projects they have worked on.
+          </p>
+          
           <p>Search for any User or Organisation on GitHub to get their list of projects. Press "Open Dashboard" to open
             the repository's software ecology dashboard in a new tab!</p>
           

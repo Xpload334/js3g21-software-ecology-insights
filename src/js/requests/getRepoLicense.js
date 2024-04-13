@@ -1,15 +1,15 @@
 ﻿import {reactive} from "vue";
 // import testData from "../../assets/TestRepoData.json";
-// import testData from "../../assets/Test_License_Data.json"
 import RequestUtils from "./requestUtils.js";
+import testData from "../../assets/Test_License_Data.json"
 
 
 class GetRepoLicense{
     static async getRepoLicense(owner, repo, usingTestData=false){
-        // if(usingTestData){
-        //     console.log("TEST LICENSE DATA");
-        //     return testData;
-        // }
+        if(usingTestData){
+            console.log("TEST LICENSE DATA");
+            return testData;
+        }
 
         //Get which license
         const response = await this.requestRepoLicense(owner, repo);
@@ -22,7 +22,11 @@ class GetRepoLicense{
         return licenseRequestResponse.data;
     }
     
-    static async getRepoLicenseFromKey(licenseKey){
+    static async getRepoLicenseFromKey(licenseKey, usingTestData=false){
+        if(usingTestData){
+            console.log("TEST LICENSE DATA");
+            return testData;
+        }
         const licenseRequestResponse = await this.requestLicenseDetails(licenseKey);
 
         return licenseRequestResponse.data;
@@ -44,6 +48,7 @@ class GetRepoLicense{
         } catch (error) {
             // Handle errors
             console.log("Error fetching license", error);
+            throw error;
         }
     }
 
@@ -61,6 +66,7 @@ class GetRepoLicense{
         } catch (error) {
             // Handle errors
             console.log("Error fetching license", error);
+            throw error;
         }
     }
 }

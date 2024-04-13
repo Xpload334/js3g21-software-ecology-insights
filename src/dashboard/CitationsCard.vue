@@ -1,6 +1,6 @@
 ﻿<template>
-  <div class="card">
-    <div class="card-header">
+  <div class="card h-100">
+    <div class="card-header azur-gradient">
       <h5 class="card-title">Citations</h5>
     </div>
     
@@ -26,7 +26,7 @@
                     <p class="card-text">{{item.citation}}</p>
                   </div>
                   <div>
-                    <p class="text-muted">{{item.style_fullname}}</p>
+                    <p class="card-text text-muted">{{item.style_fullname}}</p>
                   </div>
 <!--                  <span class="badge bg-primary rounded-pill">14</span>-->
                 </li>

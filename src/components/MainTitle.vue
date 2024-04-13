@@ -2,7 +2,7 @@
   <div id="main-title">
 <!--    <h1 class="title text-center mt-5">Search for Repos</h1>-->
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg border-bottom border-body midnight-gradient" data-bs-theme="dark">
       <div class="container-fluid">
         <a class="navbar-brand" href="/">GitDash</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -14,13 +14,6 @@
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <!-- SEARCH -->
             <li class="nav-item">
-<!--              <div v-if="state === 'search'">-->
-<!--                <a class="nav-link active" aria-current="page">Search</a>-->
-<!--              </div>-->
-<!--              <div v-else>-->
-<!--                <a class="nav-link" aria-current="page" href="/search">Search</a>-->
-<!--              </div>-->
-
               <a class="nav-link" aria-current="page" href="/search">Search</a>
             </li>
             
@@ -45,15 +38,16 @@
                 <a class="nav-link" aria-current="page" href="/help">Help</a>
               </div>
             </li>
-            
-<!--            <li class="nav-item">-->
-<!--              <a class="nav-link disabled">Disabled</a>-->
-<!--            </li>-->
           </ul>
           
-          <span class="navbar-text">
-            Joshua Severn
-          </span>
+          <div class="navbar-text">
+            <div v-if="titleCenter">
+              {{titleCenter}}
+            </div>
+            <div v-else>
+              <i>Joshua Severn</i>
+            </div>
+          </div>
         </div>
       </div>
     </nav>
@@ -63,7 +57,8 @@
 <script>
 export default {
   props: {
-    state: String
+    state: String,
+    titleCenter: String
   }
 }
 </script>
