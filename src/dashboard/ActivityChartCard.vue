@@ -1,129 +1,136 @@
 ﻿<template>
   <div class="card">
     <!-- Header -->
-    <div class="card-header">
+    <div class="card-header azur-gradient">
       <h2 class="card-title text-center">Activity</h2>
-      <ul class="nav nav-tabs card-header-tabs justify-content-center">
+      <nav>
+        <ul class="nav nav-tabs card-header-tabs flex-column flex-sm-row">
 
-        <!-- Lifetime -->
-        <li class="nav-item">
-          <div v-if="chartState === 'lifetime'">
-            <a class="nav-link active" aria-current="true">Lifetime
-              <span v-if="commitsChartData.lifetime">
+          <!-- Lifetime -->
+          <li class="flex-sm-fill text-sm-center nav-item">
+            <div v-if="chartState === 'lifetime'">
+              <a class="nav-link active" aria-current="true">Lifetime
+                <span v-if="commitsChartData.lifetime">
                 <span class="badge bg-primary">{{sumArray(commitsChartData.lifetime.datasets[0].data)}}</span>
               </span>
-              &nbsp
-              <span v-if="issuesChartData.lifetime">
+                &nbsp
+                <span v-if="issuesChartData.lifetime">
                 <span class="badge bg-warning" >{{sumArray(issuesChartData.lifetime.datasets[0].data)}}</span>
               </span>
-            </a>
-          </div>
-          <div v-else>
-            <a class="nav-link" aria-current="true" @click="changeChartState('lifetime')">Lifetime</a>
-          </div>
-        </li>
+              </a>
+            </div>
+            <div v-else>
+              <a class="nav-link text-dark" aria-current="true" @click="changeChartState('lifetime')">Lifetime</a>
+            </div>
+          </li>
 
-        <!-- Last Year -->
-        <li class="nav-item">
-          <div v-if="chartState === 'year'">
-            <a class="nav-link active" aria-current="true">Last Year
-              <span v-if="commitsChartData.year">
+          <!-- Last Year -->
+          <li class="flex-sm-fill text-sm-center nav-item">
+            <div v-if="chartState === 'year'">
+              <a class="nav-link active" aria-current="true">Last Year
+                <span v-if="commitsChartData.year">
                 <span class="badge bg-primary">{{sumArray(commitsChartData.year.datasets[0].data)}}</span>
               </span>
-              &nbsp
-              <span v-if="issuesChartData.year">
+                &nbsp
+                <span v-if="issuesChartData.year">
                 <span class="badge bg-warning" >{{sumArray(issuesChartData.year.datasets[0].data)}}</span>
               </span>
-            </a>
-          </div>
-          <div v-else>
-            <a class="nav-link" aria-current="true" @click="changeChartState('year')">Last Year</a>
-          </div>
-        </li>
-        
-        <!-- Last 3 Months -->
-        <li class="nav-item">
-          <div v-if="chartState === 'threeMonths'">
-            <a class="nav-link active" aria-current="true">Last 3 Months
-              <span v-if="commitsChartData.threeMonths">
+              </a>
+            </div>
+            <div v-else>
+              <a class="nav-link text-dark" aria-current="true" @click="changeChartState('year')">Last Year</a>
+            </div>
+          </li>
+
+          <!-- Last 3 Months -->
+          <li class="flex-sm-fill text-sm-center nav-item">
+            <div v-if="chartState === 'threeMonths'">
+              <a class="nav-link active" aria-current="true">Last 3 Months
+                <span v-if="commitsChartData.threeMonths">
                 <span class="badge bg-primary">{{sumArray(commitsChartData.threeMonths.datasets[0].data)}}</span>
               </span>
-              &nbsp
-              <span v-if="issuesChartData.threeMonths">
+                &nbsp
+                <span v-if="issuesChartData.threeMonths">
                 <span class="badge bg-warning" >{{sumArray(issuesChartData.threeMonths.datasets[0].data)}}</span>
               </span>
-            </a>
-          </div>
-          <div v-else>
-            <a class="nav-link" aria-current="true" @click="changeChartState('threeMonths')">Last 3 Months</a>
-          </div>
-        </li>
+              </a>
+            </div>
+            <div v-else>
+              <a class="nav-link text-dark" aria-current="true" @click="changeChartState('threeMonths')">Last 3 Months</a>
+            </div>
+          </li>
 
-        <!-- Last Month -->
-        <li class="nav-item">
-          <div v-if="chartState === 'month'">
-            <a class="nav-link active" aria-current="true">Last Month
-              <span v-if="commitsChartData.month">
+          <!-- Last Month -->
+          <li class="flex-sm-fill text-sm-center nav-item">
+            <div v-if="chartState === 'month'">
+              <a class="nav-link active" aria-current="true">Last Month
+                <span v-if="commitsChartData.month">
                 <span class="badge bg-primary">{{sumArray(commitsChartData.month.datasets[0].data)}}</span>
               </span>
-              &nbsp
-              <span v-if="issuesChartData.month">
+                &nbsp
+                <span v-if="issuesChartData.month">
                 <span class="badge bg-warning" >{{sumArray(issuesChartData.month.datasets[0].data)}}</span>
               </span>
-            </a>
-          </div>
-          <div v-else>
-            <a class="nav-link" aria-current="true" @click="changeChartState('month')">Last Month</a>
-          </div>
-        </li>
+              </a>
+            </div>
+            <div v-else>
+              <a class="nav-link text-dark" aria-current="true" @click="changeChartState('month')">Last Month</a>
+            </div>
+          </li>
 
-        <!-- Last Week -->
-        <li class="nav-item">
-          <div v-if="chartState === 'week'">
-            <a class="nav-link active" aria-current="true">Last Week
-              <span v-if="commitsChartData.week">
+          <!-- Last Week -->
+          <li class="flex-sm-fill text-sm-center nav-item">
+            <div v-if="chartState === 'week'">
+              <a class="nav-link active" aria-current="true">Last Week
+                <span v-if="commitsChartData.week">
                 <span class="badge bg-primary">{{sumArray(commitsChartData.week.datasets[0].data)}}</span>
               </span>
-              &nbsp
-              <span v-if="issuesChartData.week">
+                &nbsp
+                <span v-if="issuesChartData.week">
                 <span class="badge bg-warning" >{{sumArray(issuesChartData.week.datasets[0].data)}}</span>
               </span>
-            </a>
-          </div>
-          <div v-else>
-            <a class="nav-link" aria-current="true" @click="changeChartState('week')">Last Week</a>
-          </div>
-        </li>
-        
-        <!-- Reload Button -->
-        <li class="nav-item">
-          <div v-if="is_loading_commits">
-            <button class="btn btn-primary" type="button" disabled>
-              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-              Refresh Commits
-            </button>
-          </div>
-          <div v-else>
-            <button @click="refreshCommits()" class="btn btn-primary" :disabled="is_loading_commits">Refresh Commits</button>
-          </div>
-        </li>
-        <!-- Reload Button -->
-        <li class="nav-item">
-          <div v-if="is_loading_issues">
-            <button class="btn btn-primary" type="button" disabled>
-              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-              Refresh Issues
-            </button>
-          </div>
-          <div v-else>
-            <button @click="refreshIssues()" class="btn btn-primary" :disabled="is_loading_issues">
-              Refresh Issues
-            </button>
-          </div>
-        </li>
-        
-        
-      </ul>
+              </a>
+            </div>
+            <div v-else>
+              <a class="nav-link text-dark" aria-current="true" @click="changeChartState('week')">Last Week</a>
+            </div>
+          </li>
+
+          <!-- Reload Button -->
+          <li class="text-sm-center nav-item">
+            <div v-if="is_loading_commits">
+              <a class="nav-link active" type="button" disabled>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span class="badge text-bg-dark">Refresh Commits</span>
+              </a>
+            </div>
+            <div v-else>
+              <a class="nav-link" aria-current="true" @click="refreshCommits" :disabled="is_loading_commits">
+                <span class="badge text-bg-dark">Refresh Commits</span>
+              </a>
+<!--              <button @click="refreshCommits()" class="btn btn-outline-light" :disabled="is_loading_commits">Refresh Commits</button>-->
+            </div>
+          </li>
+          <!-- Reload Button -->
+          <li class="text-sm-center nav-item">
+            <div v-if="is_loading_issues">
+              <a class="nav-link active" type="button" disabled>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span class="badge text-bg-dark">Refresh Issues</span>
+              </a>
+            </div>
+            <div v-else>
+              <a class="nav-link" aria-current="true" @click="refreshIssues" :disabled="is_loading_issues">
+                <span class="badge text-bg-dark">Refresh Issues</span>
+              </a>
+              <!--              <button @click="refreshCommits()" class="btn btn-outline-light" :disabled="is_loading_commits">Refresh Commits</button>-->
+            </div>
+          </li>
+
+
+        </ul>
+      </nav>
+      
     </div>
     
     <!-- Body -->
@@ -174,11 +181,11 @@
           />
         </div>
         <div v-else>
-          <p>No commits data available.</p>
+          <p class="text-muted">No commits data available.</p>
         </div>
       </div>
       <div v-else>
-        <p>Loading...</p> <!-- Placeholder while data is being loaded -->
+        <p class="text-muted">Loading...</p> <!-- Placeholder while data is being loaded -->
       </div>
     </div>
   </div>

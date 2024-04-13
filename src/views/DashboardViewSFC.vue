@@ -1,149 +1,167 @@
 ﻿<template>
   <div>
-    <MainTitle :state="'dashboard'"/>
+    <MainTitle :state="'dashboard'" :title-center="repoName"/>
   </div>
   
-  <div class="container" id="dashboard">
-    <!-- Title -->
-    <RepoTitleCard v-bind="repoData" />
+  <div class="bg-image">
+    <div class="container" id="dashboard" style="height: calc(100vh - 100px); overflow-y: auto;">
+      <!-- Title -->
+      <RepoTitleCard class="anim-slidein-down-1" v-bind="repoData" />
 
-    <br>
-    
-    <br>
+      <br>
 
-    <!-- Basic Metrics -->
-    <div class="row">
-<!--    <div class="row row-cols-1 row-cols-md-3 g-4">-->
-      
-      <!-- OWNER/ORGANISATION -->
-      <div class="col-md-4">
-        
-        <!-- Owner -->
-<!--        <div class="card" v-if="Object.keys(repoData).length > 0">-->
-<!--          <div class="card-header">-->
-<!--            <h5 class="card-title">Owner</h5>-->
-<!--          </div>-->
-<!--          <div class="card-body">-->
-<!--            <UserCard v-if="repoData.owner" v-bind="repoData.owner" />-->
-<!--          </div>-->
-<!--        </div>-->
-        <!-- Owner -->
-        <div class="card">
-          <div class="card-header">
-            <h5 class="card-title">Owner</h5>
-          </div>
-          <div class="card-body">
-            <UserCard :user="repoData.owner" :get-user-data="getUserData"/>
+      <!-- Basic Metrics -->
+      <div class="card bg-opacity-75 bg-white anim-slidein-down-2">
+        <div class="card-header azur-gradient">
+          <h3 class="card-title text-center">Overview</h3>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+<!--          <div class="row rows-cols-1 row-cols-md-2 row-cols-lg-3 g-3">-->
+
+            <!-- OWNER/ORGANISATION -->
+            <div class="col col-sm-12 col-md-6 col-lg-4">
+              <!-- Owner -->
+              <div class="card h-100 hover-shadow">
+                <div class="card-header azur-gradient">
+                  <h5 class="card-title">Owner</h5>
+                </div>
+                <div class="card-body">
+                  <UserCard :user="repoData.owner" :get-user-data="getUserData"/>
+                </div>
+              </div>
+
+              <!-- Organisation -->
+              <div v-if="hasRepoData">
+                <div v-if="repoData.organization && repoData.organization.name !== repoData.owner.name">
+                  <br>
+                  <div class="card h-100">
+                    <div class="card-header azur-gradient">
+                      <h5 class="card-title">Organisation</h5>
+                    </div>
+                    <div class="card-body">
+                      <UserCard :user="repoData.organization" :get-user-data="getUserData"/>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- Stats card-->
+            <div class="col col-sm-12 col-md-6 col-lg-4">
+              <BasicMetricsCard v-bind="repoData" />
+            </div>
+
+            <!-- LICENSE -->
+            <div class="col col-sm-12 col-md-6 col-lg-4">
+              <LicenseCard v-bind="licenseData" />
+            </div>
+
+            <!-- TOPICS -->
+            <div class="col col-sm-12 col-md-6 col-lg-4">
+              <TopicsCard
+                  :topics="repoData.topics"
+              />
+            </div>
+
+            <!-- COMMITS -->
+            <div class="col col-sm-12 col-md-6 col-lg-4">
+              <CommitsOverviewCard
+                  :commits_count="commitsCount"
+                  :authors_count="uniqueAuthors"
+              />
+            </div>
+            
+            <div class="col col-sm-12 col-md-6 col-lg-4">
+              <MostRecentCommitCard v-bind="mostRecentCommit"/>
+            </div>
+
+            <!-- Citations -->
+            <div class="col col-sm-12 col-md-6 col-lg-6">
+              <RepoLinksCard
+                  :links="readmeLinks"
+              />
+            </div>
+            
+            <!-- Citations -->
+            <div class="col col-sm-12 col-md-6 col-lg-6">
+              <CitationsCard
+                  :citations-data="citationsData"
+              />
+            </div>
           </div>
         </div>
         
-        <br>
-        
-        <!-- Organisation -->
-        <div class="card" v-if="hasRepoData">
-          <div v-if="repoData.organization && repoData.organization.name !== repoData.owner.name">
-            <div class="card-header">
-              <h5 class="card-title">Organisation</h5>
+      </div>
+      
+
+      <br>
+
+      <!-- ACTIVITY CHART -->
+      <div class="col-md-auto">
+        <ActivityChartCard class="anim-slidein-down-3"
+            :chart-state="commitsChartState"
+            :commits-chart-data="commitsChartData"
+            :issues-chart-data="issuesChartData"
+
+            :is_loading_commits="isLoadingCommits"
+            :is_loading_issues="isLoadingIssues"
+
+            @change-activity-chart-state="setActivityChartState"
+            @refresh-commits="refreshCommits"
+            @refresh-issues="refreshIssues"
+        />
+      </div>
+
+      <br>
+
+      <!-- CONTRIBUTORS CARD -->
+      <div class="col-md-auto">
+        <ContributorsCard class="anim-slidein-down-4"
+            :is-loading="isLoadingContributors"
+            :chart-state="contributorChartState"
+            :contributors-top="contributorsChartData"
+            :suggested-max="ChartDataContributors.getSuggestedMaxY(contributorsTop)"
+            :suggested-max-y1="ChartDataContributors.getSuggestedMaxYCommits(contributorsTop)"
+
+            :contributors-chart-data-stacked="contributorsChartDataStacked"
+            :suggested-max-stacked="ChartDataContributors.getSuggestedMaxYCommits(contributorsTop)"
+            :change-chart-state="changeContributorChartState"
+
+            :get-user-data="getUserData"
+            @refresh-contributors="refreshContributors"
+        />
+      </div>
+
+
+    </div>
+    <div class="container" style="height: 50px;">
+      <div class="row">
+        <div class="col-6">
+          <p class="text-muted">
+            Photo by <a href="https://unsplash.com/@towfiqu999999?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Towfiqu barbhuiya</a> on <a href="https://unsplash.com/photos/person-in-black-suit-jacket-holding-white-tablet-computer-nApaSgkzaxg?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+          </p>
+        </div>
+        <div class="col">
+<!--          "Toasts"-->
+          <div v-if="toastMessages.length > 0">
+            <div class="card overflow-auto" style="height: 50px">
+              <div v-for="item in toastMessages">
+                <p class="text-bg-danger text-end">{{item}}</p>
+              </div>
             </div>
-            <div class="card-body">
-              <UserCard :user="repoData.organization" :get-user-data="getUserData"/>
-            </div>
+
           </div>
-          
+
         </div>
       </div>
-      
-      <!-- Stats card-->
-      <div class="col-md">
-        <BasicMetricsCard v-bind="repoData" />
-      </div>
-      
-      <!-- TOPICS -->
-      <div class="col-md">
-        <TopicsCard
-            :topics="repoData.topics"
-        />
-      </div>
-    </div>
-    
-    <br>
-    
-    <div class="row">
-      <!-- LICENSE -->
-      <div class="col-md-4">
-        <LicenseCard v-bind="licenseData" />
-      </div>
-      
-      <!-- COMMITS -->
-      <div class="col-md">
-        <CommitsOverviewCard
-            :commits_count="commitsCount"
-            :authors_count="uniqueAuthors"
-        />
-        
-        <br>
-        
-        <MostRecentCommitCard v-bind="mostRecentCommit"/>
-      </div>
-      
-<!--      &lt;!&ndash; Most Recent Commit &ndash;&gt;-->
-<!--      <div class="col-md">-->
-<!--        -->
-<!--      </div>-->
-      
-      <!-- Citations -->
-      <div class="col-md-4">
-        <CitationsCard
-            :citations-data="citationsData"
-        />
-      </div>
-    </div>
 
-    <br>
-    
-    
-    
-    
-    <br>
-
-    <!-- ACTIVITY CHART -->
-    <div class="col-md-auto">
-      <ActivityChartCard
-          :chart-state="commitsChartState"
-          :commits-chart-data="commitsChartData"
-          :issues-chart-data="issuesChartData"
-          
-          :is_loading_commits="isLoadingCommits"
-          :is_loading_issues="isLoadingIssues"
-          
-          @change-activity-chart-state="setActivityChartState"
-          @refresh-commits="refreshCommits"
-          @refresh-issues="refreshIssues"
-      />
     </div>
-
-    <br>
-    
-    <!-- CONTRIBUTORS CARD -->
-    <div class="col-md-auto">
-      <ContributorsCard
-          :is-loading="isLoadingContributors"
-          :chart-state="contributorChartState"
-          :contributors-top="contributorsChartData"
-          :suggested-max="ChartDataContributors.getSuggestedMaxY(contributorsTop)"
-          :suggested-max-y1="ChartDataContributors.getSuggestedMaxYCommits(contributorsTop)"
-          
-          :contributors-chart-data-stacked="contributorsChartDataStacked"
-          :suggested-max-stacked="ChartDataContributors.getSuggestedMaxYCommits(contributorsTop)"
-          :change-chart-state="changeContributorChartState"
-          
-          :get-user-data="getUserData"
-          @refresh-contributors="refreshContributors"
-      />
-    </div>
-    
-    
   </div>
+  
 
   <!-- Offcanvas -->
   <User_OffCanvas
@@ -153,14 +171,6 @@
       :open-dashboard="openDashboard"
       :loading-repos="isLoadingUserData"
   />
-  
-  <!-- Toasts -->
-<!--  <Toast_BottomRight -->
-<!--      v-if="showToast"-->
-<!--      :message="toastMessage"-->
-<!--      :lifetime="toastLifetime"-->
-<!--      @close="showToast = false"-->
-<!--  />-->
 </template>
 
 <script setup>
@@ -184,7 +194,7 @@ import ActivityChartCard from "../dashboard/ActivityChartCard.vue";
 import GetRepoStats from "../js/requests/getRepoStats.js"
 import GetRepoCommits from "../js/requests/getRepoCommits.js";
 import GetRepoContributors from "../js/requests/getRepoContributors.js";
-import {getReadmeReactive} from "../js/requests/getRepoReadme.js";
+import GetRepoReadme from "../js/requests/getRepoReadme.js";
 import GetRepoIssues from "../js/requests/getRepoIssues.js";
 
 
@@ -200,6 +210,7 @@ import SortReposUtils from "../js/sortReposUtils.js";
 import User_OffCanvas_Button from "../dashboard/User_OffCanvas_Button.vue";
 import GetRepoCitations from "../js/getRepoCitations.js";
 import CitationsCard from "../dashboard/CitationsCard.vue";
+import RepoLinksCard from "../dashboard/unused/RepoLinksCard.vue";
 
 const USING_TEST_DATA = false;
 
@@ -277,11 +288,16 @@ const citationsData = ref({});
 const hasCitationsData = ref(false);
 const isLoadingCitations = ref(false);
 
+//Readme links
+const readmeLinks = ref([]);
+const hasReadmeLinks = ref(false);
+const isLoadingReadmeLinks = ref(false);
 
 //Toasts
-let showToast = ref(false);
-const toastMessage = ref("");
-const toastLifetime = ref(5000);
+// let showToast = ref(false);
+// const toastMessage = ref("");
+const toastMessages = ref([]);
+// const toastLifetime = ref(5000);
 
 /**
  * Function to trigger on component mounted
@@ -315,7 +331,7 @@ const dashboardStart = (newUsername, newRepoName) => {
   owner.value = newUsername;
   repoName.value = newRepoName;
 
-  displayToast(`Loading dashboard for ${newUsername}/${newRepoName}`)
+  // displayToast(`Loading dashboard for ${newUsername}/${newRepoName}`)
   getRepoStats(owner.value, repoName.value);
 };
 
@@ -324,7 +340,7 @@ const dashboardStart = (newUsername, newRepoName) => {
  * @param username username of repo owner
  * @param repoName name of the repo
  */
-const getRepoStats = (username, repoName) => {
+function getRepoStats(username, repoName) {
   isLoadingRepo.value = true;
   
   fetchStats(username, repoName).then((data) => {
@@ -333,11 +349,13 @@ const getRepoStats = (username, repoName) => {
     
     handleRepoLinks();
   }).catch((error) => {
-    console.warn(error);
+    console.error(error);
+    //Display toast
+    displayToast(`Error: failed to retrieve repository data, please refresh and try again.`)
   }).finally(() => {
     isLoadingRepo.value = false
   });
-};
+}
 
 /**
  * Retrieve the commit history of the repo. Get the number of unique authors, the most recent commit, and aggregated chart data for
@@ -399,56 +417,12 @@ function getCommits(username, repoName){
     hasCommitsChartData.value = true;
   }).catch((error) => {
     console.error(error.stack);
+    //Display toast
+    displayToast(`Error: failed to get commit data, use the commit refresh button or refresh the page if problems continue.`)
   }).finally(() => {
     isLoadingCommits.value = false
   });
 }
-// function getCommits(username, repoName) {
-//   return new Promise((resolve, reject) => {
-//     isLoadingCommits.value = true;
-//     hasMostRecentCommit.value = false;
-//     hasCommitsChartData.value = false;
-//     hasCommitsData.value = false;
-//     commitsCount.value = 0;
-//     uniqueAuthors.value = 0;
-//
-//     fetchCommits(username, repoName)
-//         .then((data) => {
-//           commitsData.value = data;
-//           hasCommitsData.value = true;
-//
-//           commitsCount.value = commitsData.value.length;
-//           uniqueAuthors.value = countUniqueAuthors();
-//
-//           const mostRecentCommitFull = findMostRecentCommit();
-//           mostRecentCommit.value = {
-//             author: mostRecentCommitFull.author.name,
-//             message: mostRecentCommitFull.message,
-//             date: mostRecentCommitFull.author.date
-//           };
-//           hasMostRecentCommit.value = true;
-//
-//           commitsChartData.value = {
-//             lifetime: ChartDataUtils.chartDataLifetime(commitsData.value),
-//             year: ChartDataUtils.chartDataTwelveMonths(commitsData.value),
-//             threeMonths: ChartDataUtils.chartDataThreeMonths(commitsData.value),
-//             month: ChartDataUtils.chartDataMonth(commitsData.value),
-//             week: ChartDataUtils.chartDataWeek(commitsData.value)
-//           };
-//
-//           hasCommitsChartData.value = true;
-//           resolve(); // Resolve the Promise since the operation is successful
-//         })
-//         .catch((error) => {
-//           console.error(error.stack);
-//           reject(error); // Reject the Promise if an error occurs
-//         })
-//         .finally(() => {
-//           isLoadingCommits.value = false;
-//         });
-//   });
-// }
-
 
 /**
  * Retrieve the contributor history for the repo. Get the top N contributors and transform this data into an
@@ -456,7 +430,7 @@ function getCommits(username, repoName){
  * @param username username of repo owner
  * @param repoName name of the repo
  */
-const getContributors = (username, repoName) => {
+function getContributors(username, repoName) {
   isLoadingContributors.value = true;
   
   fetchContributors(username, repoName).then((data) => {
@@ -482,13 +456,19 @@ const getContributors = (username, repoName) => {
     
     hasContributorsTop.value = true;
   }).catch((error) => {
-    console.error(error);
+    console.error(error.stack);
+    //Display toast
+    displayToast(`Error: failed to get contributor data, use the commit refresh button or refresh the page if problems continue.`)
   }).finally(() => {
     isLoadingContributors.value = false
   });
-};
+}
 
-
+/**
+ * Call to get the issues history for the repo. Calculates the issue frequency per time interval.
+ * @param username
+ * @param repoName
+ */
 function getIssues(username, repoName){
   isLoadingIssues.value = true;
   
@@ -510,8 +490,9 @@ function getIssues(username, repoName){
     
     hasIssuesChartData.value = true;
   }).catch((error) => {
-    console.error(error);
-    //
+    console.error(error.stack);
+    //Display toast
+    displayToast(`Error: failed to get issues data, use the commit refresh button or refresh the page if problems continue.`)
   }).finally(() => {
     isLoadingIssues.value = false
   });
@@ -532,8 +513,9 @@ function getLicense(repoData){
     licenseData.value = data;
     hasLicenseData.value = true;
   }).catch((error) => {
-    console.error(error);
-    //
+    console.error(error.stack);
+    //Display toast
+    displayToast(`Error: failed to retrieve license information, please try again.`)
   }).finally(() => {
     isLoadingLicenseData.value = false;
   });
@@ -578,25 +560,20 @@ function getUserData(username){
       currentUserData.value.repos = reposSorted;
       
     })
+    
+  }).catch((error) => {
+    console.error(error.stack)
+    //Display toast
+    displayToast(`Error: failed to retrieve user, please refresh the page and try again.`)
+  }). finally(() => {
     isLoadingUserData.value = false;
-    
-    //     .catch((error) => {
-    //   console.error(error);
-    // })
-    
   })
-    //   .catch((error) => {
-    // console.error(error);
-  // }).finally(() => {
-  //   isLoadingUserData.value = false;
-  // });
-  
-  //Get user repos
-  
-  //Sort repos by matching tags with this project
-  //And by last updated
 }
 
+/**
+ * Call to get citations for this project
+ * @param repoData
+ */
 function getCitations(repoData){
   const htmlUrl = repoData.html_url;
   
@@ -608,32 +585,82 @@ function getCitations(repoData){
     citationsData.value = data;
     hasCitationsData.value = true;
   }).catch((error) => {
-    console.error(error);
-    //
+    console.error(error.stack);
+    //Display toast
+    displayToast(`Error: failed to retrieve citations, please refresh the page and try again.`)
   }).finally(() => {
     isLoadingCitations.value = false;
   });
 }
 
 /**
+ * Call to get the links from a project's README.md file
+ * @param username name of repository owner
+ * @param repoName name of repository
+ */
+function getReadmeLinks(username, repoName){
+  // if(!repoData.hasOwnProperty("license")){
+  //   console.error("No license found!");
+  // }
+  
+  isLoadingReadmeLinks.value = true;
+
+  fetchReadmeLinks(username, repoName).then((data) => {
+    console.log("Received readme data");
+
+    readmeLinks.value = data;
+    hasReadmeLinks.value = true;
+  }).catch((error) => {
+    console.error(error.stack);
+    //Display toast
+    displayToast(`Error: failed to retrieve README links, please refresh the page and try again.`)
+  }).finally(() => {
+    isLoadingReadmeLinks.value = false;
+  });
+}
+
+/**
  * Once the repo stats are retrieved, call requests to other endpoints.
  */
-const handleRepoLinks = () => {
-  //Get commits
-  getCommits(owner.value, repoName.value)
-  
-  //Get contributors
-  getContributors(owner.value, repoName.value);
-  
-  //Get issues
-  getIssues(owner.value, repoName.value);
-  
-  //Get License
-  getLicense(repoData.value);
-  
-  //Get citations
-  getCitations(repoData.value);
-};
+// const handleRepoLinks = () => {
+//   //Get commits
+//   getCommits(owner.value, repoName.value)
+//  
+//   //Get contributors
+//   getContributors(owner.value, repoName.value);
+//  
+//   //Get issues
+//   getIssues(owner.value, repoName.value);
+//  
+//   //Get License
+//   getLicense(repoData.value);
+//  
+//   //Get citations
+//   getCitations(repoData.value);
+//  
+//   //Get links from readme
+//   getReadmeLinks(owner.value, repoName.value);
+// };
+
+async function handleRepoLinks(){
+  const functions = [
+    { func: getCommits, args: [owner.value, repoName.value] },
+    { func: getContributors, args: [owner.value, repoName.value] },
+    { func: getIssues, args: [owner.value, repoName.value] },
+    { func: getLicense, args: [repoData.value] },
+    { func: getCitations, args: [repoData.value] },
+    { func: getReadmeLinks, args: [owner.value, repoName.value] }
+  ];
+
+  for (const { func, args } of functions) {
+    await new Promise(resolve => {
+      setTimeout(async () => {
+        await func(...args);
+        resolve();
+      }, 300); // 300ms delay
+    });
+  }
+}
 
 
 async function fetchStats(username, repoName){
@@ -668,6 +695,7 @@ async function fetchCommits(username, repoName){
 
 async function fetchContributors(username, repoName){
   const skipIfDataExists = false;
+  console.log("Fetching contributors")
 
   //Check if data exists
   if(skipIfDataExists && hasContributorsTop){
@@ -721,6 +749,14 @@ async function fetchCitations(htmlUrl){
   return data;
 }
 
+async function fetchReadmeLinks(username, repoName){
+  const data = await GetRepoReadme.getRepoPublications(username, repoName, USING_TEST_DATA);
+  
+  console.log(`${username} Readme Links Data Response (Full)`, data)
+
+  return data;
+}
+
 const countUniqueAuthors = () => {
   return GetRepoCommits.countUniqueAuthors(commitsData.value);
 };
@@ -768,18 +804,27 @@ function changeContributorChartState(newState="multi"){
   contributorChartState.value = newState
 }
 
-const displayToast= (message) => {
-  console.log(`Toast`, message)
-  toastMessage.value = message;
-  showToast.value = true;
+function displayToast(message){
+  console.log(`Displaying toast`, message)
+  
+  toastMessages.value.push(message);
+  // toastMessage.value = message;
+  // showToast.value = true;
+
+  // const toastLiveExample = document.getElementById('liveToast')
+  // const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+  // toastBootstrap.show()
+  // toastTrigger.addEventListener('click', () => {
+  //  
+  // })
   
   //Start timer for lifetime
-  if(toastLifetime.value){
-    setTimeout(() => {
-      closeToast();
-    }
-    , toastLifetime.value)
-  }
+  // if(toastLifetime.value){
+  //   setTimeout(() => {
+  //     closeToast();
+  //   }
+  //   , toastLifetime.value)
+  // }
 }
 
 const openDashboard = (owner, repo) => {
@@ -789,9 +834,9 @@ const openDashboard = (owner, repo) => {
   // appState.value.openDashboard(owner, repo);
 };
 
-const closeToast = () => {
-  showToast.value = false
-}
+// const closeToast = () => {
+//   showToast.value = false
+// }
 
 </script>
 

@@ -1,6 +1,6 @@
 ﻿<template>
-  <div class="card">
-    <div class="card-header">
+  <div class="card h-100">
+    <div class="card-header azur-gradient">
       <h5 class="card-title">Topics</h5>
     </div>
 

@@ -1,8 +1,10 @@
 ﻿<template>
-  <div class="card">
-    <div class="card-header">
+  <div class="card h-100">
+    
+    <div class="card-header azur-gradient">
       <h5 class="card-title">Most Recent Commit</h5>
     </div>
+    
     <div class="card-body">
       <div v-if="author" class="col-md-4">
           <span class="badge bg-light ">
@@ -14,20 +16,13 @@
       <div v-if="message" class="col-md-auto">
         <span class="card-text text-muted">"{{ message }}"</span>
       </div>
-
-      <div v-if="date">
-        <br>
+      
+    </div>
+    
+    <div v-if="date">
+      <div class="card-footer">
         <span class="badge bg-light text-dark text-muted">{{relativeDate(date)}}</span>
       </div>
-      
-<!--      <p class="card-text" v-if="author">Author: <b>{{ author }}</b></p>-->
-<!--      -->
-<!--      <p class="card-text text-muted" v-if="message">"{{ message }}"</p>-->
-<!--      -->
-<!--      <p class="card-text text-muted" v-if="date">{{ date }}</p>-->
-<!--      <div v-else>-->
-<!--        <p>No recent commit information available.</p>-->
-<!--      </div>-->
     </div>
   </div>
 </template>

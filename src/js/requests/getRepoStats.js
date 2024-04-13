@@ -1,18 +1,14 @@
 ﻿import {reactive} from "vue";
-// import testData from "../../assets/TestRepoData.json";
 import RequestUtils from "./requestUtils.js";
+import testData from "../../assets/TestRepoData.json";
 
-// const octokit = new Octokit({
-//     // auth: process.env.AUTHENTICATION_TOKEN,
-//     auth : "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"
-// });
 
 class GetRepoStats{
     static async getRepoStats(owner, repo, usingTestData=false){
-        // if(usingTestData){
-        //     console.log("TEST STATS DATA");
-        //     return testData;
-        // }
+        if(usingTestData){
+            console.log("TEST STATS DATA");
+            return testData;
+        }
 
         const response = await this.requestRepoStats(owner, repo);
         // console.log("Repo Stats Request", response);

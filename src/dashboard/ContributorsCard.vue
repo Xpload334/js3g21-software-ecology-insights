@@ -1,47 +1,55 @@
 ﻿<template>
   <div class="card">
-    <div class="card-header">
+    <div class="card-header azur-gradient">
       <h2 class="card-title text-center">Top Contributors</h2>
       <p class="card-subtitle text-center">Last 100 Weeks</p>
       
       <br>
       
-      <ul class="nav nav-tabs card-header-tabs justify-content-center">
+      <ul class="nav nav-tabs card-header-tabs flex-column flex-sm-row">
 
         <!-- Multi -->
-        <li class="nav-item">
+        <li class="flex-sm-fill text-sm-center nav-item">
           <div v-if="chartState === 'multi'">
-            <a class="nav-link active" aria-current="true">Top
+            <a class="nav-link active text-dark" aria-current="true">Top
               <span v-if="contributorsTop.length >= 0"> {{contributorsTop.length}}</span>
             </a>
           </div>
           <div v-else>
-            <a class="nav-link" aria-current="true" @click="changeChartState('multi')">Top
+            <a class="nav-link text-dark" aria-current="true" @click="changeChartState('multi')">Top
               <span v-if="contributorsTop.length >= 0"> {{contributorsTop.length}}</span>
             </a>
           </div>
         </li>
 
         <!-- Stacked -->
-        <li class="nav-item">
+        <li class="flex-sm-fill text-sm-center nav-item">
           <div v-if="chartState === 'stacked'">
-            <a class="nav-link active" aria-current="true">Stacked Commits</a>
+            <a class="nav-link active text-dark" aria-current="true">Stacked Commits</a>
           </div>
           <div v-else>
-            <a class="nav-link" aria-current="true" @click="changeChartState('stacked')">Stacked Commits</a>
+            <a class="nav-link text-dark" aria-current="true" @click="changeChartState('stacked')">Stacked Commits</a>
           </div>
         </li>
 
         <!-- Reload Button -->
-        <li class="nav-item">
+        <li class="text-sm-center nav-item">
           <div v-if="isLoading">
-            <button class="btn btn-primary" type="button" disabled>
+            <a class="nav-link active" aria-current="true">
               <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-              Refresh Contributors
-            </button>
+
+              <span class="badge text-bg-dark">Refresh Contributors</span>
+            </a>
+<!--            <button class="btn btn-outline-light" type="button" disabled>-->
+<!--              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>-->
+<!--              Refresh Contributors-->
+<!--            </button>-->
           </div>
           <div v-else>
-            <button @click="refreshContributors()" class="btn btn-primary" :disabled="isLoading">Refresh Contributors</button>
+            <a class="nav-link" aria-current="true" @click="refreshContributors()">
+              <span class="badge text-bg-dark">Refresh Contributors</span>
+            </a>
+<!--            <button @click="refreshContributors()" class="btn btn-outline-light" :disabled="isLoading">Refresh Contributors</button>-->
           </div>
         </li>
       </ul>
