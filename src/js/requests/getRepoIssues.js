@@ -4,7 +4,7 @@ import testData from "../../assets/TestIssuesData.json";
 
 import RequestUtils from "./requestUtils.js";
 
-
+const REQUEST_DELAY_MS = 500; // Adjust the delay time as needed
 class GetRepoIssues{
     static async getIssues(owner, repo, usingTestData=false){
         if(usingTestData){
@@ -18,11 +18,17 @@ class GetRepoIssues{
         //Iterate through issues
         console.log("Iterating through issues");
 
+        let i = 1;
+        
         for await(const {data: issues} of iterator){
             // console.log("Issues Log", issues);
             let issuesArray = this.parseIssuesList(issues);
             //Concat
             issuesData.push(issuesArray);
+            console.log(`Issues List: Page ${i}`, issuesArray)
+            i++;
+            
+            await RequestUtils.delay(REQUEST_DELAY_MS); // Adding delay between requests
         }
 
         return issuesData.flat();

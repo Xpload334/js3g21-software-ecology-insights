@@ -4,7 +4,7 @@ import testData from '../../assets/TestCommitData.json'
 
 import RequestUtils from "./requestUtils.js";
 
-
+const REQUEST_DELAY_MS = 500; // Adjust the delay time as needed
 class GetRepoCommits{
     static async getCommits(owner, repo, usingTestData=false){
         if(usingTestData){
@@ -17,11 +17,16 @@ class GetRepoCommits{
         let commitData = []
         //Iterate through responses
         console.log("Iterating through commits")
+        
+        let i = 1;
         for await(const {data: commits} of iterator){
             let commitsArray = this.parseCommitsList(commits)
             //Concat with array
             commitData.push(commitsArray);
-            // console.log(commitData)
+            console.log(`Commits List: Page ${i}`, commitsArray)
+            i++;
+            
+            await RequestUtils.delay(REQUEST_DELAY_MS); // Adding delay between requests
         }
         return commitData.flat();
     }

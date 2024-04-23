@@ -7,6 +7,8 @@ import RequestUtils from "./requestUtils.js";
 const ITEMS_PER_PAGE = 30;
 const SORTING_TYPE = "full_name"
 
+const REQUEST_DELAY_MS = 500; // Adjust the delay time as needed
+
 class SearchForRepos{
     static async getReposPages(owner, searchTypeIndex=0){
         let iterator = null;
@@ -29,17 +31,19 @@ class SearchForRepos{
 
         let reposData = []
         //Iterate through responses
-        console.log("Iterating through repos")
-        try{
-            for await(const {data: repos} of iterator){
-                // console.log("REPOS", repos);
-
-                let list = this.parseRepoList(repos)
-                //Concat with array
+        console.log("Iterating through repos");
+        try {
+            let i = 1;
+            for await (const { data: repos } of iterator) {
+                let list = this.parseRepoList(repos);
                 reposData.push(list);
+                console.log(`Repos List: Page ${i}`, list)
+                i++;
+
+                await RequestUtils.delay(REQUEST_DELAY_MS); // Adding delay between requests
             }
         } catch (e) {
-            console.error(e.stack)
+            console.error(e.stack);
             throw e;
         }
 

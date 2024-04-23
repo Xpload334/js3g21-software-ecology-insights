@@ -14,7 +14,11 @@ class GetRepoContributors{
 
         try {
             // Fetch data from GitHub API using Octokit
-            const response = await RequestUtils.octokit.repos.getContributorsStats({
+            // const response = await RequestUtils.octokit.repos.getContributorsStats({
+            //     owner: owner,
+            //     repo: repo,
+            // });
+            const response = await RequestUtils.octokit.request('GET /repos/{owner}/{repo}/stats/contributors', {
                 owner: owner,
                 repo: repo,
             });

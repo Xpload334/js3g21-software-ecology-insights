@@ -6,7 +6,7 @@
   <div class="container" id="help">
     <!-- About -->
     <div class="card">
-      <div class="card-header">
+      <div class="card-header azur-gradient">
         <h2 class="card-title">About</h2>
       </div>
       <div class="card-body">
@@ -35,7 +35,7 @@
 
     <!-- FAQ -->
     <div class="card">
-      <div class="card-header">
+      <div class="card-header azur-gradient">
         <h2 class="card-title">FAQ</h2>
       </div>
       
@@ -116,7 +116,7 @@
     
     <!-- Credits -->
     <div class="card">
-      <div class="card-header">
+      <div class="card-header azur-gradient">
         <h2 class="card-title">Credits</h2>
       </div>
       <div class="card-body">
@@ -146,6 +146,15 @@
         <br>
         
         <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="ms-2 me-auto">
+              <div class="fw-bold">GitHub</div>
+              <p><a href="https://github.com">https://github.com</a></p>
+            </div>
+            <span class="badge bg-success rounded-pill">API</span>&nbsp;
+            <span class="badge bg-success rounded-pill">Project Data</span>&nbsp;
+            <span class="badge bg-success rounded-pill">Hosting</span>&nbsp;
+          </li>
           <li class="list-group-item d-flex justify-content-between align-items-start">
             <div class="ms-2 me-auto">
               <div class="fw-bold">Bootstrap</div>

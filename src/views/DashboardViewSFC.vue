@@ -211,6 +211,7 @@ import User_OffCanvas_Button from "../dashboard/User_OffCanvas_Button.vue";
 import GetRepoCitations from "../js/getRepoCitations.js";
 import CitationsCard from "../dashboard/CitationsCard.vue";
 import RepoLinksCard from "../dashboard/unused/RepoLinksCard.vue";
+import RequestUtils from "../js/requests/requestUtils.js";
 
 const USING_TEST_DATA = false;
 
@@ -299,6 +300,8 @@ const isLoadingReadmeLinks = ref(false);
 const toastMessages = ref([]);
 // const toastLifetime = ref(5000);
 
+// const requestUtils = new RequestUtils();
+
 /**
  * Function to trigger on component mounted
  */
@@ -330,6 +333,8 @@ const dashboardStart = (newUsername, newRepoName) => {
   
   owner.value = newUsername;
   repoName.value = newRepoName;
+  
+  
 
   // displayToast(`Loading dashboard for ${newUsername}/${newRepoName}`)
   getRepoStats(owner.value, repoName.value);
@@ -657,7 +662,7 @@ async function handleRepoLinks(){
       setTimeout(async () => {
         await func(...args);
         resolve();
-      }, 300); // 300ms delay
+      }, 500); // 500ms delay
     });
   }
 }
