@@ -176,7 +176,7 @@ import SearchEntry from "../search/SearchEntry.vue";
 import MainTitle from "../components/MainTitle.vue";
 import MainFooter from "../components/MainFooter.vue";
 import SearchPagination from "../search/SearchPagination.vue";
-import Toast_BottomRight from "../components/toasts/Toast_BottomRight.vue";
+// import Toast_BottomRight from "../components/toasts/Toast_BottomRight.vue";
 
 // import 'bootstrap/dist/css/bootstrap.css'
 // import 'bootstrap-vue/dist/bootstrap-vue.css'

@@ -187,7 +187,7 @@ import ContributorsCard from "../dashboard/ContributorsCard.vue";
 import TopicsCard from "../dashboard/TopicsCard.vue";
 import MostRecentCommitCard from "../dashboard/MostRecentCommitCard.vue";
 import MainTitle from "../components/MainTitle.vue";
-import Toast_BottomRight from "../components/toasts/Toast_BottomRight.vue";
+// import Toast_BottomRight from "../components/toasts/Toast_BottomRight.vue";
 import ActivityChartCard from "../dashboard/ActivityChartCard.vue";
 
 //Requests modules
