@@ -1,9 +1,5 @@
-﻿// import { Octokit } from "@octokit/rest";
-import RequestUtils from "./requestUtils.js";
+﻿import RequestUtils from "./requestUtils.js";
 
-// const octokit = new Octokit({
-//     // auth: process.env.AUTHENTICATION_TOKEN,
-// });
 const ITEMS_PER_PAGE = 30;
 const SORTING_TYPE = "full_name"
 

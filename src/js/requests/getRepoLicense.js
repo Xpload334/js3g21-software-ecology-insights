@@ -1,15 +1,13 @@
-﻿import {reactive} from "vue";
-// import testData from "../../assets/TestRepoData.json";
-import RequestUtils from "./requestUtils.js";
-import testData from "../../assets/Test_License_Data.json"
+﻿import RequestUtils from "./requestUtils.js";
+// import testData from "../../assets/Test_License_Data.json"
 
 
 class GetRepoLicense{
     static async getRepoLicense(owner, repo, usingTestData=false){
-        if(usingTestData){
-            console.log("TEST LICENSE DATA");
-            return testData;
-        }
+        // if(usingTestData){
+        //     console.log("TEST LICENSE DATA");
+        //     return testData;
+        // }
 
         //Get which license
         const response = await this.requestRepoLicense(owner, repo);

@@ -1,16 +1,14 @@
-﻿// import {reactive} from "vue";
-// import {Octokit} from "@octokit/rest";
-import testData from "../../assets/TestIssuesData.json";
+﻿// import testData from "../../assets/TestIssuesData.json";
 
 import RequestUtils from "./requestUtils.js";
 
 const REQUEST_DELAY_MS = 500; // Adjust the delay time as needed
 class GetRepoIssues{
     static async getIssues(owner, repo, usingTestData=false){
-        if(usingTestData){
-            console.log("TEST ISSUES DATA");
-            return testData;
-        }
+        // if(usingTestData){
+        //     console.log("TEST ISSUES DATA");
+        //     return testData;
+        // }
 
         const iterator = await this.getIssuesIterator(owner, repo);
         // const iterator = await this.getIssuesIterator(owner, repo, this.paramsDefault(owner, repo));

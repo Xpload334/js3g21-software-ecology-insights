@@ -1,16 +1,16 @@
 ﻿// import {reactive} from "vue";
 // import {Octokit} from "@octokit/rest";
-import testData from '../../assets/TestCommitData.json'
+// import testData from '../../assets/TestCommitData.json'
 
 import RequestUtils from "./requestUtils.js";
 
 const REQUEST_DELAY_MS = 500; // Adjust the delay time as needed
 class GetRepoCommits{
     static async getCommits(owner, repo, usingTestData=false){
-        if(usingTestData){
-            console.log("TEST COMMIT DATA");
-            return testData.commits;
-        }
+        // if(usingTestData){
+        //     console.log("TEST COMMIT DATA");
+        //     return testData.commits;
+        // }
 
 
         const iterator = await this.getCommitsIterator(owner, repo);

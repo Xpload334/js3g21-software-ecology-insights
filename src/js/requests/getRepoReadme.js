@@ -1,12 +1,11 @@
-﻿import {reactive} from "vue";
-import RequestUtils from "./requestUtils.js";
-import testData from "../../assets/Test_Readme.json"
+﻿import RequestUtils from "./requestUtils.js";
+// import testData from "../../assets/Test_Readme.json"
 
 class GetRepoReadme{
     static async getRepoPublications(owner, repo, USING_TEST_DATA=false) {
         let data;
         if(USING_TEST_DATA){
-            data = testData;
+            // data = testData;
         } else {
             const response = await this.requestRepoReadme(owner, repo);
             console.log("README Content", response.data);
